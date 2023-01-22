@@ -1,0 +1,65 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+  extra_module_url:
+   - /config/www/community/lovelace-card-mod/card-mod.js
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include sensor.yaml
+
+template:
+  - sensor:
+    - name: "Calculated Light Brightness"
+      unit_of_measurement: "Float"
+      state: |
+        {%- set lux = states('sensor.estimated_illuminance') | int(default=0) -%}
+        {%- set perc = ((lux / (400 / 100))/200) | float -%}
+        {{ perc }}
+  - trigger:
+    - platform: state
+      entity_id:
+        - climate.kitchen
+    - platform: time_pattern
+      minutes: "/5"
+    binary_sensor:
+    - name: "Kitchen Eco Mode"
+      state: "{{ state_attr('climate.kitchen', 'preset_mode') == 'eco' }}"
+    - name: "Kitchen Heating"
+      state: "{{ state_attr('climate.kitchen', 'hvac_action') == 'heating' }}"
+
+  - trigger:
+    - platform: state
+      entity_id:
+        - remote.65oled806_12_remote
+    - platform: time_pattern
+      minutes: "/5"
+    binary_sensor:
+    - name: "Living TV On"
+      state: "{{ states('remote.65oled806_12_remote') == 'on' }}"
+
+homeassistant:
+    customize: !include customize.yaml
+
+influxdb:
+    api_version: 1
+    username: '!secret influx_uid'
+    password: '!secret influx_pwd'
+    tags:
+        instance: prod
+        source: hass
+    

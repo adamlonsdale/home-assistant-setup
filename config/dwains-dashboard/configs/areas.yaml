@@ -1,0 +1,45 @@
+office:
+  icon: mdi:chair-rolling
+  floor: First Floor
+  disabled: false
+  grouped_sort_order: 1
+guest_room:
+  icon: mdi:bed
+  floor: First Floor
+  disabled: false
+  grouped_sort_order: 2
+living_room:
+  icon: mdi:sofa
+  floor: Ground Floor
+  disabled: false
+  grouped_sort_order: 1
+kitchen:
+  icon: mdi:fridge
+  floor: Ground Floor
+  disabled: false
+  grouped_sort_order: 2
+master_bedroom:
+  icon: mdi:bed-king
+  floor: First Floor
+  disabled: false
+  grouped_sort_order: 3
+bathroom:
+  icon: mdi:bathtub
+  floor: First Floor
+  disabled: false
+  grouped_sort_order: 4
+hallway:
+  icon: mdi:door-closed
+  floor: Ground Floor
+  disabled: false
+  grouped_sort_order: 3
+utility:
+  icon: mdi:washing-machine
+  floor: Ground Floor
+  disabled: false
+  grouped_sort_order: 4
+en_suite:
+  icon: mdi:shower-head
+  floor: First Floor
+  disabled: false
+  grouped_sort_order: 5

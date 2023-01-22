@@ -1,0 +1,35 @@
+homeassistant: true
+mqtt:
+  server: mqtt://core-mosquitto:1883
+  user: addons
+  password: '!secret mqtt_password'
+  password: 
+serial:
+  port: /dev/ttyUSB0
+frontend:
+  port: 8099
+advanced:
+  homeassistant_legacy_entity_attributes: false
+  legacy_api: false
+  legacy_availability_payload: false
+  log_level: info
+device_options:
+  legacy: false
+permit_join: true
+devices:
+  '0x00124b00246ca33d':
+    friendly_name: Hallway Plug
+  '0x00124b00246c9dbe':
+    friendly_name: Kitchen Plug
+  '0x00124b00246caf47':
+    friendly_name: Utility Plug
+  '0x00124b00246ca011':
+    friendly_name: Landing Plug
+  '0x00124b00292931e4':
+    friendly_name: Stairs Motion
+  '0x00124b00292998ac':
+    friendly_name: Front Door
+  '0x00124b0022d5a09d':
+    friendly_name: En Suite Climate
+  '0x00124b0022d5dc06':
+    friendly_name: Master Bedroom Climate

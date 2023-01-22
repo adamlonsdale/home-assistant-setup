@@ -1,0 +1,108 @@
+- id: '1672786399713'
+  alias: Low battery level detection & notification for all battery sensors
+  description: ''
+  use_blueprint:
+    path: sbyx/low-battery-level-detection-notification-for-all-battery-sensors.yaml
+    input:
+      threshold: 15
+      day: 6
+      exclude:
+        entity_id:
+        - sensor.adam_s_ipad_battery_level
+        - sensor.adams_iphone_battery_level
+      actions:
+      - device_id: 5459415477ca3de54c37573b258cf625
+        domain: mobile_app
+        type: notify
+        message: Batteries need changing!
+        title: 'The following sensors need batteries changing: {{sensors}}'
+- id: '1673389901443'
+  alias: Go to bed
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 692fd34c43eb0945990f115a2406d341
+    entity_id: light.far_end
+    domain: light
+  - type: turn_off
+    device_id: c156419b74b0fb05367c4106a767c10e
+    entity_id: light.lamp_2
+    domain: light
+  - type: turn_off
+    device_id: ac34d46b98665e0f3f7d16980f7235c0
+    entity_id: light.near_window
+    domain: light
+  - type: turn_off
+    device_id: 67efab9f16d9179141b6331053b6f59b
+    entity_id: light.signe_gradient_living_room
+    domain: light
+  - type: turn_off
+    device_id: 0c8e824e74f016ac8e00be47a0268dee
+    entity_id: light.hallway_toilet
+    domain: light
+  - type: turn_on
+    device_id: 359198f42ca411dbc14ee570528b46bf
+    entity_id: light.front_door
+    domain: light
+    brightness_pct: 50
+  - device_id: a5bdac38fdd1ff4ee52a5007404f404c
+    domain: climate
+    entity_id: climate.kitchen
+    type: set_preset_mode
+    preset_mode: eco
+  - service: androidtv.adb_command
+    data:
+      command: POWER
+    target:
+      entity_id: media_player.main_tv
+  - type: turn_on
+    device_id: 76497eb01548d2962b637dce29e2d5c1
+    entity_id: light.lamp
+    domain: light
+    brightness_pct: 100
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 45
+      milliseconds: 0
+  - type: turn_off
+    device_id: 359198f42ca411dbc14ee570528b46bf
+    entity_id: light.front_door
+    domain: light
+  mode: single
+- id: '1674200143844'
+  alias: Tag Evanescence - Fallen is scanned
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: f77bb2b0-76f7-492c-b307-fe8ef63dd77f
+  condition: []
+  action:
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.25
+    target:
+      entity_id:
+      - media_player.main_bedroom
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.main_bedroom
+    data:
+      media_content_id: plex://4f86a96668a6ebc2ffe96dd49cb8c39e0d77db1e/11328
+      media_content_type: album
+    metadata:
+      title: Fallen (2003)
+      thumbnail: https://178-78-103-57.15eff6ade6294647acafa8ad308ab407.plex.direct:32400/library/metadata/11328/thumb/1673910877?X-Plex-Token=9zKNT1PjZVsPPZa4sqQF
+      media_class: album
+      children_media_class:
+      navigateIds:
+      - {}
+      - media_content_type: plex
+        media_content_id: ''
+      - media_content_type: library
+        media_content_id: plex://4f86a96668a6ebc2ffe96dd49cb8c39e0d77db1e/4
+      - media_content_type: artist
+        media_content_id: plex://4f86a96668a6ebc2ffe96dd49cb8c39e0d77db1e/11327
+  mode: single

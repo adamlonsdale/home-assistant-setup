@@ -1,0 +1,23 @@
+  - platform: illuminance
+    name: Estimated Illuminance
+    entity_id: weather.openweathermap
+  - platform: filter
+    name: "Filtered Light Brightness"
+    entity_id: sensor.calculated_light_brightness
+    filters:
+     - filter: range
+       lower_bound: 0.2
+       upper_bound: 1
+  - platform: formulaone_api
+  - platform: mqtt_room
+    name: "Adam's iPhone BLE"
+    device_id: "Adam's iPhone"
+    state_topic: "espresense/devices/Adam's iPhone"
+    timeout: 5
+    away_timeout: 120
+  - platform: mqtt_room
+    name: "Adam's Watch BLE"
+    device_id: "irk:5b4ef3d66f64ee9e1c909205aaf714bb"
+    state_topic: "espresense/devices/irk:5b4ef3d66f64ee9e1c909205aaf714bb"
+    timeout: 5
+    away_timeout: 120
