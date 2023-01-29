@@ -51,9 +51,22 @@ template:
     binary_sensor:
     - name: "Living TV On"
       state: "{{ states('remote.65oled806_12_remote') == 'on' }}"
+      
+  - trigger:
+    - platform: state
+      entity_id:
+        - binary_switch.office_sensor_motion
+    - platform: time_pattern
+      minutes: "/1"
+    binary_sensor:
+    - name: "Office Presence"
+      state: "{{ states('binary_switch.office_sensor_motion') }}"
+      delay_off: '00:05:00'
 
 homeassistant:
     customize: !include customize.yaml
+    allowlist_external_dirs:
+     - '/tmp'
 
 influxdb:
     api_version: 1

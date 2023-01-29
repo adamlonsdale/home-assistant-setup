@@ -1,5 +1,20 @@
 version: '3'
 services:
+  find3:
+    container_name: find3
+    image: schollz/find3:latest
+    restart: always
+    volumes:
+      - "./find3/data:/data"
+    environment:
+      MQTT_ADMIN: ${FIND3_MQTT_ADMIN:?err}
+      MQTT_PASS: ${FIND3_MQTT_PASS:?err}
+      MQTT_SERVER: 'mqtt:1883'
+    # Expose the port 1883 to the internal docker network for bridging to the mqtt container
+    expose:
+      - "1883"
+    ports:
+      - "0.0.0.0:8003:8003"
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
@@ -7,7 +22,37 @@ services:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
-   # devices:
-   #   - /dev/ttyUSB0:/dev/ttyUSB0
+    depends_on:
+      zigbee2mqtt:
+        condition: service_started
     ports:
       - "8123:8123"
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: "mqtt"
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mqtt/data:/mosquitto/data
+      - ./mqtt/config:/mosquitto/config
+      - ./mqtt/log:/mosquitto/log
+    environment:
+      - TZ=Europe/London
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    restart: always
+    image: koenkk/zigbee2mqtt:latest
+    volumes:
+      - ./zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    depends_on:
+      mqtt:
+        condition: service_started
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      - TZ=Europe/London
+    #devices:
+    #  - /dev/ttyUSB0:/dev/ttyUSB0
