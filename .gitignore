@@ -5,7 +5,12 @@ unifi
 *.pyc
 __pycache__
 
+*.gz
+
 /ssl/*
+
+/zigbee2mqtt/*
+!/zigbee2mqtt/configuration.yaml
 
 /config/*
 !/config/configuration.yaml
