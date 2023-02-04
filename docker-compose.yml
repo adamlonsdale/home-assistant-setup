@@ -2,14 +2,15 @@ version: '3'
 services:
   find3:
     container_name: find3
-    image: schollz/find3:latest
+    image: find3:latest
     restart: always
     volumes:
       - "./find3/data:/data"
     environment:
-      MQTT_ADMIN: ${FIND3_MQTT_ADMIN:?err}
-      MQTT_PASS: ${FIND3_MQTT_PASS:?err}
       MQTT_SERVER: 'mqtt:1883'
+    depends_on:
+      mqtt:
+        condition: service_started
     # Expose the port 1883 to the internal docker network for bridging to the mqtt container
     expose:
       - "1883"
@@ -22,9 +23,6 @@ services:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
-    depends_on:
-      zigbee2mqtt:
-        condition: service_started
     ports:
       - "8123:8123"
   mqtt:
@@ -55,4 +53,4 @@ services:
     environment:
       - TZ=Europe/London
     #devices:
-    #  - /dev/ttyUSB0:/dev/ttyUSB0
+    #  - /dev/tty.usbserial-0001:/dev/ttyUSB0

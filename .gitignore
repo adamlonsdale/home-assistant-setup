@@ -29,6 +29,10 @@ __pycache__
 /config/zigbee2mqtt/*
 !/config/zigbee2mqtt/configuration.yaml
 
+/find3/data/*
+
 .env
 .DS_Store
 .pnpm-store
+
+docker-compose.override.yml
