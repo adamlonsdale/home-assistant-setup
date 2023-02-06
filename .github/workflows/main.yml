@@ -10,6 +10,6 @@ jobs:
     steps:
     - name: Call Deployment Action
       run: |
-        curl -X POST https://api.github.com/repos/adamlonsdale/home-assistant-setup-deploy/dispatches \
+        curl -X POST https://api.github.com/repos/adamlonsdale/home-assistant-deploy/dispatches \
         -H 'Accept: application/vnd.github.everest-preview+json' \
         -u ${{ secrets.ACCESS_TOKEN }}
