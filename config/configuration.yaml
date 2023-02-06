@@ -55,13 +55,10 @@ template:
   - trigger:
     - platform: state
       entity_id:
-        - binary_switch.office_sensor_motion
-    - platform: time_pattern
-      minutes: "/1"
+        - binary_sensor.office_sensor_motion
     binary_sensor:
     - name: "Office Presence"
-      state: "{{ states('binary_switch.office_sensor_motion') }}"
-      delay_off: '00:05:00'
+      state: "{{ states('binary_sensor.office_sensor_motion') == 'on' }}"
 
 homeassistant:
     customize: !include customize.yaml
