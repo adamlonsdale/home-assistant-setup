@@ -54,3 +54,69 @@ services:
       - TZ=Europe/London
     #devices:
     #  - /dev/tty.usbserial-0001:/dev/ttyUSB0
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 784:784/udp
+      - 853:853/tcp
+      - 80:80/tcp
+      - 443:443/tcp
+    expose:
+      - "3000"
+    volumes:
+      - ./adguard/workdir:/opt/adguardhome/work
+      - ./adguard/confdir:/opt/adguardhome/conf
+    networks:
+      macvlan:
+        ipv4_address: 192.168.150.192
+      vlan_bridge:
+        ipv4_address: 192.168.10.192
+    restart: unless-stopped
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    restart: always
+    environment:
+      - INFLUXDB_DB=influx
+    expose:
+      - "3006"
+    volumes:
+      - ./influxdb:/var/lib/influxdb
+  grafana:
+   image: grafana/grafana
+   container_name: grafana-server
+   restart: always
+   depends_on:
+     - influxdb
+   environment:
+     - GF_INSTALL_PLUGINS=
+   links:
+     - influxdb
+   ports:
+     - '3000:3000'
+   volumes:
+     - ./grafana:/var/lib/grafana
+networks:
+  macvlan:
+    name: docker_macvlan
+    driver: macvlan
+    enable_ipv6: false
+    driver_opts:
+      parent: en0
+    ipam:
+      config:
+        - subnet: 192.168.150.0/24
+          ip_range: 192.168.150.192/27
+          gateway: 192.168.150.1
+  vlan_bridge:
+    name: docker_vlan_bridge
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
+          ip_range: 192.168.10.192/27
+          gateway: 192.168.10.1

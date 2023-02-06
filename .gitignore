@@ -31,6 +31,12 @@ __pycache__
 
 /find3/data/*
 
+/influxdb/
+/grafana/
+/adguard/workdir/
+
+/.idea/
+
 .env
 .DS_Store
 .pnpm-store
