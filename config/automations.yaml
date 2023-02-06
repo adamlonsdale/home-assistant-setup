@@ -150,17 +150,20 @@
   - platform: state
     entity_id:
     - binary_sensor.office_sensor_motion
+    - binary_sensor.office_presence
     for:
       hours: 0
       minutes: 0
       seconds: 0
+  - platform: time_pattern
+    minutes: '*'
   condition: []
   action:
   - choose:
     - conditions:
       - condition: time
-        after: '18:00:00'
-        before: 07:00:00
+        after: '17:30:00'
+        before: 08:30:00
       - condition: state
         entity_id: binary_sensor.office_presence
         state: 'on'
@@ -171,22 +174,30 @@
         metadata: {}
     - conditions:
       - condition: state
-        entity_id: binary_sensor.living_room_sensor_motion
+        entity_id: binary_sensor.office_presence
         state: 'off'
         for:
           hours: 0
-          minutes: 4
+          minutes: 2
           seconds: 0
       sequence:
       - service: scene.turn_on
         target:
           entity_id: scene.office_off
         metadata: {}
-    default:
-    - service: scene.turn_on
-      target:
-        entity_id: scene.work_time
-      metadata: {}
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.office_presence
+        state: 'on'
+      - condition: time
+        after: 08:30:00
+        before: '17:30:00'
+      sequence:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.work_time
+        metadata: {}
+    default: []
   mode: single
 - id: '1674842920963'
   alias: Theatre Mode
