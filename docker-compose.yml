@@ -2,7 +2,7 @@ version: '3'
 services:
   find3:
     container_name: find3
-    image: find3:latest
+    image: adamlonsdale/find3:latest
     restart: always
     volumes:
       - "./find3/data:/data"
