@@ -105,7 +105,7 @@ networks:
     driver: macvlan
     enable_ipv6: false
     driver_opts:
-      parent: #{NETWORK_INTERFACE}#
+      parent: ${NETWORK_INTERFACE}
     ipam:
       config:
         - subnet: 192.168.150.0/24
