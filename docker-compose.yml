@@ -16,6 +16,8 @@ services:
       - "1883"
     ports:
       - "0.0.0.0:8003:8003"
+    networks:
+      vlan_bridge:
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
@@ -25,6 +27,8 @@ services:
     restart: unless-stopped
     ports:
       - "8123:8123"
+    networks:
+      vlan_bridge:
   mqtt:
     image: eclipse-mosquitto:latest
     container_name: "mqtt"
@@ -38,6 +42,8 @@ services:
       - ./mqtt/log:/mosquitto/log
     environment:
       - TZ=Europe/London
+    networks:
+      vlan_bridge:
   zigbee2mqtt:
     container_name: zigbee2mqtt
     restart: always
@@ -52,6 +58,8 @@ services:
       - "127.0.0.1:8080:8080"
     environment:
       - TZ=Europe/London
+    networks:
+      vlan_bridge:
     #devices:
     #  - /dev/tty.usbserial-0001:/dev/ttyUSB0
   adguardhome:
@@ -73,7 +81,7 @@ services:
       macvlan:
         ipv4_address: 192.168.150.192
       vlan_bridge:
-        ipv4_address: 192.168.10.192
+        ipv4_address: 172.22.0.192
     restart: unless-stopped
   influxdb:
     image: influxdb:1.8
@@ -85,6 +93,8 @@ services:
       - "3006"
     volumes:
       - ./influxdb:/var/lib/influxdb
+    networks:
+      vlan_bridge:
   grafana:
    image: grafana/grafana
    container_name: grafana-server
@@ -99,6 +109,8 @@ services:
      - '3000:3000'
    volumes:
      - ./grafana:/var/lib/grafana
+   networks:
+     vlan_bridge:
 networks:
   macvlan:
     name: docker_macvlan
@@ -112,11 +124,9 @@ networks:
           ip_range: 192.168.150.192/27
           gateway: 192.168.150.1
   vlan_bridge:
-    name: docker_vlan_bridge
+    name: home_vlan
     driver: bridge
     enable_ipv6: false
     ipam:
       config:
-        - subnet: 192.168.10.0/24
-          ip_range: 192.168.10.192/27
-          gateway: 192.168.10.1
+        - subnet: 172.22.0.0/24
