@@ -70,6 +70,7 @@ influxdb:
     username: '!secret influx_uid'
     password: '!secret influx_pwd'
     host: influxdb
+    database: influx
     tags:
         instance: prod
         source: hass
