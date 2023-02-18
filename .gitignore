@@ -35,6 +35,24 @@ __pycache__
 /grafana/
 /adguard/workdir/
 
+/swag/etc/
+/swag/log/
+/swag/keys/
+/swag/fail2ban/*
+!/swag/fail2ban/filter.d/
+!/swag/fail2ban/action.d/
+!/swag/fail2ban/jail.local
+/swag/nginx/*
+!/swag/nginx/nginx.conf
+!/swag/nginx/proxy.conf
+!/swag/nginx/ssl.conf
+!/swag/nginx/proxy-confs
+/swag/nginx/proxy-confs/*
+!/swag/nginx/proxy-confs/*.conf
+!/swag/nginx/site-confs
+/swag/nginx/site-confs/*
+!/swag/nginx/site-confs/default.conf
+
 /.idea/
 
 .env
