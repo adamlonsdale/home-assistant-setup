@@ -84,8 +84,8 @@ services:
     networks:
       macvlan:
         ipv4_address: 192.168.150.192
-      vlan_bridge:
-        ipv4_address: 172.22.0.192
+    #  vlan_bridge:
+    #    ipv4_address: 172.22.0.192
     restart: unless-stopped
   influxdb:
     image: influxdb:1.8
@@ -117,6 +117,30 @@ services:
    networks:
      vlan_bridge:
         ipv4_address: 172.22.0.193
+
+  swag:
+    image: linuxserver/swag:2.3.0
+    container_name: swag
+    restart: unless-stopped
+    ports:
+      - '443:443'
+      - '80:80'
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=99
+      - PGID=100
+      - TZ=Europe/London
+      - URL=lonsdale.social
+      - VALIDATION=http
+      - SUBDOMAINS=www,home,vpn,docker
+      - DNSPLUGIN=cloudflare
+      - ONLY_SUBDOMAINS=true
+    volumes:
+      - './swag:/config'
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.195
 networks:
   macvlan:
     name: docker_macvlan
