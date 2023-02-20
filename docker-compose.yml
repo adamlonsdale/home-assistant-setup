@@ -4,9 +4,8 @@ services:
     container_name: find3
     image: adamlonsdale/find3:latest
     restart: always
-    user: "${UID}:${GID}"
     volumes:
-      - ${FIND3_DATA}:/data
+      - ${FIND3_DATA}:/data:rw,slave
     environment:
       - MQTT_SERVER=mqtt:1883
       - MQTT_ADMIN=${MQTT_ADMIN}
@@ -26,9 +25,8 @@ services:
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
-    user: "${UID}:${GID}"
     volumes:
-      - ${HASS_CONFIG}:/config
+      - ${HASS_CONFIG}:/config:rw,slave
       - ${LOCALTIME}:/etc/localtime:ro
     restart: unless-stopped
     ports:
@@ -41,14 +39,13 @@ services:
     image: eclipse-mosquitto:latest
     container_name: "mqtt"
     restart: always
-    user: "${UID}:${GID}"
     ports:
       - 1883:1883
       - 9001:9001
     volumes:
-      - ${MQTT_DATA}:/mosquitto/data
-      - ${MQTT_CONFIG}:/mosquitto/config
-      - ${MQTT_LOG}:/mosquitto/log
+      - ${MQTT_DATA}:/mosquitto/data:rw,slave
+      - ${MQTT_CONFIG}:/mosquitto/config:rw,slave
+      - ${MQTT_LOG}:/mosquitto/log:rw,slave
     environment:
       - TZ=Europe/London
     networks:
@@ -58,7 +55,6 @@ services:
   zigbee2mqtt:
     container_name: zigbee2mqtt
     restart: always
-    user: "${UID}:${GID}"
     image: koenkk/zigbee2mqtt:latest
     volumes:
       - ${ZIGBEE2MQTT_DATA}:/app/data
@@ -79,7 +75,6 @@ services:
   adguardhome:
     image: adguard/adguardhome
     container_name: adguardhome
-    user: "${UID}:${GID}"
     ports:
       - 53:53/tcp
       - 53:53/udp
@@ -90,8 +85,8 @@ services:
     expose:
       - "3000"
     volumes:
-      - ${ADGUARD_WORKDIR}:/opt/adguardhome/work
-      - ${ADGUARD_CONFDIR}:/opt/adguardhome/conf
+      - ${ADGUARD_WORKDIR}:/opt/adguardhome/work:rw,slave
+      - ${ADGUARD_CONFDIR}:/opt/adguardhome/conf:rw,slave
     networks:
       macvlan:
         ipv4_address: 192.168.150.192
@@ -103,7 +98,6 @@ services:
     image: influxdb:1.8
     container_name: influxdb
     restart: always
-    user: "${UID}:${GID}"
     environment:
       - INFLUXDB_DB=influx
       - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
@@ -111,7 +105,7 @@ services:
     expose:
       - "3006"
     volumes:
-      - ${INFLUXDB_DATA}:/var/lib/influxdb
+      - ${INFLUXDB_DATA}:/var/lib/influxdb:rw,slave
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.194
@@ -120,7 +114,6 @@ services:
    image: grafana/grafana
    container_name: grafana-server
    restart: always
-   user: "${UID}:${GID}"
    depends_on:
      - influxdb
    environment:
@@ -132,7 +125,7 @@ services:
    ports:
      - '3000:3000'
    volumes:
-     - ${GRAFANA_DATA}:/var/lib/grafana
+     - ${GRAFANA_DATA}:/var/lib/grafana:rw,slave
    networks:
      vlan_bridge:
         ipv4_address: 172.22.0.193
@@ -141,7 +134,6 @@ services:
     image: linuxserver/swag:2.3.0
     container_name: swag
     restart: unless-stopped
-    user: "${UID}:${GID}"
     ports:
       - '443:443'
       - '80:80'
@@ -157,7 +149,7 @@ services:
       - DNSPLUGIN=cloudflare
       - ONLY_SUBDOMAINS=true
     volumes:
-      - ${SWAG_DATA}:/config
+      - ${SWAG_DATA}:/config:rw,slave
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.195
