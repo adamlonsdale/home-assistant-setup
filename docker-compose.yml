@@ -4,6 +4,7 @@ services:
     container_name: find3
     image: adamlonsdale/find3:latest
     restart: always
+    user: "${UID}:${GID}"
     volumes:
       - ${FIND3_DATA}:/data
     environment:
@@ -21,9 +22,11 @@ services:
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.198
+        
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
+    user: "${UID}:${GID}"
     volumes:
       - ${HASS_CONFIG}:/config
       - ${LOCALTIME}:/etc/localtime:ro
@@ -33,10 +36,12 @@ services:
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.197
+        
   mqtt:
     image: eclipse-mosquitto:latest
     container_name: "mqtt"
     restart: always
+    user: "${UID}:${GID}"
     ports:
       - 1883:1883
       - 9001:9001
@@ -49,9 +54,11 @@ services:
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.196
+        
   zigbee2mqtt:
     container_name: zigbee2mqtt
     restart: always
+    user: "${UID}:${GID}"
     image: koenkk/zigbee2mqtt:latest
     volumes:
       - ${ZIGBEE2MQTT_DATA}:/app/data
@@ -68,9 +75,11 @@ services:
         ipv4_address: 172.22.0.199
     #devices:
     #  - /dev/tty.usbserial-0001:/dev/ttyUSB0
+    
   adguardhome:
     image: adguard/adguardhome
     container_name: adguardhome
+    user: "${UID}:${GID}"
     ports:
       - 53:53/tcp
       - 53:53/udp
@@ -89,10 +98,12 @@ services:
     #  vlan_bridge:
     #    ipv4_address: 172.22.0.192
     restart: unless-stopped
+    
   influxdb:
     image: influxdb:1.8
     container_name: influxdb
     restart: always
+    user: "${UID}:${GID}"
     environment:
       - INFLUXDB_DB=influx
       - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
@@ -104,10 +115,12 @@ services:
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.194
+        
   grafana:
    image: grafana/grafana
    container_name: grafana-server
    restart: always
+   user: "${UID}:${GID}"
    depends_on:
      - influxdb
    environment:
@@ -128,6 +141,7 @@ services:
     image: linuxserver/swag:2.3.0
     container_name: swag
     restart: unless-stopped
+    user: "${UID}:${GID}"
     ports:
       - '443:443'
       - '80:80'
