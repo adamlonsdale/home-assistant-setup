@@ -140,8 +140,8 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - PUID=99
-      - PGID=100
+      - PUID=0
+      - PGID=0
       - TZ=Europe/London
       - URL=lonsdale.social
       - VALIDATION=http
