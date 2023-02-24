@@ -131,7 +131,7 @@ services:
         ipv4_address: 172.22.0.193
 
   swag:
-    image: adamlonsdale/dockerswagrun:latest
+    image: lscr.io/linuxserver/swag:latest
     container_name: swag
     restart: unless-stopped
     ports:
