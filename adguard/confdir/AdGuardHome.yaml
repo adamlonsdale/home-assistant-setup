@@ -11,10 +11,8 @@ web_session_ttl: 720
 dns:
   bind_hosts:
     - 192.168.150.192
-    - fd39:3e8d:1d98:4eda:61c8:9f1a:bfed:ba70
     - 172.30.32.1
     - 127.0.0.1
-    - ::1
   port: 53
   anonymize_client_ip: false
   protection_enabled: true
@@ -43,7 +41,6 @@ dns:
     - hostname.bind
   trusted_proxies:
     - 127.0.0.0/8
-    - ::1/128
   cache_size: 4194304
   cache_ttl_min: 0
   cache_ttl_max: 0
