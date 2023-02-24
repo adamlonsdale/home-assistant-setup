@@ -131,7 +131,7 @@ services:
         ipv4_address: 172.22.0.193
 
   swag:
-    image: adamlonsdale/docker-swag:latest
+    image: adamlonsdale/dockerswagrun:latest
     container_name: swag
     restart: unless-stopped
     ports:
@@ -149,10 +149,11 @@ services:
       - DNSPLUGIN=cloudflare
       - ONLY_SUBDOMAINS=true
     volumes:
-      - ${SWAG_DATA}:/config:rw,slave
+      - ${SWAG_DATA}:/config
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.195
+        
 networks:
   macvlan:
     name: docker_macvlan
