@@ -76,12 +76,12 @@ services:
     image: adguard/adguardhome
     container_name: adguardhome
     ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - 784:784/udp
-      - 853:853/tcp
-      - 80:80/tcp
-      - 443:443/tcp
+      - 0.0.0.0:53:53/tcp
+      - 0.0.0.0:53:53/udp
+      - 0.0.0.0:784:784/udp
+      - 0.0.0.0:853:853/tcp
+      - 0.0.0.0:80:80/tcp
+      - 0.0.0.0:443:443/tcp
     expose:
       - "3000"
     volumes:
