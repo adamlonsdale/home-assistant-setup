@@ -90,8 +90,8 @@ services:
     networks:
       macvlan:
         ipv4_address: 192.168.150.192
-    #  vlan_bridge:
-    #    ipv4_address: 172.22.0.192
+      vlan_bridge:
+        ipv4_address: 172.22.0.192
     restart: unless-stopped
     
   influxdb:
