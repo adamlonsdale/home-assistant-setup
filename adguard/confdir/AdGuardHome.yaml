@@ -1,4 +1,4 @@
-bind_host: 127.0.0.1
+bind_host: 0.0.0.0
 bind_port: 80
 users: []
 auth_attempts: 5
@@ -11,7 +11,6 @@ web_session_ttl: 720
 dns:
   bind_hosts:
     - 192.168.150.192
-    - 172.22.0.192
     - 127.0.0.1
   port: 53
   anonymize_client_ip: false
