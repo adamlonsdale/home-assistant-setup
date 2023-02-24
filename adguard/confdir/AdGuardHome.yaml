@@ -11,7 +11,7 @@ web_session_ttl: 720
 dns:
   bind_hosts:
     - 192.168.150.192
-    - 172.30.32.1
+    - 172.22.0.192
     - 127.0.0.1
   port: 53
   anonymize_client_ip: false
