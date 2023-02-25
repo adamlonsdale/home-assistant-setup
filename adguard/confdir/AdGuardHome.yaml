@@ -1,4 +1,4 @@
-bind_host: 127.0.0.1
+bind_host: 0.0.0.0
 bind_port: 80
 users: []
 auth_attempts: 5
@@ -133,6 +133,21 @@ clients:
     dhcp: true
     hosts: true
   persistent:
+    - name: Macbook Pro
+      tags:
+        - device_laptop
+        - os_macos
+        - user_admin
+      ids:
+        - 192.168.150.157
+      blocked_services: []
+      upstreams: []
+      use_global_settings: true
+      filtering_enabled: false
+      parental_enabled: false
+      safesearch_enabled: false
+      safebrowsing_enabled: false
+      use_global_blocked_services: true
     - name: Router
       tags: []
       ids:
