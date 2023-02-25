@@ -52,6 +52,8 @@ services:
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.196
+        aliases:
+          - core-mosquitto
         
   zigbee2mqtt:
     container_name: zigbee2mqtt
