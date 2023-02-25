@@ -62,8 +62,6 @@ template:
 
 homeassistant:
     customize: !include customize.yaml
-    allowlist_external_dirs:
-     - '/tmp'
 
 influxdb:
     api_version: 1
