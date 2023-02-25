@@ -8,7 +8,6 @@
      - filter: range
        lower_bound: 0.2
        upper_bound: 1
-  - platform: formulaone_api
   - platform: mqtt_room
     name: "Adam's iPhone BLE"
     device_id: "Adam's iPhone"
