@@ -29,16 +29,12 @@ services:
       - ${HASS_CONFIG}:/config:rw,slave
       - ${LOCALTIME}:/etc/localtime:ro
     restart: unless-stopped
-    depends_on:
-      mqtt:
-        condition: service_started
-      influxdb:
-        condition: service_started
     ports:
-      - "8123:8123"
+      - 127.22.0.192:8123:8123
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.197
+      macvlan:
         
   mqtt:
     image: eclipse-mosquitto:latest
