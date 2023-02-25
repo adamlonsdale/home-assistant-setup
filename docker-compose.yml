@@ -29,6 +29,11 @@ services:
       - ${HASS_CONFIG}:/config:rw,slave
       - ${LOCALTIME}:/etc/localtime:ro
     restart: unless-stopped
+    depends_on:
+      mqtt:
+        condition: service_started
+      influxdb:
+        condition: service_started
     ports:
       - "8123:8123"
     networks:
