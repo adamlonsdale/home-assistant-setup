@@ -65,8 +65,8 @@ services:
     depends_on:
       mqtt:
         condition: service_started
-    ports:
-      - "127.0.0.1:8080:8080"
+    expose:
+      - "8080"
     environment:
       - TZ=Europe/London
     networks:
