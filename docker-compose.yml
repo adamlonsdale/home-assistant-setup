@@ -35,6 +35,7 @@ services:
       vlan_bridge:
         ipv4_address: 172.22.0.197
       macvlan:
+        ipv4_address: 192.168.150.10
         
   mqtt:
     image: eclipse-mosquitto:latest
