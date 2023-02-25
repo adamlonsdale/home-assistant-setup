@@ -69,8 +69,8 @@ services:
     networks:
       vlan_bridge:
         ipv4_address: 172.22.0.199
-    #devices:
-    #  - /dev/tty.usbserial-0001:/dev/ttyUSB0
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
     
   adguardhome:
     image: adguard/adguardhome
