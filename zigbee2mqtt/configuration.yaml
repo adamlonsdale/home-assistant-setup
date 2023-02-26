@@ -6,7 +6,7 @@ mqtt:
 serial:
   port: /dev/ttyUSB0
 frontend:
-  port: 8099
+  port: 8080
 advanced:
   homeassistant_legacy_entity_attributes: false
   legacy_api: false
