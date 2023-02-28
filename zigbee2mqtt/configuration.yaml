@@ -32,3 +32,5 @@ devices:
     friendly_name: En Suite Climate
   '0x00124b0022d5dc06':
     friendly_name: Master Bedroom Climate
+  '0x00124b00246cefa3':
+    friendly_name: Living Room TV
