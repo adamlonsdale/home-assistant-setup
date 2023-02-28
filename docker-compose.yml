@@ -133,6 +133,24 @@ services:
    networks:
      vlan_bridge:
         ipv4_address: 172.22.0.193
+  
+  presencelight:
+    image: isaaclevin/presencelight
+    container_name: presencelight
+    restart: always
+  ports:
+    - 5000:80
+    - 5001:443
+  volumes:
+    ${PRESENCELIGHT_DATA}/https:/https
+  environment:
+    ASPNETCORE_HTTPS_PORT: "5001"
+    ASPNETCORE_URLS: "https://+;http://+"
+    ASPNETCORE_Kestrel__Certificates__Default__Password: "presencelight"
+    ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/presencelight.pfx"
+  networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.200
 
   swag:
     image: lscr.io/linuxserver/swag:latest
