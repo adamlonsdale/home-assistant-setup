@@ -72,4 +72,5 @@ influxdb:
     tags:
         instance: prod
         source: hass
-    
+
+o365: !include o365.yaml
