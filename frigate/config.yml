@@ -1,0 +1,93 @@
+mqtt:
+  host: 172.22.0.196
+  user: mqtt
+  password: mqtt
+
+detectors:
+  coral:
+    type: edgetpu
+    device: usb
+
+cameras:
+  front-door:
+    rtmp:
+      enabled: False
+    objects:
+      track:
+        - person
+        - car
+        - truck
+        - motorcycle
+        - cat
+    ffmpeg:
+      input_args:
+        - -avoid_negative_ts
+        - make_zero
+        - -fflags
+        - nobuffer
+        - -flags
+        - low_delay
+        - -strict
+        - experimental
+        - -fflags
+        - +genpts+discardcorrupt
+        - -r
+        - "5" # <---- adjust depending on your desired frame rate from the mjpeg image
+        - -use_wallclock_as_timestamps
+        - "1"
+      inputs:
+        - path: {FRIGATE_FRONTDOOR_CAM}
+          roles:
+            - detect
+    detect:
+      width: 1280
+      height: 720
+    snapshots:
+      enabled: True
+      bounding_box: True
+    mqtt:
+      timestamp: False
+      bounding_box: False
+      crop: True
+      height: 500
+  garden:
+    rtmp:
+      enabled: False
+    objects:
+      track:
+        - person
+        - car
+        - truck
+        - motorcycle
+        - cat
+    ffmpeg:
+      input_args:
+        - -avoid_negative_ts
+        - make_zero
+        - -fflags
+        - nobuffer
+        - -flags
+        - low_delay
+        - -strict
+        - experimental
+        - -fflags
+        - +genpts+discardcorrupt
+        - -r
+        - "5" # <---- adjust depending on your desired frame rate from the mjpeg image
+        - -use_wallclock_as_timestamps
+        - "1"
+      inputs:
+        - path: {FRIGATE_GARDEN_CAM}
+          roles:
+            - detect
+    detect:
+      width: 1280
+      height: 720
+    snapshots:
+      enabled: True
+      bounding_box: True
+    mqtt:
+      timestamp: False
+      bounding_box: False
+      crop: True
+      height: 500
