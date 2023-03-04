@@ -8,10 +8,19 @@ detectors:
     type: edgetpu
     device: usb
 
+record:
+  enabled: True
+  events:
+    retain:
+      default: 6
+      mode: active_objects
+    objects:
+        cat: 2
+
 cameras:
   front-door:
     rtmp:
-      enabled: False
+      enabled: True
     objects:
       track:
         - person
@@ -52,7 +61,7 @@ cameras:
       height: 500
   garden:
     rtmp:
-      enabled: False
+      enabled: True
     objects:
       track:
         - person
