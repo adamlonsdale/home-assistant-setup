@@ -65,9 +65,10 @@ homeassistant:
 
 influxdb:
     api_version: 1
-    username: '!secret influx_uid'
-    password: '!secret influx_pwd'
+    username: !secret influx_uid
+    password: !secret influx_pwd
     host: influxdb
+    port: 8086
     database: influx
     tags:
         instance: prod
