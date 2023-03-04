@@ -157,7 +157,37 @@ services:
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.195
-        
+    
+  frigate:
+    image: blakeblackshear/frigate:stable
+    container_name: frigate
+    privileged: true
+    restart: unless-stopped
+    shm_size: "256mb"
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/dri/renderD128
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${FRIGATE_DATA}:/config
+      - ${FRIGATE_STORAGE}:/media/frigate
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "5000:5000"
+      - "1935:1935"
+    environment:
+      - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PWD}
+      - TZ=Europe/London
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+      - FLASK_ENV=development
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/btbn-ffmpeg/bin
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.201
+
 networks:
   macvlan:
     name: docker_macvlan
