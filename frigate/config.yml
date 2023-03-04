@@ -14,8 +14,8 @@ record:
     retain:
       default: 6
       mode: active_objects
-    objects:
-      cat: 2
+      objects:
+        cat: 2
 
 cameras:
   front-door:
