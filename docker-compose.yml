@@ -180,6 +180,8 @@ services:
       - "1935:1935"
     environment:
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PWD}
+      - FRIGATE_GARDEN_CAM=${FRIGATE_GARDEN_CAM}
+      - FRIGATE_FRONTDOOR_CAM=${FRIGATE_FRONTDOOR_CAM}
       - TZ=Europe/London
       - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
       - FLASK_ENV=development
