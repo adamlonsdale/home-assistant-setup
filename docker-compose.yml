@@ -190,6 +190,22 @@ services:
      vlan_bridge:
         ipv4_address: 172.22.0.201
 
+  appdaemon:
+    image: acockburn/appdaemon:latest
+    container_name: appdaemon
+    restart: unless-stopped
+    ports:
+      - "5050:5050"
+    environment:
+      - HA_URL=http://homeassistant
+      - TOKEN=${HA_APPDAEMON_TOKEN}
+      - DASH_URL="http://$HOSTNAME:5050"
+    volumes:
+      - ${APPDAEMON_DATA}:/conf
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.202
+
 networks:
   macvlan:
     name: docker_macvlan
