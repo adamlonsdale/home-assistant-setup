@@ -9,13 +9,13 @@
        lower_bound: 0.2
        upper_bound: 1
   - platform: mqtt_room
-    name: "Adam's iPhone BLE"
-    device_id: "Adam's iPhone"
-    state_topic: "espresense/devices/Adam's iPhone"
+    name: "Adams iPhone BLE"
+    device_id: "irk:e779e26ada3c54f733b14c9022553209"
+    state_topic: "espresense/devices/irk:e779e26ada3c54f733b14c9022553209"
     timeout: 5
     away_timeout: 120
   - platform: mqtt_room
-    name: "Adam's Watch BLE"
+    name: "Adams Watch BLE"
     device_id: "irk:5b4ef3d66f64ee9e1c909205aaf714bb"
     state_topic: "espresense/devices/irk:5b4ef3d66f64ee9e1c909205aaf714bb"
     timeout: 5

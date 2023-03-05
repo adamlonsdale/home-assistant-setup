@@ -197,11 +197,12 @@ services:
     ports:
       - "5050:5050"
     environment:
-      - HA_URL=http://homeassistant
+      - HA_URL=http://homeassistant:8123
       - TOKEN=${HA_APPDAEMON_TOKEN}
-      - DASH_URL="http://$HOSTNAME:5050"
+      - DASH_URL="http://appdaemon:5050"
     volumes:
       - ${APPDAEMON_DATA}:/conf
+      - /etc/localtime:/etc/localtime:ro
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.202
