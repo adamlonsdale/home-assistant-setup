@@ -1,0 +1,9 @@
+proj-dev
+py3-shapely
+geos-dev
+py3-scipy
+py3-numpy
+py3-matplotlib
+gfortran
+patchelf
+openblas-dev

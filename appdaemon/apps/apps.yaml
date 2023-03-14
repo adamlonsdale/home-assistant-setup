@@ -1,0 +1,146 @@
+hello_world:
+  module: hello
+  class: HelloWorld
+ESPresenseIps:
+  module: espresense-ips
+  class: ESPresenseIps
+  pluggins:
+    - HASS
+    - MQTT
+  draw_interval: 5
+  rooms:
+    toilet: [0, 0.864, 0.965]
+    living_room: [9.83, 0.584, 1.224]
+    closet: [3.175, 1.499, 1.727]
+    master_bedroom: [3.175, 1.499, 1.727]
+    hallway: [9.398, 5.817, 1.32]
+    garage: [3.772, 7.417, 0.838]
+    utility: [1.049, 4.56, 1.930]
+    office: [3.772, 7.417, 0.838]
+    kitchen: [1.049, 4.56, 1.930]
+  devices:
+  - id: irk:e779e26ada3c54f733b14c9022553209
+    name: Phone
+    timeout: 30
+    away_timeout: 120
+  roomplans:
+  - name: living_room
+    points:
+    - x: 0.45
+      y: 1.18
+    - x: 0.45
+      y: 0.78
+    - x: 0.37
+      y: 0.78
+    - x: 0.37
+      y: 0.67
+    - x: 0.12
+      y: 0.67
+    - x: 0.12
+      y: 1.23
+    - x: 0.2
+      y: 1.23
+    - x: 0.24
+      y: 1.25
+    - x: 0.32
+      y: 1.25
+    - x: 0.36
+      y: 1.23
+    - x: 0.43
+      y: 1.23
+    - x: 0.45
+      y: 1.23
+  - name: closet
+    points:
+    - x: 0.45
+      y: 0.67
+    - x: 0.45
+      y: 0.77
+    - x: 0.38
+      y: 0.77
+    - x: 0.38
+      y: 0.67
+  - name: master_bedroom
+    points:
+    - x: 0.66
+      y: 0.61
+    - x: 0.55
+      y: 0.61
+    - x: 0.55
+      y: 0.79
+    - x: 0.66
+      y: 0.79
+  - name: hallway
+    points:
+    - x: 0.45
+      y: 1.18
+    - x: 0.59
+      y: 1.18
+    - x: 0.59
+      y: 1.15
+    - x: 0.66
+      y: 1.15
+    - x: 0.66
+      y: 0.8
+    - x: 0.55
+      y: 0.8
+    - x: 0.55
+      y: 0.61
+    - x: 0.45
+      y: 0.61
+  - name: garage
+    points:
+    - x: 0.67
+      y: 0.57
+    - x: 0.93
+      y: 0.57
+    - x: 0.93
+      y: 1.14
+    - x: 0.67
+      y: 1.14
+  - name: utility
+    points:
+    - x: 0.74
+      y: 0.55
+    - x: 0.93
+      y: 0.55
+    - x: 0.93
+      y: 0.32
+    - x: 0.74
+      y: 0.32
+  - name: kitcehn
+    points:
+    - x: 0.66
+      y: 0.6
+    - x: 0.45
+      y: 0.6
+    - x: 0.45
+      y: 0.67
+    - x: 0.12
+      y: 0.67
+    - x: 0.12
+      y: 0.32
+    - x: 0.22
+      y: 0.32
+    - x: 0.22
+      y: 0.21
+    - x: 0.55
+      y: 0.21
+    - x: 0.55
+      y: 0.32
+    - x: 0.74
+      y: 0.32
+    - x: 0.74
+      y: 0.56
+    - x: 0.66
+      y: 0.56
+  - name: office
+    points:
+    - x: 0.22
+      y: 0.21
+    - x: 0.55
+      y: 0.21
+    - x: 0.55
+      y: 0.32
+    - x: 0.22
+      y: 0.31
