@@ -12,6 +12,8 @@ __pycache__
 /zigbee2mqtt/*
 !/zigbee2mqtt/configuration.yaml
 
+/appdaemon/secrets.yaml
+
 /config/*
 !/config/configuration.yaml
 !/config/customize.yaml
