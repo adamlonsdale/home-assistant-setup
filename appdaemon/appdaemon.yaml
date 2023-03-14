@@ -7,10 +7,12 @@ appdaemon:
     HASS:
       type: hass
       ha_url: http://homeassistant:8123
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiMDE4ZDAxMGIzZmY0YmEzYmY5ZGUxZmEyZGY0MzczOSIsImlhdCI6MTY3ODA0Mzc0MCwiZXhwIjoxOTkzNDAzNzQwfQ.UYOf6bgwlhPNEcFlx0WX3NmX1C84UGixnjMhHVeaiIU
       cert_verify: False
     MQTT:
       type: mqtt
-      client_host: mqtt
+      client_host: core-mosquitto
+      client_port: 1883
       namespace: mqtt
       birth_topic: appdaemon
       will_topic: appdaemon
