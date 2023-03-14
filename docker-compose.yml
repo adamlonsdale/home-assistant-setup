@@ -170,7 +170,7 @@ services:
     restart: unless-stopped
     networks:
       vlan_bridge:
-          ipv4_address: 172.22.0.202
+          ipv4_address: 172.22.0.204
 
   grocy-backend:
     image: "grocy/backend:v3.3.2"
