@@ -157,6 +157,36 @@ services:
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.195
+
+  grocy-frontend:
+    image: "grocy/frontend:v3.3.2"
+    depends_on:
+      - grocy-backend
+    expose:
+      - "8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+    networks:
+      vlan_bridge:
+          ipv4_address: 172.22.0.202
+
+  grocy-backend:
+    image: "grocy/backend:v3.3.2"
+    expose:
+      - "9000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - ${GROCY_DATA}:/var/www/data
+    env_file:
+      - grocy.env
+    restart: unless-stopped
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.203
     
   frigate:
     image: blakeblackshear/frigate:stable
