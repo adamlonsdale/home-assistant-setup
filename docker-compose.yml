@@ -159,7 +159,7 @@ services:
         ipv4_address: 172.22.0.195
 
   grocy-frontend:
-    image: "grocy/frontend:v3.3.2"
+    image: "adamlonsdale/grocy-frontend:v3.3.2"
     depends_on:
       - grocy-backend
     expose:
@@ -173,7 +173,7 @@ services:
           ipv4_address: 172.22.0.204
 
   grocy-backend:
-    image: "grocy/backend:v3.3.2"
+    image: "adamlonsdale/grocy-backend:v3.3.2"
     expose:
       - "9000"
     read_only: true
