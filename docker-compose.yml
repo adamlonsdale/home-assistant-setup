@@ -35,7 +35,7 @@ services:
       vlan_bridge:
         ipv4_address: 172.22.0.197
       macvlan:
-        ipv4_address: 192.168.150.10
+        ipv4_address: 192.168.160.10
         
   mqtt:
     image: eclipse-mosquitto:latest
@@ -95,7 +95,7 @@ services:
       - ${ADGUARD_CONFDIR}:/opt/adguardhome/conf:rw,slave
     networks:
       macvlan:
-        ipv4_address: 192.168.150.192
+        ipv4_address: 192.168.160.192
     restart: unless-stopped
     
   influxdb:
@@ -179,8 +179,6 @@ services:
     read_only: true
     tmpfs:
       - /tmp
-    volumes:
-      - ${GROCY_DATA}:/var/www/data
     env_file:
       - grocy.env
     restart: unless-stopped
@@ -246,9 +244,9 @@ networks:
       parent: ${NETWORK_INTERFACE}
     ipam:
       config:
-        - subnet: 192.168.150.0/24
-          ip_range: 192.168.150.192/27
-          gateway: 192.168.150.1
+        - subnet: 192.168.160.0/24
+          ip_range: 192.168.160.192/27
+          gateway: 192.168.160.1
   vlan_bridge:
     name: home_vlan
     driver: bridge
