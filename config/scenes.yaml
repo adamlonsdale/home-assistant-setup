@@ -591,3 +591,51 @@
       state: 'off'
   icon: mdi:lightbulb-off
   metadata: {}
+- id: '1679323859598'
+  name: TV Mute
+  entities:
+    media_player.living_room:
+      source_list:
+      - TV
+      group_members:
+      - media_player.living_room
+      volume_level: 0.05
+      is_volume_muted: true
+      media_content_id: x-sonos-htastream:RINCON_5CAAFD33616B01400:spdif
+      media_content_type: music
+      media_title: TV
+      source: TV
+      shuffle: false
+      repeat: 'off'
+      queue_size: 1
+      device_class: speaker
+      friendly_name: Living Room Sonos
+      supported_features: 981567
+      state: playing
+  metadata:
+    media_player.living_room:
+      entity_only: true
+- id: '1679323898617'
+  name: TV Unmute
+  entities:
+    media_player.living_room:
+      source_list:
+      - TV
+      group_members:
+      - media_player.living_room
+      volume_level: 0.18
+      is_volume_muted: false
+      media_content_id: x-sonos-htastream:RINCON_5CAAFD33616B01400:spdif
+      media_content_type: music
+      media_title: TV
+      source: TV
+      shuffle: false
+      repeat: 'off'
+      queue_size: 1
+      device_class: speaker
+      friendly_name: Living Room Sonos
+      supported_features: 981567
+      state: playing
+  metadata:
+    media_player.living_room:
+      entity_only: true
