@@ -1,27 +1,5 @@
 version: '3'
 services:
-  find3:
-    container_name: find3
-    image: adamlonsdale/find3:latest
-    restart: always
-    volumes:
-      - ${FIND3_DATA}:/data:rw,slave
-    environment:
-      - MQTT_SERVER=mqtt:1883
-      - MQTT_ADMIN=${MQTT_ADMIN}
-      - MQTT_PASS=${MQTT_PASS}
-    depends_on:
-      mqtt:
-        condition: service_started
-    # Expose the port 1883 to the internal docker network for bridging to the mqtt container
-    expose:
-      - "1883"
-    ports:
-      - "0.0.0.0:8003:8003"
-    networks:
-      vlan_bridge:
-        ipv4_address: 172.22.0.198
-        
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
@@ -217,23 +195,6 @@ services:
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.201
-
-  appdaemon:
-    image: acockburn/appdaemon:latest
-    container_name: appdaemon
-    restart: unless-stopped
-    ports:
-      - "5050:5050"
-    environment:
-      - HA_URL=http://homeassistant:8123
-      - TOKEN=${HA_APPDAEMON_TOKEN}
-      - DASH_URL="http://appdaemon:5050"
-    volumes:
-      - ${APPDAEMON_DATA}:/conf
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-     vlan_bridge:
-        ipv4_address: 172.22.0.202
 
 networks:
   macvlan:
