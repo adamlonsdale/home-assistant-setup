@@ -10,7 +10,7 @@ debug_pprof: false
 web_session_ttl: 720
 dns:
   bind_hosts:
-    - 192.168.150.192
+    - 192.168.160.192
     - 127.0.0.1
   port: 53
   anonymize_client_ip: false
@@ -47,7 +47,10 @@ dns:
   bogus_nxdomain: []
   aaaa_disabled: false
   enable_dnssec: false
-  edns_client_subnet: false
+  edns_client_subnet:
+    custom_ip: ""
+    enabled: false
+    use_custom: false
   max_goroutines: 300
   handle_ddr: true
   ipset: []
@@ -133,25 +136,10 @@ clients:
     dhcp: true
     hosts: true
   persistent:
-    - name: Macbook Pro
-      tags:
-        - device_laptop
-        - os_macos
-        - user_admin
-      ids:
-        - 192.168.150.157
-      blocked_services: []
-      upstreams: []
-      use_global_settings: true
-      filtering_enabled: false
-      parental_enabled: false
-      safesearch_enabled: false
-      safebrowsing_enabled: false
-      use_global_blocked_services: true
     - name: Router
       tags: []
       ids:
-        - 192.168.150.1
+        - 192.168.160.1
       blocked_services: []
       upstreams: []
       use_global_settings: true
@@ -171,4 +159,4 @@ os:
   group: ""
   user: ""
   rlimit_nofile: 0
-schema_version: 16
+schema_version: 17
