@@ -127,7 +127,7 @@ services:
       - TZ=Europe/London
       - URL=lonsdale.social
       - VALIDATION=http
-      - SUBDOMAINS=www,home,vpn,docker,grocy
+      - SUBDOMAINS=${HOME_SUBDOMAINS}
       - DNSPLUGIN=cloudflare
       - ONLY_SUBDOMAINS=true
     volumes:
