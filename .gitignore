@@ -50,7 +50,9 @@ __pycache__
 !/swag/nginx/ssl.conf
 !/swag/nginx/proxy-confs
 /swag/nginx/proxy-confs/*
-!/swag/nginx/proxy-confs/*.conf
+!/swag/nginx/proxy-confs/grocy.subdomain.conf
+!/swag/nginx/proxy-confs/homeassistant.subdomain.conf
+!/swag/nginx/proxy-confs/portainer.subdomain.conf
 !/swag/nginx/site-confs
 /swag/nginx/site-confs/*
 !/swag/nginx/site-confs/default.conf
