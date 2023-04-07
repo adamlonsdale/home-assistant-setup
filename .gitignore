@@ -23,13 +23,19 @@ __pycache__
 !/config/scripts.yaml
 !/config/sensor.yaml
 !/config/custom_components/
-!/config/www/community/
+!/config/www/
+config/www/floorplans/
+config/www/media/
+config/www/tmp/
 !/config/ui_lovelace_minimalist/
 !/config/themes/
 !/config/dwains-dashboard/
 !/config/zigbee2mqtt
 /config/zigbee2mqtt/*
 !/config/zigbee2mqtt/configuration.yaml
+
+*.glb
+*.old
 
 /find3/data/*
 
@@ -50,7 +56,9 @@ __pycache__
 !/swag/nginx/ssl.conf
 !/swag/nginx/proxy-confs
 /swag/nginx/proxy-confs/*
-!/swag/nginx/proxy-confs/*.conf
+!/swag/nginx/proxy-confs/grocy.subdomain.conf
+!/swag/nginx/proxy-confs/homeassistant.subdomain.conf
+!/swag/nginx/proxy-confs/portainer.subdomain.conf
 !/swag/nginx/site-confs
 /swag/nginx/site-confs/*
 !/swag/nginx/site-confs/default.conf

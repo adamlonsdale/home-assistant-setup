@@ -127,7 +127,7 @@ services:
       - TZ=Europe/London
       - URL=lonsdale.social
       - VALIDATION=http
-      - SUBDOMAINS=www,home,vpn,docker,grocy
+      - SUBDOMAINS=${HOME_SUBDOMAINS}
       - DNSPLUGIN=cloudflare
       - ONLY_SUBDOMAINS=true
     volumes:
@@ -195,6 +195,20 @@ services:
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.201
+  
+  espresence:
+   image: adamlonsdale/espresence-companion:dev
+   container_name: espresence-companion
+   restart: always
+   depends_on:
+     - mqtt
+   ports:
+     - '8276:8276'
+   volumes:
+     - ${ESPRESENCE_DATA}:/config/espresense
+   networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.206
 
 networks:
   macvlan:
