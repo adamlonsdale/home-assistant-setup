@@ -34,7 +34,8 @@ config/www/tmp/
 /config/zigbee2mqtt/*
 !/config/zigbee2mqtt/configuration.yaml
 
-.glb
+*.glb
+*.old
 
 /find3/data/*
 
@@ -66,7 +67,6 @@ config/www/tmp/
 
 .env
 .DS_Store
-.old
 .pnpm-store
 
 docker-compose.override.yml
