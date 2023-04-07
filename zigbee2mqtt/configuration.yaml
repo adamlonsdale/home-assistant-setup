@@ -34,3 +34,7 @@ devices:
     friendly_name: Master Bedroom Climate
   '0x00124b00246cefa3':
     friendly_name: Living Room TV
+  '0x00124b0029197bbf':
+    friendly_name: Closet Climate
+  '0x00124b0029298c5f':
+    friendly_name: '0x00124b0029298c5f'
