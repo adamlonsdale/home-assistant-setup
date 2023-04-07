@@ -1,0 +1,198 @@
+# MQTT Connection, if empty will query and use hassio provided mqtt
+mqtt:
+  host: 192.168.160.151
+  port: 1883
+  ssl: false
+  username:
+  password:
+
+# This gets added to the x,y,z to derive a gps location
+gps:
+  latitude: 53.72996027248322
+  longitude: -0.4604924602243754
+  elevation: 165
+
+# How long before device considered stale
+timeout: 30 # Seconds
+
+# How long before device is considered away
+away_timeout: 120 # Seconds
+
+weighting:
+  algorithm: gaussian
+  props:
+    sigma: 0.10
+
+floors:
+  - id: level-38a7a668-1e4f-4f40-880e-d60bf5606c93
+    name: ground_floor
+    bounds: [[0, -0, 0], [16, -16, 2.2]]
+    rooms:
+      - name: living_room
+        points:
+        - [4.5, -11.7]
+        - [4.5, -7.7]
+        - [3.7, -7.7]
+        - [3.7, -6.6]
+        - [1.2, -6.6]
+        - [1.2, -12.2]
+        - [2, -12.2]
+        - [2.4, -12.4]
+        - [3.2, -12.4]
+        - [3.6, -12.2]
+        - [4.3, -12.2]
+        - [4.5, -12.2]
+      - name: closet
+        points:
+        - [4.5, -6.6]
+        - [4.5, -7.6]
+        - [3.8, -7.6]
+        - [3.8, -6.6]
+      - name: toilet
+        points:
+        - [6.6, -6]
+        - [5.5, -6]
+        - [5.5, -7.8]
+        - [6.6, -7.8]
+      - name: hallway
+        points:
+        - [4.5, -11.7]
+        - [5.9, -11.7]
+        - [5.9, -11]
+        - [6.6, -11]
+        - [6.6, -7.9]
+        - [5.5, -7.9]
+        - [5.5, -5.9]
+        - [4.5, -5.9]
+      - name: garage
+        points:
+        - [6.7, -5.6]
+        - [9.3, -5.6]
+        - [9.3, -11.3]
+        - [6.7, -11.3]
+      - name: utility
+        points:
+        - [7.4, -5.4]
+        - [9.3, -5.4]
+        - [9.3, -3.1]
+        - [7.4, -3.1]
+      - name: kitcehn
+        points:
+        - [6.6, -5.9]
+        - [4.5, -5.9]
+        - [4.5, -6.6]
+        - [1.2, -6.6]
+        - [1.2, -3.1]
+        - [2.2, -3.1]
+        - [2.2, -2]
+        - [5.5, -2]
+        - [5.5, -3.1]
+        - [7.4, -3.1]
+        - [7.4, -5.5]
+        - [6.6, -5.5]
+  - id: level-e490ce8b-992d-4c89-8f37-f4a880ddbea7
+    name: upstairs
+    bounds: [[0, -0, 2.2], [16, -16, 4.4]]
+    rooms:
+      - name: master_bedroom
+        points:
+        - [1.2, -8.5]
+        - [5.5, -8.5]
+        - [5.5, -9.6]
+        - [6.6, -9.6]
+        - [6.6, -11]
+        - [4.4, -11]
+        - [4.4, -12.2]
+        - [1.2, -12.2]
+      - name: guest_room
+        points:
+        - [6.7, -11]
+        - [9.3, -11]
+        - [9.3, -6.8]
+        - [7.6, -6.8]
+        - [7.6, -7.4]
+        - [6.7, -7.4]
+      - name: spare_room
+        points:
+        - [9.3, -3.1]
+        - [9.3, -6.7]
+        - [7.6, -6.7]
+        - [7.6, -6.1]
+        - [6.8, -6.1]
+        - [6.8, -4.8]
+        - [6.4, -4.8]
+        - [6.4, -3.1]
+      - name: landing
+        points:
+        - [7.6, -7.3]
+        - [5.5, -7.3]
+        - [5.5, -8.5]
+        - [4.5, -8.5]
+        - [4.5, -6.2]
+        - [7.6, -6.2]
+      - name: bathroom
+        points:
+        - [4, -3.1]
+        - [6.3, -3.1]
+        - [6.3, -4.9]
+        - [6.7, -4.9]
+        - [6.7, -6.1]
+        - [4.7, -6.1]
+        - [4.7, -4.9]
+        - [4, -4.9]
+      - name: office
+        points:
+        - [1.2, -3.1]
+        - [1.2, -6.4]
+        - [2.6, -6.4]
+        - [2.6, -7.1]
+        - [4.4, -7.1]
+        - [4.4, -6.1]
+        - [4.7, -6.1]
+        - [4.7, -4.9]
+        - [4, -4.9]
+        - [4, -3.1]
+      - name: en_suite
+        points:
+        - [1.2, -6.4]
+        - [2.6, -6.4]
+        - [2.6, -7.2]
+        - [3.4, -7.2]
+        - [3.4, -8.5]
+        - [1.2, -8.5]
+      - name: cupboard
+        points:
+        - [3.4, -7.2]
+        - [4.4, -7.2]
+        - [4.4, -8.5]
+        - [3.4, -8.5]
+
+# Locations of espresense nodes in meters
+nodes:
+  - name: landing
+    point: [7.5, -7, 2.2]
+    floors: ["level-e490ce8b-992d-4c89-8f37-f4a880ddbea7"]
+  - name: office
+    point: [2.8, -6.4, 2.2]
+    floors: ["level-e490ce8b-992d-4c89-8f37-f4a880ddbea7"]
+  - name: master_bedroom
+    point: [4.1, -11.6, 2.2]
+    floors: ["level-e490ce8b-992d-4c89-8f37-f4a880ddbea7"]
+  - name: living_room
+    point: [1.6, -10.8, 0]
+    floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
+  - name: hallway
+    point: [5.9, -11.3, 0]
+    floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
+  - name: closet
+    point: [4.3, -7.4, 0]
+    floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
+  - name: kitchen
+    point: [2.2, -3.1, 0]
+    floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
+
+# Devices to track
+devices:
+  - id: "tile:*" # Track all tiles
+  - id: "irk:*" # Track all IRKs
+  - id: "apple:*" # Track all apple devices

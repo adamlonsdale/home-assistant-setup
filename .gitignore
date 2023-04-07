@@ -34,6 +34,8 @@ config/www/tmp/
 /config/zigbee2mqtt/*
 !/config/zigbee2mqtt/configuration.yaml
 
+/espresence/.storage/
+
 *.glb
 *.old
 
