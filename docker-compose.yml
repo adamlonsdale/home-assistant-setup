@@ -195,6 +195,20 @@ services:
     networks:
      vlan_bridge:
         ipv4_address: 172.22.0.201
+  
+  espresence:
+   image: adamlonsdale/espresence-companion:dev
+   container_name: espresence-companion
+   restart: always
+   depends_on:
+     - mqtt
+   ports:
+     - '8276:8276'
+   volumes:
+     - ${ESPRESENCE_DATA}:/config/espresense
+   networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.206
 
 networks:
   macvlan:
