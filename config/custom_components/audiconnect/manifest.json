@@ -1,0 +1,11 @@
+{
+  "domain": "audiconnect",
+  "name": "Audi Connect",
+  "config_flow": true,
+  "documentation": "https://github.com/arjenvrh/audi_connect_ha",
+  "issue_tracker": "https://github.com/arjenvrh/audi_connect_ha/issues",
+  "requirements": ["beautifulsoup4"],
+  "dependencies": [],
+  "codeowners": ["@arjenvrh"],
+  "version": "2021.1.1"
+}
