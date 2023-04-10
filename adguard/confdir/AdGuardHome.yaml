@@ -111,6 +111,8 @@ filters:
 whitelist_filters: []
 user_rules:
   - '@@||skyvegas.com^'
+  - '@@||iadsdk.apple.com^$important'
+  - ""
 dhcp:
   enabled: false
   interface_name: ""
