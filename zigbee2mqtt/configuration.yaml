@@ -36,5 +36,9 @@ devices:
     friendly_name: Living Room TV
   '0x00124b0029197bbf':
     friendly_name: Closet Climate
+  '0x7cb94c7788dc0000':
+    friendly_name: Office Plug
   '0x00124b0029298c5f':
-    friendly_name: '0x00124b0029298c5f'
+    friendly_name: Office Door
+  '0x00124b00292927c7':
+    friendly_name: En Suite Door
