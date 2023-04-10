@@ -214,6 +214,7 @@ services:
     image: nodered/node-red:latest
     environment:
       - TZ=Europe/London
+      - NODERED_CREDENTIAL_SECRET=${NODERED_CREDENTIAL_SECRET}
     ports:
       - "1880:1880"
     networks:
