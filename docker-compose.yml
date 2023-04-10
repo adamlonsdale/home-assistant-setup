@@ -210,6 +210,17 @@ services:
      vlan_bridge:
         ipv4_address: 172.22.0.206
 
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Europe/London
+    ports:
+      - "1880:1880"
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.207
+    volumes:
+      - ${NODERED_DATA}:/data
 networks:
   macvlan:
     name: docker_macvlan
