@@ -205,6 +205,9 @@ nodes:
   - name: kitchen
     point: [2.2, -3.1, 0]
     floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
+  - name: utility
+    point: [7.2, -3.5, 0]
+    floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
 
 # Devices to track
 devices:
