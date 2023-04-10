@@ -45,6 +45,10 @@ config/www/tmp/
 /grafana/
 /adguard/workdir/
 
+/nodered/*
+!/nodered/settings.js
+!/nodered/flows.json
+
 /swag/etc/
 /swag/log/
 /swag/keys/

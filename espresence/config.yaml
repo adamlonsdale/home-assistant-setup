@@ -18,6 +18,18 @@ timeout: 30 # Seconds
 # How long before device is considered away
 away_timeout: 120 # Seconds
 
+optimization:
+  enabled: true
+  interval_secs: 60
+  limits:
+    absorption_min: 2
+    absorption_max: 5
+    tx_ref_rssi_min: -70
+    tx_ref_rssi_max: -50
+    rx_adj_rssi_min: -20
+    rx_adj_rssi_max: 20
+
+
 weighting:
   algorithm: gaussian
   props:
@@ -26,7 +38,7 @@ weighting:
 floors:
   - id: level-38a7a668-1e4f-4f40-880e-d60bf5606c93
     name: ground_floor
-    bounds: [[0, -0, 0], [16, -16, 2.2]]
+    bounds: [[0, -0, 0], [16, -16, 2.0]]
     rooms:
       - name: living_room
         points:
@@ -92,7 +104,7 @@ floors:
         - [6.6, -5.5]
   - id: level-e490ce8b-992d-4c89-8f37-f4a880ddbea7
     name: upstairs
-    bounds: [[0, -0, 2.2], [16, -16, 4.4]]
+    bounds: [[0, -0, 2.0], [16, -16, 4.4]]
     rooms:
       - name: master_bedroom
         points:
@@ -178,6 +190,9 @@ nodes:
   - name: master_bedroom
     point: [4.1, -11.6, 2.2]
     floors: ["level-e490ce8b-992d-4c89-8f37-f4a880ddbea7"]
+  - name: en_suite
+    point: [1.6, -9.0, 2.2]
+    floors: ["level-e490ce8b-992d-4c89-8f37-f4a880ddbea7"]
   - name: living_room
     point: [1.6, -10.8, 0]
     floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
@@ -190,9 +205,12 @@ nodes:
   - name: kitchen
     point: [2.2, -3.1, 0]
     floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
+  - name: utility
+    point: [7.2, -3.5, 0]
+    floors: ["level-38a7a668-1e4f-4f40-880e-d60bf5606c93"]
 
 # Devices to track
 devices:
-  - id: "tile:*" # Track all tiles
   - id: "irk:*" # Track all IRKs
-  - id: "apple:*" # Track all apple devices
+  - id: "iBeacon:*"
+  - id: "sonos:*"

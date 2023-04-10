@@ -22,6 +22,65 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 sensor: !include sensor.yaml
 
+input_select: 
+  house_presence:
+    name: House Presence
+    initial: Unknown #Default until actual state is known after restart
+    options:
+      - Unknown
+      - Empty
+      - Someone
+      - Guests
+      - Extended Away
+      - Adam
+  bedroom_presence:
+    name: Bedroom Presence
+    initial: Unknown #Default until actual state is known after restart
+    options:
+      - Unknown
+      - Empty
+      - Someone
+      - Guests
+      - Adam
+      - Extended Away
+      - Going to Sleep
+      - Sleeping
+      - Waking Up
+      - Woken Up
+  living_room_presence:
+    name: Living Room Presence
+    initial: Unknown #Default until actual state is known after restart
+    options:
+      - Unknown
+      - Empty
+      - Someone
+      - Guests
+      - Extended Away
+      - Adam
+  adam_location:
+    name: Adam Location
+    initial: Unknown #Default until actual state is known after restart
+    options:
+      - Unknown
+      - Just Arrived
+      - Home
+      - Just Left
+      - Away
+      - Extended Away
+      - Living Room
+      - Bedroom
+
+group: 
+  person_locations:
+    name: Person Locations
+    entities:
+      - input_select.adam_location
+ 
+  person_home_away:
+    name: Person Locations
+    entities:
+      - person.adam_lonsdale
+
 template:
   - sensor:
     - name: "Calculated Light Brightness"
