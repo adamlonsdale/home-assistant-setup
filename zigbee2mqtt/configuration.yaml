@@ -42,3 +42,5 @@ devices:
     friendly_name: Office Door
   '0x00124b00292927c7':
     friendly_name: En Suite Door
+  '0x0017880108f6699a':
+    friendly_name: Sonos Dimmer
