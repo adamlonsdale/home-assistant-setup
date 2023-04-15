@@ -129,7 +129,8 @@ services:
       - VALIDATION=http
       - SUBDOMAINS=${HOME_SUBDOMAINS}
       - DNSPLUGIN=cloudflare
-      - ONLY_SUBDOMAINS=true
+      - ONLY_SUBDOMAINS=false
+      - EXTRA_DOMAINS=${HOME_EXTRADOMAINS}
     volumes:
       - ${SWAG_DATA}:/config
     networks:
