@@ -122,8 +122,8 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - PUID=0
-      - PGID=0
+      - PUID=500
+      - PGID=1000
       - TZ=Europe/London
       - URL=lonsdale.social
       - VALIDATION=http
