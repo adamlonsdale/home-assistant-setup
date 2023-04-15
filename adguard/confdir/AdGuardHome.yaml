@@ -64,7 +64,9 @@ dns:
   safesearch_cache_size: 1048576
   parental_cache_size: 1048576
   cache_time: 30
-  rewrites: []
+  rewrites:
+    - domain: '*.lonsdale.house'
+      answer: 192.168.160.151
   blocked_services: []
   upstream_timeout: 10s
   private_networks: []
@@ -112,6 +114,8 @@ whitelist_filters: []
 user_rules:
   - '@@||skyvegas.com^'
   - '@@||iadsdk.apple.com^$important'
+  - '@@||browser.pipe.aria.microsoft.com^$important'
+  - '@@||eu-mobile.events.data.microsoft.com^$important'
   - ""
 dhcp:
   enabled: false
@@ -138,6 +142,21 @@ clients:
     dhcp: true
     hosts: true
   persistent:
+    - name: Macbook Pro
+      tags:
+        - device_laptop
+        - os_macos
+        - user_admin
+      ids:
+        - 192.168.160.2
+      blocked_services: []
+      upstreams: []
+      use_global_settings: true
+      filtering_enabled: false
+      parental_enabled: false
+      safesearch_enabled: false
+      safebrowsing_enabled: false
+      use_global_blocked_services: true
     - name: Router
       tags: []
       ids:
