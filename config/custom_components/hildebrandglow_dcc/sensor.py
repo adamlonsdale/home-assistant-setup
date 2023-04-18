@@ -55,7 +55,8 @@ async def async_setup_entry(
                 "Non-200 Status Code. The Glow API may be experiencing issues"
             )
         else:
-            _LOGGER.exception("Unexpected exception: %s. Please open an issue", ex)
+            _LOGGER.exception(
+                "Unexpected exception: %s. Please open an issue", ex)
 
     for virtual_entity in virtual_entities:
         # Gather all resources for each virtual entity
@@ -78,7 +79,8 @@ async def async_setup_entry(
                     "Non-200 Status Code. The Glow API may be experiencing issues"
                 )
             else:
-                _LOGGER.exception("Unexpected exception: %s. Please open an issue", ex)
+                _LOGGER.exception(
+                    "Unexpected exception: %s. Please open an issue", ex)
 
         # Loop through all resources and create sensors
         for resource in resources:
@@ -90,7 +92,8 @@ async def async_setup_entry(
 
                 # Standing and Rate sensors are handled by the coordinator
                 coordinator = TariffCoordinator(hass, resource)
-                standing_sensor = Standing(coordinator, resource, virtual_entity)
+                standing_sensor = Standing(
+                    coordinator, resource, virtual_entity)
                 entities.append(standing_sensor)
                 rate_sensor = Rate(coordinator, resource, virtual_entity)
                 entities.append(rate_sensor)
@@ -118,7 +121,8 @@ def supply_type(resource) -> str:
         return "electricity"
     if "gas.consumption" in resource.classifier:
         return "gas"
-    _LOGGER.error("Unknown classifier: %s. Please open an issue", resource.classifier)
+    _LOGGER.error("Unknown classifier: %s. Please open an issue",
+                  resource.classifier)
     return "unknown"
 
 
@@ -173,14 +177,25 @@ async def daily_data(hass: HomeAssistant, resource) -> float:
                 "Non-200 Status Code. The Glow API may be experiencing issues"
             )
         else:
-            _LOGGER.exception("Unexpected exception: %s. Please open an issue", ex)
+            _LOGGER.exception(
+                "Unexpected exception: %s. Please open an issue", ex)
 
     try:
+        _LOGGER.debug("Get readings from %s to %s for %s",
+                      t_from, t_to, resource.classifier)
         readings = await hass.async_add_executor_job(
             resource.get_readings, t_from, t_to, "P1D", "sum", True
         )
-        _LOGGER.debug("Successfully got daily usage for resource id %s", resource.id)
-        return readings[0][1].value
+        _LOGGER.debug(
+            "Successfully got daily usage for resource id %s", resource.id)
+        _LOGGER.debug("Readings for %s has %s entries",
+                      resource.classifier, len(readings))
+
+        usage = 0
+        for reading in readings:
+            usage += reading[1].value
+
+        return usage
     except requests.Timeout as ex:
         _LOGGER.error("Timeout: %s", ex)
     except requests.exceptions.ConnectionError as ex:
@@ -192,7 +207,8 @@ async def daily_data(hass: HomeAssistant, resource) -> float:
                 "Non-200 Status Code. The Glow API may be experiencing issues"
             )
         else:
-            _LOGGER.exception("Unexpected exception: %s. Please open an issue", ex)
+            _LOGGER.exception(
+                "Unexpected exception: %s. Please open an issue", ex)
     return None
 
 
@@ -223,7 +239,8 @@ async def tariff_data(hass: HomeAssistant, resource) -> float:
                 "Non-200 Status Code. The Glow API may be experiencing issues"
             )
         else:
-            _LOGGER.exception("Unexpected exception: %s. Please open an issue", ex)
+            _LOGGER.exception(
+                "Unexpected exception: %s. Please open an issue", ex)
     return None
 
 
