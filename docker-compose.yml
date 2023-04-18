@@ -125,12 +125,10 @@ services:
       - PUID=500
       - PGID=1000
       - TZ=Europe/London
-      - URL=lonsdale.social
-      - VALIDATION=http
-      - SUBDOMAINS=${HOME_SUBDOMAINS}
+      - URL=lonsdale.house
+      - VALIDATION=dns
+      - SUBDOMAINS=wildcard
       - DNSPLUGIN=cloudflare
-      - ONLY_SUBDOMAINS=false
-      - EXTRA_DOMAINS=${HOME_EXTRADOMAINS}
     volumes:
       - ${SWAG_DATA}:/config
     networks:

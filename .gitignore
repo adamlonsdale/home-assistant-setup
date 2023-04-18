@@ -67,6 +67,7 @@ finance.subdomain.conf
 !/swag/nginx/site-confs
 /swag/nginx/site-confs/*
 !/swag/nginx/site-confs/default.conf
+/swag/dns-conf/*
 
 /.idea/
 
