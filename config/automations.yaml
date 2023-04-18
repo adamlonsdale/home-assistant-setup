@@ -231,3 +231,79 @@
       title: Rat Alert
       message: IS THERE A RAT?!?!?!?!
   mode: single
+- id: '1681556893540'
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
+    type: action
+    subtype: on_press_release
+    discovery_id: 0x0017880108f6699a action_on_press_release
+    id: 'on'
+  - platform: device
+    domain: mqtt
+    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
+    type: action
+    subtype: off_press_release
+    discovery_id: 0x0017880108f6699a action_off_press_release
+    id: 'off'
+  - platform: device
+    domain: mqtt
+    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
+    type: action
+    subtype: up_press_release
+    discovery_id: 0x0017880108f6699a action_up_press_release
+    id: up
+  - platform: device
+    domain: mqtt
+    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
+    type: action
+    subtype: down_press_release
+    discovery_id: 0x0017880108f6699a action_down_press_release
+    id: down
+  condition: []
+  action:
+  - if:
+    - condition: trigger
+      id: 'on'
+    then:
+    - service: media_player.volume_mute
+      data:
+        is_volume_muted: false
+      target:
+        device_id:
+        - a7a027637224e11b7f4c087f5a82da2b
+        - 9060dbb4396f8584afa5f13fc493c494
+  - if:
+    - condition: trigger
+      id: 'off'
+    then:
+    - service: media_player.volume_mute
+      data:
+        is_volume_muted: true
+      target:
+        device_id:
+        - a7a027637224e11b7f4c087f5a82da2b
+        - 9060dbb4396f8584afa5f13fc493c494
+  - if:
+    - condition: trigger
+      id: up
+    then:
+    - service: media_player.volume_up
+      data: {}
+      target:
+        device_id:
+        - 9060dbb4396f8584afa5f13fc493c494
+        - a7a027637224e11b7f4c087f5a82da2b
+  - if:
+    - condition: trigger
+      id: down
+    then:
+    - service: media_player.volume_down
+      data: {}
+      target:
+        device_id:
+        - 9060dbb4396f8584afa5f13fc493c494
+        - a7a027637224e11b7f4c087f5a82da2b
+  mode: single
