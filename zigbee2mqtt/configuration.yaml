@@ -24,8 +24,6 @@ devices:
     friendly_name: Utility Plug
   '0x00124b00246ca011':
     friendly_name: Landing Plug
-  '0x00124b00292931e4':
-    friendly_name: Stairs Motion
   '0x00124b00292998ac':
     friendly_name: Front Door
   '0x00124b0022d5a09d':
@@ -44,3 +42,5 @@ devices:
     friendly_name: En Suite Door
   '0x0017880108f6699a':
     friendly_name: Sonos Dimmer
+  '0x00124b00292931e4':
+    friendly_name: Stairs Motion
