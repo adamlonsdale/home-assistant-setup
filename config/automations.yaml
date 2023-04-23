@@ -307,3 +307,50 @@
         - 9060dbb4396f8584afa5f13fc493c494
         - a7a027637224e11b7f4c087f5a82da2b
   mode: single
+- id: '1682234657497'
+  alias: Living Room Daytime
+  description: ''
+  use_blueprint:
+    path: freakshock88/motion_illuminance_activated_entity.yaml
+    input:
+      motion_sensor: binary_sensor.living_room_sensor_motion
+      target_entity: scene.living_room_daytime_chill
+      illuminance_sensor: sensor.living_room_sensor_illuminance
+      sunstate_condition: Above horizon
+      no_motion_wait: input_number.living_room_empty_wait_time
+      illuminance_cutoff: input_number.low_light_level
+- id: '1682234975513'
+  alias: Living Room Nighttime
+  description: ''
+  use_blueprint:
+    path: freakshock88/motion_illuminance_activated_entity.yaml
+    input:
+      motion_sensor: binary_sensor.living_room_sensor_motion
+      target_entity: scene.living_room_chill
+      illuminance_sensor: sensor.living_room_sensor_illuminance
+      sunstate_condition: Below horizon
+      no_motion_wait: input_number.living_room_empty_wait_time
+- id: '1682235808454'
+  alias: Home Presence
+  description: ''
+  use_blueprint:
+    path: SirGoodenough/Person_Alert_Blueprint.yaml
+    input:
+      people2monitor:
+      - person.adam_lonsdale
+      zone2monitor:
+      - zone.home
+      hold_period:
+        hours: 0
+        minutes: 0
+        seconds: 0
+      leave_action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.all_off
+        metadata: {}
+      enter_action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.welcome_home
+        metadata: {}
