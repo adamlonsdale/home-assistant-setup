@@ -1,12 +1,48 @@
 mqtt:
   host: 172.22.0.196
-  user: mqtt
-  password: mqtt
+  user: "{FRIGATE_MQTT_USER}"
+  password: "{FRIGATE_MQTT_PASSWORD}"
 
 detectors:
   coral:
     type: edgetpu
     device: usb
+
+objects:
+  track:
+    - person
+    - bicycle
+    - car
+    - motorcycle
+    - bird
+    - cat
+    - dog
+    - horse
+    - sheep
+    - cow
+    - elephant
+    - bear
+    - zebra
+    - giraffe
+    - sports ball
+
+go2rtc:
+  rtsp:
+    username: "{FRIGATE_RTSP_USER}"
+    password: "{FRIGATE_RTSP_PASSWORD}"
+  streams:
+    kitchen_hd:
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.22:554/stream1#video=copy#audio=copy#audio=opus"
+    kitchen_sd:
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.22:554/stream2#video=copy#audio=copy#audio=opus"
+    outside_hd:
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.23:554/stream1#video=copy#audio=copy#audio=opus"
+    outside_sd:
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.23:554/stream2#video=copy#audio=copy#audio=opus"
+  webrtc:
+    candidates:
+      - 192.168.160.151:8555
+      - 172.22.0.201:8555
 
 record:
   enabled: True
@@ -17,91 +53,51 @@ record:
       objects:
         cat: 2
 
+detect:
+  stationary:
+    interval: 0
+    threshold: 50
+
 cameras:
-  front-door:
-    rtmp:
-      enabled: True
-    objects:
-      track:
-        - person
-        - car
-        - truck
-        - motorcycle
-        - cat
-        - dog
-        - bird
+  kitchen:
     ffmpeg:
-      input_args:
-        - -avoid_negative_ts
-        - make_zero
-        - -fflags
-        - nobuffer
-        - -flags
-        - low_delay
-        - -strict
-        - experimental
-        - -fflags
-        - +genpts+discardcorrupt
-        - -r
-        - "5" # <---- adjust depending on your desired frame rate from the mjpeg image
-        - -use_wallclock_as_timestamps
-        - "1"
+      output_args:
+        record: preset-record-generic-audio-copy
       inputs:
-        - path: "https://{FRIGATE_FRONTDOOR_CAM}"
+        - path: rtsp://127.0.0.1:8554/kitchen_sd
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/kitchen_hd
+          input_args: preset-rtsp-restream
           roles:
             - detect
-    detect:
-      width: 1280
-      height: 720
+    live:
+      stream_name: kitchen_sd
     snapshots:
       enabled: True
       bounding_box: True
-    motion:
-      mask:
-        - 50,0,57,98,255,173,1280,189,1280,0,852,0,602,0,446,0,302,0
-    zones:
-      drive:
-        coordinates: 248,720,693,720,1280,720,973,406,409,394
     mqtt:
       timestamp: False
       bounding_box: False
       crop: True
       height: 500
-  garden:
-    rtmp:
-      enabled: True
-    objects:
-      track:
-        - person
-        - car
-        - truck
-        - motorcycle
-        - cat
-        - dog
-        - bird
+
+  outside:
     ffmpeg:
-      input_args:
-        - -avoid_negative_ts
-        - make_zero
-        - -fflags
-        - nobuffer
-        - -flags
-        - low_delay
-        - -strict
-        - experimental
-        - -fflags
-        - +genpts+discardcorrupt
-        - -r
-        - "5" # <---- adjust depending on your desired frame rate from the mjpeg image
-        - -use_wallclock_as_timestamps
-        - "1"
+      output_args:
+        record: preset-record-generic-audio-copy
       inputs:
-        - path: "https://{FRIGATE_GARDEN_CAM}"
+        - path: rtsp://127.0.0.1:8554/outside_sd
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/outside_hd
+          input_args: preset-rtsp-restream
           roles:
             - detect
-    detect:
-      width: 1280
-      height: 720
+    live:
+      stream_name: outside_sd
     snapshots:
       enabled: True
       bounding_box: True
