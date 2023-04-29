@@ -115,6 +115,53 @@ services:
    networks:
      vlan_bridge:
         ipv4_address: 172.22.0.193
+  
+  vikunja_db:
+    image: mariadb:10
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: vikunja
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: vikunja
+    volumes:
+      - ${VIKUNJA_DATA}/db:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.210
+
+  vikunja_api:
+    image: vikunja/api
+    environment:
+      VIKUNJA_DATABASE_HOST: vikunja_db
+      VIKUNJA_DATABASE_PASSWORD: ${MYSQL_PASSWORD}
+      VIKUNJA_DATABASE_TYPE: mysql
+      VIKUNJA_DATABASE_USER: vikunja
+      VIKUNJA_DATABASE_DATABASE: vikunja
+      VIKUNJA_SERVICE_JWTSECRET: ${VIKUNJA_JWTSECRET}
+      VIKUNJA_SERVICE_FRONTENDURL: https://todo.lonsdale.house/
+    expose:
+      - "3456"
+    volumes:
+      - ${VIKUNJA_DATA}/api:/app/vikunja/files
+    depends_on:
+      - vikunja_db
+    restart: unless-stopped
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.209
+  
+  vikunja_frontend:
+    image: vikunja/frontend
+    expose:
+      - "80"
+    environment:
+      VIKUNJA_API_URL: https://todo.lonsdale.house/api/v1
+    restart: unless-stopped
+    networks:
+     vlan_bridge:
+        ipv4_address: 172.22.0.208
 
   swag:
     image: lscr.io/linuxserver/swag:latest
