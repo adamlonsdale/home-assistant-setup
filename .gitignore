@@ -45,6 +45,8 @@ config/www/tmp/
 /grafana/
 /adguard/workdir/
 
+/influxdb2
+
 /nodered/*
 !/nodered/settings.js
 !/nodered/flows.json

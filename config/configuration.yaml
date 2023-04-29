@@ -123,12 +123,14 @@ homeassistant:
     customize: !include customize.yaml
 
 influxdb:
-    api_version: 1
-    username: !secret influx_uid
-    password: !secret influx_pwd
+    api_version: 2
     host: influxdb
     port: 8086
-    database: influx
+    ssl: false
+    token: !secret influx_token
+    organization: 4b506cab92110ea5
+    bucket: Home
+    max_retries: 5
     tags:
         instance: prod
         source: hass

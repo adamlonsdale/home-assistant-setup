@@ -1,5 +1,5 @@
 - id: '1672786399713'
-  alias: Low battery level detection & notification for all battery sensors
+  alias: Home - Battery Notifications
   description: ''
   use_blueprint:
     path: sbyx/low-battery-level-detection-notification-for-all-battery-sensors.yaml
@@ -22,26 +22,27 @@
   trigger: []
   condition: []
   action:
-  - type: turn_off
-    device_id: 692fd34c43eb0945990f115a2406d341
-    entity_id: light.far_end
-    domain: light
-  - type: turn_off
-    device_id: c156419b74b0fb05367c4106a767c10e
-    entity_id: light.lamp_2
-    domain: light
-  - type: turn_off
-    device_id: ac34d46b98665e0f3f7d16980f7235c0
-    entity_id: light.near_window
-    domain: light
-  - type: turn_off
-    device_id: 67efab9f16d9179141b6331053b6f59b
-    entity_id: light.signe_gradient_living_room
-    domain: light
-  - type: turn_off
-    device_id: 0c8e824e74f016ac8e00be47a0268dee
-    entity_id: light.hallway_toilet
-    domain: light
+  - parallel:
+    - type: turn_off
+      device_id: 692fd34c43eb0945990f115a2406d341
+      entity_id: light.far_end
+      domain: light
+    - type: turn_off
+      device_id: c156419b74b0fb05367c4106a767c10e
+      entity_id: light.lamp_2
+      domain: light
+    - type: turn_off
+      device_id: ac34d46b98665e0f3f7d16980f7235c0
+      entity_id: light.near_window
+      domain: light
+    - type: turn_off
+      device_id: 67efab9f16d9179141b6331053b6f59b
+      entity_id: light.signe_gradient_living_room
+      domain: light
+    - type: turn_off
+      device_id: 0c8e824e74f016ac8e00be47a0268dee
+      entity_id: light.hallway_toilet
+      domain: light
   - type: turn_on
     device_id: 359198f42ca411dbc14ee570528b46bf
     entity_id: light.front_door
@@ -73,7 +74,7 @@
     domain: light
   mode: single
 - id: '1674200143844'
-  alias: Tag Evanescence - Fallen is scanned
+  alias: Music Tag - Evanescence Fallen is scanned
   description: ''
   trigger:
   - platform: tag
@@ -106,45 +107,8 @@
       - media_content_type: artist
         media_content_id: plex://4f86a96668a6ebc2ffe96dd49cb8c39e0d77db1e/11327
   mode: single
-- id: '1674472846636'
-  alias: Person Detected
-  description: ''
-  trigger:
-  - platform: device
-    device_id: 1db4b95459025b6810bb9f56599327bd
-    domain: nest
-    type: camera_person
-  condition: []
-  action:
-  - service: camera.record
-    data:
-      duration: 45
-      lookback: 10
-      filename: /tmp/Person_GuestRoom_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4
-    target:
-      entity_id: camera.guest_room
-  mode: single
-- id: '1674472892392'
-  alias: Motion Drive
-  description: ''
-  trigger:
-  - platform: device
-    device_id: 1db4b95459025b6810bb9f56599327bd
-    domain: nest
-    type: camera_motion
-  condition: []
-  action:
-  - service: camera.record
-    data:
-      duration: 10
-      lookback: 5
-      filename: /tmp/Motion_{{ entity_id.name }}_{{ now().strftime("%Y%m%d-%H%M%S")
-        }}.mp4
-    target:
-      entity_id: camera.guest_room
-  mode: single
 - id: '1674821169405'
-  alias: Office Lights
+  alias: Office - Lighting
   description: ''
   trigger:
   - platform: state
@@ -155,49 +119,24 @@
       hours: 0
       minutes: 0
       seconds: 0
-  - platform: time_pattern
-    minutes: '*'
   condition: []
   action:
-  - choose:
-    - conditions:
-      - condition: time
-        after: '17:30:00'
-        before: 08:30:00
-      - condition: state
-        entity_id: binary_sensor.office_presence
-        state: 'on'
-      sequence:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.play_time
-        metadata: {}
-    - conditions:
-      - condition: state
-        entity_id: binary_sensor.office_presence
-        state: 'off'
-        for:
-          hours: 0
-          minutes: 2
-          seconds: 0
-      sequence:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.office_off
-        metadata: {}
-    - conditions:
-      - condition: state
-        entity_id: binary_sensor.office_presence
-        state: 'on'
-      - condition: time
-        after: 08:30:00
-        before: '17:30:00'
-      sequence:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.work_time
-        metadata: {}
-    default: []
+  - if:
+    - condition: time
+      after: '17:30:00'
+      before: 08:00:00
+    then:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.play_time
+      metadata: {}
+    else:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.work_time
+      metadata: {}
+  trace:
+    stored_traces: 50
   mode: single
 - id: '1674842920963'
   alias: Theatre Mode
@@ -209,29 +148,8 @@
       scene_playing: scene.living_room_chill
       scene_paused: scene.living_room_daytime_chill
       transition: 3
-- id: '1674916886564'
-  alias: Rat Alert
-  description: ''
-  trigger:
-  - platform: device
-    device_id: 8b906e52a23b01f2453472f60ebfa360
-    domain: nest
-    type: camera_motion
-  condition: []
-  action:
-  - service: camera.snapshot
-    data:
-      filename: /config/www/tmp/ratimage.jpg
-    target:
-      entity_id: camera.office
-  - service: notify.mobile_app_adams_iphone
-    data:
-      data:
-        image: /local/tmp/ratimage.jpg
-      title: Rat Alert
-      message: IS THERE A RAT?!?!?!?!
-  mode: single
 - id: '1681556893540'
+  alias: Living Room - Volume Switch
   description: ''
   trigger:
   - platform: device
@@ -306,9 +224,11 @@
         device_id:
         - 9060dbb4396f8584afa5f13fc493c494
         - a7a027637224e11b7f4c087f5a82da2b
+  trace:
+    stored_traces: 50
   mode: single
 - id: '1682234657497'
-  alias: Living Room Daytime
+  alias: Living Room - Daytime
   description: ''
   use_blueprint:
     path: freakshock88/motion_illuminance_activated_entity.yaml
@@ -320,37 +240,117 @@
       no_motion_wait: input_number.living_room_empty_wait_time
       illuminance_cutoff: input_number.low_light_level
 - id: '1682234975513'
-  alias: Living Room Nighttime
+  alias: Living Room - Evening
   description: ''
   use_blueprint:
     path: freakshock88/motion_illuminance_activated_entity.yaml
     input:
       motion_sensor: binary_sensor.living_room_sensor_motion
-      target_entity: scene.living_room_chill
+      target_entity: script.living_chill_script
       illuminance_sensor: sensor.living_room_sensor_illuminance
       sunstate_condition: Below horizon
       no_motion_wait: input_number.living_room_empty_wait_time
-- id: '1682235808454'
-  alias: Home Presence
+- id: '1682283901871'
+  alias: Hallway - Off
   description: ''
-  use_blueprint:
-    path: SirGoodenough/Person_Alert_Blueprint.yaml
-    input:
-      people2monitor:
-      - person.adam_lonsdale
-      zone2monitor:
-      - zone.home
-      hold_period:
-        hours: 0
-        minutes: 0
-        seconds: 0
-      leave_action:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.all_off
-        metadata: {}
-      enter_action:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.welcome_home
-        metadata: {}
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.stairs_motion_occupancy
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition:
+  - condition: template
+    value_template: '{{ (as_timestamp(now())-as_timestamp(states.automation.living_room_nighttime.last_updated))
+      > 150 }}'
+  action:
+  - type: turn_off
+    device_id: cde7fca74567f8b9527f6590d1d5849a
+    entity_id: light.hallway
+    domain: light
+  trace:
+    stored_traces: 50
+  mode: single
+- id: '1682722209466'
+  alias: Home - Off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - person.adam_lonsdale
+    attribute: source
+    from: home
+    to: not_home
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.all_off
+    metadata: {}
+  trace:
+    stored_traces: 50
+  mode: single
+- id: '1682723299240'
+  alias: Home - Return
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - person.adam_lonsdale
+    from: not_home
+    to: home
+  condition: []
+  action:
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.front_door_contact
+      from: 'off'
+      to: 'on'
+    continue_on_timeout: false
+    timeout:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  - if:
+    - condition: numeric_state
+      entity_id: sensor.living_room_sensor_illuminance
+      attribute: light_level
+      below: input_number.low_light_level
+    then:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.welcome_home
+      metadata: {}
+  trace:
+    stored_traces: 50
+  mode: single
+- id: '1682756163488'
+  alias: Office - Off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.office_sensor_motion
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 30
+    to: 'off'
+  condition: []
+  action:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.office_off
+    metadata: {}
+  trace:
+    stored_traces: 50
+  mode: single
