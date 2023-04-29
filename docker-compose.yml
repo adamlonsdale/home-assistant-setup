@@ -81,19 +81,14 @@ services:
     container_name: influxdb
     restart: always
     environment:
-      - INFLUXDB_DB=influx
-      - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
-      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
       - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_ADMIN_USER}
       - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
       - DOCKER_INFLUXDB_INIT_ORG=Lonsdale
       - DOCKER_INFLUXDB_INIT_BUCKET=Home
       - DOCKER_INFLUXDB_INIT_RETENTION=12w
-      - DOCKER_INFLUXDB_INIT_MODE=upgrade
     expose:
       - "8086"
     volumes:
-      - ${INFLUXDB_DATA}:/var/lib/influxdb
       - ${INFLUXDB_DATA}2/data:/var/lib/influxdb2
       - ${INFLUXDB_DATA}2/config:/etc/influxdb2
     networks:
