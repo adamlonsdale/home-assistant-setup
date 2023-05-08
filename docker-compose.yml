@@ -7,11 +7,10 @@ services:
       - ${HASS_CONFIG}:/config:rw,slave
       - ${LOCALTIME}:/etc/localtime:ro
     restart: unless-stopped
-    ports:
-      - 127.22.0.192:8123:8123
+    expose: 
+      - "8123"
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.197
       macvlan:
         ipv4_address: 192.168.160.10
         
@@ -30,7 +29,6 @@ services:
       - TZ=Europe/London
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.196
         aliases:
           - core-mosquitto
         
@@ -46,13 +44,10 @@ services:
         condition: service_started
     expose:
       - "8080"
-    ports:
-      - 8081:8080
     environment:
       - TZ=Europe/London
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.199
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
     
@@ -93,7 +88,6 @@ services:
       - ${INFLUXDB_DATA}2/config:/etc/influxdb2
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.194
         
   grafana:
    image: grafana/grafana-oss:latest
@@ -108,13 +102,12 @@ services:
    links:
      - influxdb
    user: "500:1000"
-   ports:
+   expose:
      - '3000:3000'
    volumes:
      - ${GRAFANA_DATA}:/var/lib/grafana
    networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.193
   
   vikunja_db:
     image: mariadb:10
@@ -129,7 +122,6 @@ services:
     restart: unless-stopped
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.210
 
   vikunja_api:
     image: vikunja/api
@@ -150,7 +142,6 @@ services:
     restart: unless-stopped
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.209
   
   vikunja_frontend:
     image: vikunja/frontend
@@ -161,7 +152,6 @@ services:
     restart: unless-stopped
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.208
 
   swag:
     image: lscr.io/linuxserver/swag:latest
@@ -185,35 +175,6 @@ services:
       - ${SWAG_DATA}:/config
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.195
-
-  grocy-frontend:
-    image: "adamlonsdale/grocy-frontend:v3.3.2"
-    depends_on:
-      - grocy-backend
-    expose:
-      - "8080"
-    read_only: true
-    tmpfs:
-      - /tmp
-    restart: unless-stopped
-    networks:
-      vlan_bridge:
-          ipv4_address: 172.22.0.204
-
-  grocy-backend:
-    image: "adamlonsdale/grocy-backend:v3.3.2"
-    expose:
-      - "9000"
-    read_only: true
-    tmpfs:
-      - /tmp
-    env_file:
-      - grocy.env
-    restart: unless-stopped
-    networks:
-     vlan_bridge:
-        ipv4_address: 172.22.0.203
     
   frigate:
     image: ghcr.io/blakeblackshear/frigate:stable
@@ -232,7 +193,7 @@ services:
         target: /tmp/cache
         tmpfs:
           size: 1000000000
-    ports:
+    expose:
       - "5000:5000"
       - "1935:1935"
       - "8555:8555"
@@ -246,7 +207,6 @@ services:
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.201
   
   espresence:
    image: adamlonsdale/espresence-companion:dev
@@ -254,24 +214,23 @@ services:
    restart: always
    depends_on:
      - mqtt
-   ports:
-     - '8276:8276'
+   expose:
+     - '8276'
    volumes:
      - ${ESPRESENCE_DATA}:/config/espresense
    networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.206
 
   node-red:
     image: nodered/node-red:latest
     environment:
       - TZ=Europe/London
       - NODERED_CREDENTIAL_SECRET=${NODERED_CREDENTIAL_SECRET}
-    ports:
-      - "1880:1880"
+    expose:
+      - "1880"
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.207
+
     volumes:
       - ${NODERED_DATA}:/data
 
@@ -284,11 +243,10 @@ services:
     environment:
       - TZ=Europe/London
     restart: unless-stopped
-    ports:
-      - 10300:10300
+    expose:
+      - "10300"
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.211
 
   piper:
     container_name: piper
@@ -299,11 +257,10 @@ services:
     environment:
       - TZ=Europe/London
     restart: unless-stopped
-    ports:
-      - 10200:10200
+    expose:
+      - "10200"
     networks:
       vlan_bridge:
-          ipv4_address: 172.22.0.212
 
   music-assistant:
     container_name: musicassistant
@@ -314,7 +271,7 @@ services:
     restart: unless-stopped
     privileged: true
     ports:
-      - 172.22.0.214:8095:8095
+      - 8095:8095
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
@@ -338,6 +295,6 @@ networks:
     enable_ipv6: false
     ipam:
       config:
-        - subnet: 172.22.0.0/24
-          ip_range: 172.22.0.192/26
+        - subnet: 172.22.0.0/16
+          ip_range: 172.22.1.0/24
           gateway: 172.22.0.1
