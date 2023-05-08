@@ -24,40 +24,27 @@
   action:
   - parallel:
     - type: turn_off
-      device_id: 692fd34c43eb0945990f115a2406d341
-      entity_id: light.far_end
-      domain: light
-    - type: turn_off
-      device_id: c156419b74b0fb05367c4106a767c10e
-      entity_id: light.lamp_2
-      domain: light
-    - type: turn_off
-      device_id: ac34d46b98665e0f3f7d16980f7235c0
-      entity_id: light.near_window
-      domain: light
-    - type: turn_off
-      device_id: 67efab9f16d9179141b6331053b6f59b
-      entity_id: light.signe_gradient_living_room
-      domain: light
-    - type: turn_off
       device_id: 0c8e824e74f016ac8e00be47a0268dee
       entity_id: light.hallway_toilet
+      domain: light
+    - type: turn_off
+      device_id: fa9fca7bea24e9cd3da84140d3ea352a
+      entity_id: light.living_room
       domain: light
   - type: turn_on
     device_id: 359198f42ca411dbc14ee570528b46bf
     entity_id: light.front_door
     domain: light
-    brightness_pct: 50
+    brightness_pct: 35
   - device_id: a5bdac38fdd1ff4ee52a5007404f404c
     domain: climate
     entity_id: climate.kitchen
     type: set_preset_mode
     preset_mode: eco
-  - service: androidtv.adb_command
-    data:
-      command: POWER
+  - service: media_player.turn_off
+    data: {}
     target:
-      entity_id: media_player.main_tv
+      entity_id: media_player.65oled806_12
   - type: turn_on
     device_id: 76497eb01548d2962b637dce29e2d5c1
     entity_id: light.lamp
@@ -148,85 +135,6 @@
       scene_playing: scene.living_room_chill
       scene_paused: scene.living_room_daytime_chill
       transition: 3
-- id: '1681556893540'
-  alias: Living Room - Volume Switch
-  description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
-    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
-    type: action
-    subtype: on_press_release
-    discovery_id: 0x0017880108f6699a action_on_press_release
-    id: 'on'
-  - platform: device
-    domain: mqtt
-    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
-    type: action
-    subtype: off_press_release
-    discovery_id: 0x0017880108f6699a action_off_press_release
-    id: 'off'
-  - platform: device
-    domain: mqtt
-    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
-    type: action
-    subtype: up_press_release
-    discovery_id: 0x0017880108f6699a action_up_press_release
-    id: up
-  - platform: device
-    domain: mqtt
-    device_id: 7859d1c74a6f82d1528d5d8d3586d18f
-    type: action
-    subtype: down_press_release
-    discovery_id: 0x0017880108f6699a action_down_press_release
-    id: down
-  condition: []
-  action:
-  - if:
-    - condition: trigger
-      id: 'on'
-    then:
-    - service: media_player.volume_mute
-      data:
-        is_volume_muted: false
-      target:
-        device_id:
-        - a7a027637224e11b7f4c087f5a82da2b
-        - 9060dbb4396f8584afa5f13fc493c494
-  - if:
-    - condition: trigger
-      id: 'off'
-    then:
-    - service: media_player.volume_mute
-      data:
-        is_volume_muted: true
-      target:
-        device_id:
-        - a7a027637224e11b7f4c087f5a82da2b
-        - 9060dbb4396f8584afa5f13fc493c494
-  - if:
-    - condition: trigger
-      id: up
-    then:
-    - service: media_player.volume_up
-      data: {}
-      target:
-        device_id:
-        - 9060dbb4396f8584afa5f13fc493c494
-        - a7a027637224e11b7f4c087f5a82da2b
-  - if:
-    - condition: trigger
-      id: down
-    then:
-    - service: media_player.volume_down
-      data: {}
-      target:
-        device_id:
-        - 9060dbb4396f8584afa5f13fc493c494
-        - a7a027637224e11b7f4c087f5a82da2b
-  trace:
-    stored_traces: 50
-  mode: single
 - id: '1682234657497'
   alias: Living Room - Daytime
   description: ''
@@ -281,13 +189,12 @@
   - platform: state
     entity_id:
     - person.adam_lonsdale
-    attribute: source
     from: home
-    to: not_home
     for:
       hours: 0
       minutes: 0
       seconds: 0
+    to: not_home
   condition: []
   action:
   - service: scene.turn_on
@@ -306,6 +213,11 @@
     - person.adam_lonsdale
     from: not_home
     to: home
+  - type: motion
+    platform: device
+    device_id: ee20d67f1210e69f4bf00baeb5dd4254
+    entity_id: binary_sensor.office_sensor_motion
+    domain: binary_sensor
   condition: []
   action:
   - wait_for_trigger:
@@ -354,3 +266,38 @@
   trace:
     stored_traces: 50
   mode: single
+- id: '1682808309962'
+  alias: Living Room - Off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.living_room_sensor_motion
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: fa9fca7bea24e9cd3da84140d3ea352a
+    entity_id: light.living_room
+    domain: light
+  mode: single
+  trace:
+    stored_traces: 50
+- id: '1683100910566'
+  alias: Controller - Philips 324131092621 Hue Dimmer switch
+  description: ''
+  use_blueprint:
+    path: EPMatt/philips_324131092621.yaml
+    input:
+      integration: Zigbee2MQTT
+      controller_entity: sensor.sonos_dimmer_action
+      helper_last_controller_event: input_text.sonos_last_action
+      action_button_up_short:
+      - service: media_player.volume_up
+        data: {}
+        target:
+          entity_id: media_player.living_room
