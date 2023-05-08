@@ -72,6 +72,11 @@ finance.subdomain.conf
 /swag/dns-conf/*
 !/swag/nginx/private.conf
 
+/musicassistant
+/piper
+/vikunja
+/whisper
+
 /.idea/
 
 .env
