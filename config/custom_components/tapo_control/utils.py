@@ -16,6 +16,8 @@ from homeassistant.components.media_source.error import Unresolvable
 from haffmpeg.tools import IMAGE_JPEG, ImageFrame
 from onvif import ONVIFCamera
 from pytapo import Tapo
+from yarl import URL
+from homeassistant.helpers.network import NoURLAvailableError, get_url
 
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.components.ffmpeg import DATA_FFMPEG
@@ -36,6 +38,19 @@ from .const import (
 )
 
 UUID = uuid.uuid4().hex
+
+
+def isUsingHTTPS(hass):
+    try:
+        base_url = get_url(hass, prefer_external=False)
+    except NoURLAvailableError:
+        try:
+            base_url = get_url(hass, prefer_external=True)
+        except NoURLAvailableError:
+            LOGGER.warn("Failed to detect base_url schema, not using webhooks.")
+            return True
+    LOGGER.debug("Detected base_url schema: " + URL(base_url).scheme)
+    return URL(base_url).scheme == "https"
 
 
 def getStreamSource(entry, hdStream):
@@ -74,7 +89,9 @@ def isOpen(ip, port):
 
 
 def getDataPath():
-    return os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+    return os.path.abspath(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
+    )
 
 
 def getColdDirPathForEntry(entry_id):
@@ -179,13 +196,11 @@ async def getRecording(
 
     coldFilePath = downloadedFile["fileName"]
     hotFilePath = (
-        coldFilePath.replace("/.storage/", "/www/").replace(".mp4", "")
-        + UUID
-        + ".mp4"
+        coldFilePath.replace("/.storage/", "/www/").replace(".mp4", "") + UUID + ".mp4"
     )
     shutil.copyfile(coldFilePath, hotFilePath)
 
-    fileWebPath = hotFilePath[hotFilePath.index("/www/") + 5:]  # remove ./www/
+    fileWebPath = hotFilePath[hotFilePath.index("/www/") + 5 :]  # remove ./www/
 
     return f"/local/{fileWebPath}"
 
@@ -239,15 +254,20 @@ async def initOnvifEvents(hass, host, username, password):
         no_cache=True,
     )
     try:
+        LOGGER.debug("[initOnvifEvents] Creating onvif connection...")
         await device.update_xaddrs()
-        device_mgmt = device.create_devicemgmt_service()
+        LOGGER.debug("[initOnvifEvents] Connection estabilished.")
+        device_mgmt = await device.create_devicemgmt_service()
+        LOGGER.debug("[initOnvifEvents] Getting device information...")
         device_info = await device_mgmt.GetDeviceInformation()
+        LOGGER.debug("[initOnvifEvents] Got device information.")
         if "Manufacturer" not in device_info:
             raise Exception("Onvif connection has failed.")
 
         return {"device": device, "device_mgmt": device_mgmt}
-    except Exception:
-        pass
+    except Exception as e:
+        LOGGER.error("[initOnvifEvents] Initiating onvif connection failed.")
+        LOGGER.error(e)
 
     return False
 
@@ -700,7 +720,8 @@ async def setupOnvif(hass, entry):
         hass.data[DOMAIN][entry.entry_id]["events"] = EventManager(
             hass,
             hass.data[DOMAIN][entry.entry_id]["eventsDevice"],
-            f"{entry.entry_id}_tapo_events",
+            entry,
+            hass.data[DOMAIN][entry.entry_id]["name"],
         )
 
         hass.data[DOMAIN][entry.entry_id]["eventsSetup"] = await setupEvents(
@@ -713,7 +734,17 @@ async def setupEvents(hass, config_entry):
     if not hass.data[DOMAIN][config_entry.entry_id]["events"].started:
         LOGGER.debug("Setting up events...")
         events = hass.data[DOMAIN][config_entry.entry_id]["events"]
-        if await events.async_start():
+        onvif_capabilities = await hass.data[DOMAIN][config_entry.entry_id][
+            "eventsDevice"
+        ].get_capabilities()
+        onvif_capabilities = onvif_capabilities or {}
+        pull_point_support = onvif_capabilities.get("Events", {}).get(
+            "WSPullPointSupport"
+        )
+        LOGGER.debug("WSPullPointSupport: %s", pull_point_support)
+        shouldUseWebhooks = isUsingHTTPS(hass) is False
+        # Setting Webhooks to False specifically as they seem broken on Tapo
+        if await events.async_start(pull_point_support is not False, shouldUseWebhooks):
             LOGGER.debug("Events started.")
             if not hass.data[DOMAIN][config_entry.entry_id]["motionSensorCreated"]:
                 hass.data[DOMAIN][config_entry.entry_id]["motionSensorCreated"] = True
@@ -742,6 +773,7 @@ def build_device_info(attributes: dict) -> DeviceInfo:
         manufacturer=BRAND,
         model=attributes["device_model"],
         sw_version=attributes["sw_version"],
+        hw_version=attributes["hw_version"],
     )
 
 
