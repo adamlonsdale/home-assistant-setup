@@ -1,5 +1,5 @@
 mqtt:
-  host: 172.22.0.196
+  host: "mqtt"
   user: "{FRIGATE_MQTT_USER}"
   password: "{FRIGATE_MQTT_PASSWORD}"
 
