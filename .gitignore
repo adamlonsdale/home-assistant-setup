@@ -73,6 +73,9 @@ finance.subdomain.conf
 !/swag/nginx/private.conf
 
 /musicassistant
+/piper
+/vikunja
+/whisper
 
 /.idea/
 
