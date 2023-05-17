@@ -255,6 +255,61 @@ services:
       vlan_bridge:
       macvlan:
         ipv4_address: 192.168.160.11
+
+  broker:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - ${HOME_ROOT}/redis/data:/data
+    networks:
+     vlan_bridge:
+
+  paperless_db:
+    image: docker.io/library/mariadb:10
+    restart: unless-stopped
+    volumes:
+      - ${HOME_ROOT}/paperless/dbdata:/var/lib/mysql
+    networks:
+     vlan_bridge:
+
+  paperless_ui:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - paperless_db
+      - broker
+      - gotenberg
+      - tika
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - ${HOME_ROOT}/paperless/data:/usr/src/paperless/data
+      - ${HOME_ROOT}/paperless/media:/usr/src/paperless/media
+      - ${HOME_ROOT}/paperless/export:/usr/src/paperless/export
+      - ${HOME_ROOT}/paperless/consume:/usr/src/paperless/consume
+    networks:
+     vlan_bridge:
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:7.8
+    restart: unless-stopped
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+    networks:
+     vlan_bridge:
+
+  tika:
+    image: ghcr.io/paperless-ngx/tika:latest
+    restart: unless-stopped
+    networks:
+     vlan_bridge:
   
 networks:
   macvlan:
