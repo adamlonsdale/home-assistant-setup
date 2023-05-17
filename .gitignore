@@ -77,6 +77,18 @@ finance.subdomain.conf
 /vikunja
 /whisper
 
+/proxy-manager/*
+
+!/proxy-manager/docker-compose.yml
+!/proxy-manager/fail2ban.env
+!/proxy-manager/nginx.env
+
+!/proxy-manager/data_f2b
+/proxy-manager/data_f2b/*
+!/proxy-manager/data_f2b/jail.d
+!/proxy-manager/data_f2b/filter.d
+!/proxy-manager/data_f2b/action.d
+
 /.idea/
 
 .env
