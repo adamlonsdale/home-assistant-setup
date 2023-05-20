@@ -3,6 +3,7 @@ services:
   snipeit:
     image: snipe/snipe-it
     container_name: snipeit
+    user: "${UID}:${GID}"
     restart: unless-stopped
     env_file: snipeit.env
     expose: 
@@ -17,6 +18,7 @@ services:
   snipeit_db:
     image: mysql:5.6
     container_name: snipeit_db
+    user: "${UID}:${GID}"
     restart: unless-stopped
     env_file: snipeit.env
     volumes:

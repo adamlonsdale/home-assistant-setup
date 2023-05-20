@@ -3,6 +3,7 @@ services:
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:rc"
+    user: "${UID}:${GID}"
     volumes:
       - ${HOME_ROOT}/config:/config
       - /etc/localtime:/etc/localtime:ro
@@ -17,6 +18,7 @@ services:
   mqtt:
     image: eclipse-mosquitto:latest
     container_name: "mqtt"
+    user: "${UID}:${GID}"
     restart: always
     ports:
       - 1883:1883
@@ -34,6 +36,7 @@ services:
         
   zigbee2mqtt:
     container_name: zigbee2mqtt
+    user: "${UID}:${GID}"
     restart: always
     image: koenkk/zigbee2mqtt:latest
     volumes:
@@ -52,6 +55,7 @@ services:
   adguardhome:
     image: adguard/adguardhome
     container_name: adguardhome
+    user: "${UID}:${GID}"
     ports:
       - 53:53/tcp
       - 53:53/udp
@@ -72,6 +76,7 @@ services:
   influxdb:
     image: influxdb:2.7
     container_name: influxdb
+    user: "${UID}:${GID}"
     restart: always
     environment:
       - DOCKER_INFLUXDB_INIT_ORG=Lonsdale
@@ -88,6 +93,7 @@ services:
   grafana:
    image: grafana/grafana-oss:latest
    container_name: grafana
+   user: "${UID}:${GID}"
    restart: always
    depends_on:
      - influxdb
@@ -95,7 +101,6 @@ services:
      - GF_INSTALL_PLUGINS=
    links:
      - influxdb
-   user: "500:1000"
    expose:
      - "3000"
    volumes:
@@ -106,6 +111,7 @@ services:
   frigate:
     image: ghcr.io/blakeblackshear/frigate:stable
     container_name: frigate
+    user: "${UID}:${GID}"
     privileged: true
     restart: unless-stopped
     shm_size: "256mb"
@@ -131,6 +137,7 @@ services:
   espresence:
    image: adamlonsdale/espresence-companion:dev
    container_name: espresence-companion
+   user: "${UID}:${GID}"
    restart: always
    depends_on:
      - mqtt
@@ -143,6 +150,7 @@ services:
 
   node-red:
     image: nodered/node-red:latest
+    user: "${UID}:${GID}"
     environment:
       - TZ=Europe/London
     expose:
@@ -154,6 +162,7 @@ services:
 
   whisper:
     container_name: whisper
+    user: "${UID}:${GID}"
     command: --model small --language en
     image: rhasspy/wyoming-whisper
     volumes:
@@ -168,6 +177,7 @@ services:
 
   piper:
     container_name: piper
+    user: "${UID}:${GID}"
     image: rhasspy/wyoming-piper
     command: --voice en-gb-southern_english_female-low
     volumes:
@@ -182,6 +192,7 @@ services:
 
   music-assistant:
     container_name: musicassistant
+    user: "${UID}:${GID}"
     image: "registry.lonsdale.house/musicassistantserver"
     volumes:
       - ${HOME_ROOT}/musicassistant:/data

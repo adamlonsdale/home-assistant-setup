@@ -2,6 +2,7 @@ version: '3.8'
 services:
   nginx-proxy-manager:
     container_name: nginx-proxy-manager
+    user: "${UID}:${GID}"
     image: 'jc21/nginx-proxy-manager:latest'
     ports:
       - '80:80'
@@ -21,6 +22,7 @@ services:
   fail2ban:
     image: crazymax/fail2ban:latest
     container_name: fail2ban
+    user: "${UID}:${GID}"
     network_mode: "host"
     cap_add:
       - NET_ADMIN
@@ -37,7 +39,9 @@ services:
   
   registry:
     restart: always
+    container_name: registry
     image: registry:2
+    user: "${UID}:${GID}"
     expose:
       - 5000:5000
     volumes:
@@ -50,11 +54,12 @@ services:
   registry-ui:
     image: joxit/docker-registry-ui:latest
     container_name: registryui
+    user: "${UID}:${GID}"
     expose:
       - "80"
     environment:
       - REGISTRY_TITLE=Lonsdale Registry
-      - NGINX_PROXY_PASS_URL=http://proxy-registry-1:5000
+      - NGINX_PROXY_PASS_URL=http://registry:5000
       - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
       - SINGLE_REGISTRY=true
     volumes:

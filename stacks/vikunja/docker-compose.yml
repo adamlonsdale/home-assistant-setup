@@ -2,6 +2,7 @@ version: '3'
 services:
   vikunja_db:
     image: mariadb:10
+    user: "${UID}:${GID}"
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - ${HOME_ROOT}/vikunja/db:/var/lib/mysql
@@ -11,6 +12,7 @@ services:
 
   vikunja_api:
     image: vikunja/api
+    user: "${UID}:${GID}"
     environment:
       VIKUNJA_DATABASE_HOST: vikunja_db
       VIKUNJA_DATABASE_TYPE: mysql
@@ -27,6 +29,7 @@ services:
   
   vikunja_frontend:
     image: vikunja/frontend
+    user: "${UID}:${GID}"
     expose:
       - "80"
     environment:
