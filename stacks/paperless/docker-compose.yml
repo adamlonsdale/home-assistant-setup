@@ -6,7 +6,7 @@ services:
     volumes:
       - ${HOME_ROOT}/redis/data:/data
     networks:
-     vlan_bridge:
+     home_vnet:
 
   paperless_db:
     image: docker.io/library/mariadb:10
@@ -14,7 +14,7 @@ services:
     volumes:
       - ${HOME_ROOT}/paperless/dbdata:/var/lib/mysql
     networks:
-     vlan_bridge:
+     home_vnet:
 
   paperless_ui:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -37,7 +37,7 @@ services:
       - ${HOME_ROOT}/paperless/export:/usr/src/paperless/export
       - ${HOME_ROOT}/paperless/consume:/usr/src/paperless/consume
     networks:
-     vlan_bridge:
+     home_vnet:
 
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.8
@@ -47,13 +47,13 @@ services:
       - "--chromium-disable-javascript=true"
       - "--chromium-allow-list=file:///tmp/.*"
     networks:
-     vlan_bridge:
+     home_vnet:
 
   tika:
     image: ghcr.io/paperless-ngx/tika:latest
     restart: unless-stopped
     networks:
-     vlan_bridge:
+     home_vnet:
 
 networks:
   home_vnet:
