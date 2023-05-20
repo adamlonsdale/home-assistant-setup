@@ -91,7 +91,7 @@ finance.subdomain.conf
 
 /.idea/
 
-.env
+*.env
 .DS_Store
 .pnpm-store
 
