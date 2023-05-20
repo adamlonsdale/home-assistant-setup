@@ -39,55 +39,46 @@ config/www/tmp/
 *.glb
 *.old
 
-/find3/data/*
-
-/influxdb/
-/grafana/
 /adguard/workdir/
 
+/grafana/
+
+/influxdb/
 /influxdb2
 
 /nodered/*
 !/nodered/settings.js
 !/nodered/flows.json
 
-/swag/etc/
-/swag/log/
-/swag/keys/
-/swag/fail2ban/*
-!/swag/fail2ban/filter.d/
-!/swag/fail2ban/action.d/
-!/swag/fail2ban/jail.local
-/swag/nginx/*
-!/swag/nginx/nginx.conf
-!/swag/nginx/proxy.conf
-!/swag/nginx/ssl.conf
-!/swag/nginx/proxy-confs
-/swag/nginx/proxy-confs/*
-!/swag/nginx/proxy-confs/*.subdomain.conf
-finance.subdomain.conf
-!/swag/nginx/site-confs
-/swag/nginx/site-confs/*
-!/swag/nginx/site-confs/default.conf
-/swag/dns-conf/*
-!/swag/nginx/private.conf
-
 /musicassistant
 /piper
 /vikunja
 /whisper
 
-/stacks/proxy-manager/*
+/stacks/*
+!/stacks/proxy-manager
+!/stacks/snipeit
+!/stacks/paperless
+!/stacks/vikunja
 
+/stacks/proxy-manager/*
 !/stacks/proxy-manager/docker-compose.yml
 !/stacks/proxy-manager/fail2ban.env
 !/stacks/proxy-manager/nginx.env
-
 !/stacks/proxy-manager/data_f2b
 /stacks/proxy-manager/data_f2b/*
 !/stacks/proxy-manager/data_f2b/jail.d
 !/stacks/proxy-manager/data_f2b/filter.d
 !/stacks/proxy-manager/data_f2b/action.d
+
+/stacks/vikunja/*
+!/stacks/vikunja/docker-compose.yml
+
+/stacks/paperless/*
+!/stacks/paperless/docker-compose.yml
+
+/stacks/snipeit/*
+!/stacks/snipeit/docker-compose.yml
 
 /.idea/
 
