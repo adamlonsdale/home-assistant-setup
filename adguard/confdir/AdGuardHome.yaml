@@ -10,7 +10,7 @@ debug_pprof: false
 web_session_ttl: 720
 dns:
   bind_hosts:
-    - 192.168.160.192
+    - 192.168.160.100
     - 127.0.0.1
   port: 53
   anonymize_client_ip: false

@@ -4,14 +4,13 @@ services:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:rc"
     volumes:
-      - ${HASS_CONFIG}:/config:rw,slave
-      - ${LOCALTIME}:/etc/localtime:ro
+      - ${HOME_ROOT}/config:/config
+      - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
-    ports:
-      - 127.22.0.192:8123:8123
+    expose: 
+      - "8123"
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.197
       macvlan:
         ipv4_address: 192.168.160.10
         
@@ -23,14 +22,13 @@ services:
       - 1883:1883
       - 9001:9001
     volumes:
-      - ${MQTT_DATA}:/mosquitto/data:rw,slave
-      - ${MQTT_CONFIG}:/mosquitto/config:rw,slave
-      - ${MQTT_LOG}:/mosquitto/log:rw,slave
+      - ${HOME_ROOT}/mqtt/data:/mosquitto/data
+      - ${HOME_ROOT}/mqtt/config:/mosquitto/config
+      - ${HOME_ROOT}/mqtt/log:/mosquitto/log
     environment:
       - TZ=Europe/London
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.196
         aliases:
           - core-mosquitto
         
@@ -39,22 +37,17 @@ services:
     restart: always
     image: koenkk/zigbee2mqtt:latest
     volumes:
-      - ${ZIGBEE2MQTT_DATA}:/app/data
-      - ${RUN_UDEV}:/run/udev:ro
+      - ${HOME_ROOT}/zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
     depends_on:
       mqtt:
         condition: service_started
     expose:
       - "8080"
-    ports:
-      - 8081:8080
     environment:
       - TZ=Europe/London
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.199
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0
     
   adguardhome:
     image: adguard/adguardhome
@@ -69,11 +62,11 @@ services:
     expose:
       - "3000"
     volumes:
-      - ${ADGUARD_WORKDIR}:/opt/adguardhome/work:rw,slave
-      - ${ADGUARD_CONFDIR}:/opt/adguardhome/conf:rw,slave
+      - ${HOME_ROOT}/adguard/workdir:/opt/adguardhome/work
+      - ${HOME_ROOT}/adguard/confdir:/opt/adguardhome/conf
     networks:
       macvlan:
-        ipv4_address: 192.168.160.192
+        ipv4_address: 192.168.160.100
     restart: unless-stopped
     
   influxdb:
@@ -81,19 +74,16 @@ services:
     container_name: influxdb
     restart: always
     environment:
-      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_ADMIN_USER}
-      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
       - DOCKER_INFLUXDB_INIT_ORG=Lonsdale
       - DOCKER_INFLUXDB_INIT_BUCKET=Home
       - DOCKER_INFLUXDB_INIT_RETENTION=12w
     expose:
       - "8086"
     volumes:
-      - ${INFLUXDB_DATA}2/data:/var/lib/influxdb2
-      - ${INFLUXDB_DATA}2/config:/etc/influxdb2
+      - ${HOME_ROOT}/influxdb2/data:/var/lib/influxdb2
+      - ${HOME_ROOT}/influxdb2/config:/etc/influxdb2
     networks:
       vlan_bridge:
-        ipv4_address: 172.22.0.194
         
   grafana:
    image: grafana/grafana-oss:latest
@@ -103,117 +93,15 @@ services:
      - influxdb
    environment:
      - GF_INSTALL_PLUGINS=
-     - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
-     - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
    links:
      - influxdb
    user: "500:1000"
-   ports:
-     - '3000:3000'
+   expose:
+     - "3000"
    volumes:
-     - ${GRAFANA_DATA}:/var/lib/grafana
+     - ${HOME_ROOT}/grafana:/var/lib/grafana
    networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.193
-  
-  vikunja_db:
-    image: mariadb:10
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: vikunja
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: vikunja
-    volumes:
-      - ${VIKUNJA_DATA}/db:/var/lib/mysql
-    restart: unless-stopped
-    networks:
-     vlan_bridge:
-        ipv4_address: 172.22.0.210
-
-  vikunja_api:
-    image: vikunja/api
-    environment:
-      VIKUNJA_DATABASE_HOST: vikunja_db
-      VIKUNJA_DATABASE_PASSWORD: ${MYSQL_PASSWORD}
-      VIKUNJA_DATABASE_TYPE: mysql
-      VIKUNJA_DATABASE_USER: vikunja
-      VIKUNJA_DATABASE_DATABASE: vikunja
-      VIKUNJA_SERVICE_JWTSECRET: ${VIKUNJA_JWTSECRET}
-      VIKUNJA_SERVICE_FRONTENDURL: https://todo.lonsdale.house/
-    expose:
-      - "3456"
-    volumes:
-      - ${VIKUNJA_DATA}/api:/app/vikunja/files
-    depends_on:
-      - vikunja_db
-    restart: unless-stopped
-    networks:
-     vlan_bridge:
-        ipv4_address: 172.22.0.209
-  
-  vikunja_frontend:
-    image: vikunja/frontend
-    expose:
-      - "80"
-    environment:
-      VIKUNJA_API_URL: https://todo.lonsdale.house/api/v1
-    restart: unless-stopped
-    networks:
-     vlan_bridge:
-        ipv4_address: 172.22.0.208
-
-  swag:
-    image: lscr.io/linuxserver/swag:latest
-    container_name: swag
-    restart: unless-stopped
-    ports:
-      - '443:443'
-      - '80:80'
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - PUID=500
-      - PGID=1000
-      - TZ=Europe/London
-      - URL=lonsdale.house
-      - VALIDATION=dns
-      - SUBDOMAINS=wildcard
-      - DNSPLUGIN=cloudflare
-      - PROPAGATION=35
-    volumes:
-      - ${SWAG_DATA}:/config
-    networks:
-     vlan_bridge:
-        ipv4_address: 172.22.0.195
-
-  grocy-frontend:
-    image: "adamlonsdale/grocy-frontend:v3.3.2"
-    depends_on:
-      - grocy-backend
-    expose:
-      - "8080"
-    read_only: true
-    tmpfs:
-      - /tmp
-    restart: unless-stopped
-    networks:
-      vlan_bridge:
-          ipv4_address: 172.22.0.204
-
-  grocy-backend:
-    image: "adamlonsdale/grocy-backend:v3.3.2"
-    expose:
-      - "9000"
-    read_only: true
-    tmpfs:
-      - /tmp
-    env_file:
-      - grocy.env
-    restart: unless-stopped
-    networks:
-     vlan_bridge:
-        ipv4_address: 172.22.0.203
     
   frigate:
     image: ghcr.io/blakeblackshear/frigate:stable
@@ -221,32 +109,24 @@ services:
     privileged: true
     restart: unless-stopped
     shm_size: "256mb"
-    devices:
-      - /dev/bus/usb:/dev/bus/usb
-      - /dev/dri/renderD128
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${FRIGATE_DATA}:/config
-      - ${FRIGATE_STORAGE}:/media/frigate
-      - type: tmpfs
-        target: /tmp/cache
-        tmpfs:
-          size: 1000000000
-    ports:
-      - "5000:5000"
-      - "1935:1935"
-      - "8555:8555"
+    expose:
+      - "5000"
+      - "1935"
+      - "8555"
     environment:
       - TZ=Europe/London
       - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
       - FLASK_ENV=development
-      - FRIGATE_MQTT_USER=${FRIGATE_MQTT_USER}
-      - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD}
-      - FRIGATE_RTSP_USER=${FRIGATE_RTSP_USER}
-      - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${HOME_ROOT}/frigate:/config
+      - ${MEDIA_ROOT}/frigate:/media/frigate
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.201
   
   espresence:
    image: adamlonsdale/espresence-companion:dev
@@ -254,79 +134,77 @@ services:
    restart: always
    depends_on:
      - mqtt
-   ports:
-     - '8276:8276'
+   expose:
+     - "8276"
    volumes:
-     - ${ESPRESENCE_DATA}:/config/espresense
+     - ${HOME_ROOT}/espresence:/config/espresense
    networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.206
 
   node-red:
     image: nodered/node-red:latest
     environment:
       - TZ=Europe/London
-      - NODERED_CREDENTIAL_SECRET=${NODERED_CREDENTIAL_SECRET}
-    ports:
-      - "1880:1880"
+    expose:
+      - "1880"
+    volumes:
+      - ${HOME_ROOT}/nodered:/data
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.207
-    volumes:
-      - ${NODERED_DATA}:/data
 
   whisper:
     container_name: whisper
     command: --model small --language en
     image: rhasspy/wyoming-whisper
     volumes:
-      - ${WHISPER_DATA}:/data
+      - ${HOME_ROOT}/whisper:/data
     environment:
       - TZ=Europe/London
     restart: unless-stopped
-    ports:
-      - 10300:10300
+    expose:
+      - "10300"
     networks:
      vlan_bridge:
-        ipv4_address: 172.22.0.211
 
   piper:
     container_name: piper
     image: rhasspy/wyoming-piper
     command: --voice en-gb-southern_english_female-low
     volumes:
-      - ${PIPER_DATA}:/data
+      - ${HOME_ROOT}/piper:/data
     environment:
       - TZ=Europe/London
     restart: unless-stopped
-    ports:
-      - 10200:10200
+    expose:
+      - "10200"
     networks:
       vlan_bridge:
-          ipv4_address: 172.22.0.212
 
   music-assistant:
     container_name: musicassistant
-    image: "localhost:5005/musicassistantserver"
+    image: "registry.lonsdale.house/musicassistantserver"
     volumes:
-      - ${MA_DATA}:/data
-      - ${MUSIC}:/media
+      - ${HOME_ROOT}/musicassistant:/data
+      - ${MUSIC_ROOT}:/media
     restart: unless-stopped
     privileged: true
     ports:
-      - 172.22.0.214:8095:8095
+      - 8095:8095
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
-    network_mode: "host"
-  
+    networks:
+      vlan_bridge:
+      macvlan:
+        ipv4_address: 192.168.160.11
+
 networks:
   macvlan:
     name: docker_macvlan
     driver: macvlan
     enable_ipv6: false
     driver_opts:
-      parent: ${NETWORK_INTERFACE}
+      parent: br0
     ipam:
       config:
         - subnet: 192.168.160.0/24
@@ -338,6 +216,6 @@ networks:
     enable_ipv6: false
     ipam:
       config:
-        - subnet: 172.22.0.0/24
-          ip_range: 172.22.0.192/26
+        - subnet: 172.22.0.0/16
+          ip_range: 172.22.1.0/24
           gateway: 172.22.0.1
