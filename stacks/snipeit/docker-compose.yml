@@ -3,9 +3,11 @@ services:
   snipeit:
     image: snipe/snipe-it
     container_name: snipeit
-    user: "${UID}:${GID}"
     restart: unless-stopped
     env_file: snipeit.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
     expose: 
       - "80"
     depends_on:
