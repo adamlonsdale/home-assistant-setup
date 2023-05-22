@@ -3,11 +3,9 @@ services:
   vikunja_db:
     image: mariadb:10
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    user: "${UID}:${GID}"
     volumes:
       - ${HOME_ROOT}/vikunja/db:/var/lib/mysql
-    environment:
-      - PUID=${UID}
-      - PGID=${GID}
     restart: unless-stopped
     networks:
      home_vnet:

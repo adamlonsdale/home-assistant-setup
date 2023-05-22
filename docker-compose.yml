@@ -12,7 +12,7 @@ services:
     networks:
       vlan_bridge:
       macvlan:
-        ipv4_address: 192.168.160.10
+        ipv4_address: 192.168.160.102
         
   mqtt:
     image: eclipse-mosquitto:latest
@@ -62,8 +62,7 @@ services:
       - 853:853/tcp
       - 80:80/tcp
       - 443:443/tcp
-    expose:
-      - "3000"
+      - 3000:3000/tcp
     volumes:
       - ${HOME_ROOT}/adguard/workdir:/opt/adguardhome/work
       - ${HOME_ROOT}/adguard/confdir:/opt/adguardhome/conf
@@ -162,7 +161,7 @@ services:
     container_name: whisper
     user: "${UID}:${GID}"
     command: --model small --language en
-    image: rhasspy/wyoming-whisper
+    image: rhasspy/wyoming-whisper:latest
     volumes:
       - ${HOME_ROOT}/whisper:/data
     environment:
@@ -205,7 +204,7 @@ services:
     networks:
       vlan_bridge:
       macvlan:
-        ipv4_address: 192.168.160.11
+        ipv4_address: 192.168.160.101
 
 networks:
   macvlan:
@@ -215,8 +214,11 @@ networks:
     ipam:
       config:
         - subnet: 192.168.160.0/24
-          ip_range: 192.168.160.192/27
+          ip_range: 192.168.160.128/28
           gateway: 192.168.160.1
+    driver_opts:
+      parent: br0
+
   vlan_bridge:
     name: home_vlan
     driver: bridge

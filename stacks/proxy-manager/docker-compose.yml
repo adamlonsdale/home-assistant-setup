@@ -44,20 +44,21 @@ services:
     restart: always
     container_name: registry
     image: registry:2
-    user: "${UID}:${GID}"
     expose:
       - 5000:5000
     volumes:
       - ./data_registry:/var/lib/registry
       - ./certs:/certs
       - ./auth:/auth
+    environment:
+      PUID: "${UID}"
+      PGID: "${GID}"
     networks:
       - home_vnet
 
   registry-ui:
     image: joxit/docker-registry-ui:latest
     container_name: registryui
-    user: "${UID}:${GID}"
     expose:
       - "80"
     environment:
@@ -65,6 +66,8 @@ services:
       - NGINX_PROXY_PASS_URL=http://registry:5000
       - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
       - SINGLE_REGISTRY=true
+      - PUID=${UID}
+      - PGID=${GID}
     volumes:
       - ./nginx.env:/etc/nginx/.env
     depends_on:
