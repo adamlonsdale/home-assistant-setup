@@ -3,7 +3,6 @@ services:
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:rc"
-    user: "${UID}:${GID}"
     volumes:
       - ${HOME_ROOT}/config:/config
       - /etc/localtime:/etc/localtime:ro
@@ -36,8 +35,8 @@ services:
         
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    user: "${UID}:${GID}"
     restart: always
+    privileged: true
     image: koenkk/zigbee2mqtt:latest
     volumes:
       - ${HOME_ROOT}/zigbee2mqtt:/app/data
@@ -111,7 +110,6 @@ services:
   frigate:
     image: ghcr.io/blakeblackshear/frigate:stable
     container_name: frigate
-    user: "${UID}:${GID}"
     privileged: true
     restart: unless-stopped
     shm_size: "256mb"
@@ -214,8 +212,6 @@ networks:
     name: docker_macvlan
     driver: macvlan
     enable_ipv6: false
-    driver_opts:
-      parent: br0
     ipam:
       config:
         - subnet: 192.168.160.0/24

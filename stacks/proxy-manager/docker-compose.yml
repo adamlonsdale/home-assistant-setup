@@ -2,7 +2,6 @@ version: '3.8'
 services:
   nginx-proxy-manager:
     container_name: nginx-proxy-manager
-    user: "${UID}:${GID}"
     image: 'jc21/nginx-proxy-manager:latest'
     ports:
       - '80:80'
@@ -16,14 +15,18 @@ services:
       X_FRAME_OPTIONS: "sameorigin"
       DB_SQLITE_FILE: "/data/database.sqlite"
       TZ: "Europe/London"
+      PUID: "${UID}"
+      PGID: "${GID}"
     networks:
       - home_vnet
 
   fail2ban:
     image: crazymax/fail2ban:latest
     container_name: fail2ban
-    user: "${UID}:${GID}"
     network_mode: "host"
+    environment:
+      PUID: "${UID}"
+      PGID: "${GID}"
     cap_add:
       - NET_ADMIN
       - NET_RAW

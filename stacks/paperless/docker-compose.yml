@@ -6,6 +6,9 @@ services:
     restart: unless-stopped
     volumes:
       - ${HOME_ROOT}/redis/data:/data
+    environment:
+      PUID: "${UID}"
+      PGID: "${GID}"
     networks:
      home_vnet:
 
@@ -13,6 +16,9 @@ services:
     image: docker.io/library/mariadb:10
     user: "${UID}:${GID}"
     restart: unless-stopped
+    environment:
+      PUID: "${UID}"
+      PGID: "${GID}"
     volumes:
       - ${HOME_ROOT}/paperless/dbdata:/var/lib/mysql
     networks:
@@ -20,7 +26,6 @@ services:
 
   paperless_ui:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
-    user: "${UID}:${GID}"
     restart: unless-stopped
     depends_on:
       - paperless_db
