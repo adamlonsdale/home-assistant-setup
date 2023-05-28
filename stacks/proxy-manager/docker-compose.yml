@@ -18,7 +18,7 @@ services:
       PUID: "${UID}"
       PGID: "${GID}"
     networks:
-      - home_vnet
+      - service_vnet
 
   fail2ban:
     image: crazymax/fail2ban:latest
@@ -32,51 +32,15 @@ services:
       - NET_RAW
     privileged: true
     volumes:
-      - "./data_f2b:/data"
-      - "./data_npm/logs/:/var/log/npm/:ro"
+      - ./data_f2b:/data
+      - ./data_npm/logs/:/var/log/npm/:ro
     restart: always
     env_file:
-      - "./fail2ban.env"
+      - ./fail2ban.env
     depends_on:
       - nginx-proxy-manager
-  
-  registry:
-    restart: always
-    container_name: registry
-    image: registry:2
-    expose:
-      - 5000:5000
-    volumes:
-      - ./data_registry:/var/lib/registry
-      - ./certs:/certs
-      - ./auth:/auth
-    environment:
-      PUID: "${UID}"
-      PGID: "${GID}"
-      REGISTRY_CATALOG_MAXENTRIES: '100000'
-    networks:
-      - home_vnet
-
-  registry-ui:
-    image: joxit/docker-registry-ui:latest
-    container_name: registryui
-    expose:
-      - "80"
-    environment:
-      - REGISTRY_TITLE=Lonsdale Registry
-      - NGINX_PROXY_PASS_URL=http://registry:5000
-      - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
-      - SINGLE_REGISTRY=true
-      - PUID=${UID}
-      - PGID=${GID}
-    volumes:
-      - ./nginx.env:/etc/nginx/.env
-    depends_on:
-      - registry
-    networks:
-      - home_vnet
 
 networks:
-  home_vnet:
-    name: home_vlan
+  service_vnet:
+    name: proxy_vnet
     external: true

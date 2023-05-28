@@ -60,6 +60,10 @@ config/www/tmp/
 !/stacks/snipeit
 !/stacks/paperless
 !/stacks/vikunja
+!/stacks/networks
+!/stacks/etherpad
+!/stacks/container_registry
+!/stacks/home
 
 /stacks/proxy-manager/*
 !/stacks/proxy-manager/docker-compose.yml
@@ -79,6 +83,11 @@ config/www/tmp/
 
 /stacks/snipeit/*
 !/stacks/snipeit/docker-compose.yml
+
+!/stacks/networks/docker-compose.yml
+
+/stacks/container_registry/*
+!/stacks/container_registry/docker-compose.yml
 
 /.idea/
 

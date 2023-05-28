@@ -1,0 +1,72 @@
+version: "3.4"
+
+services:
+  postgresql:
+    image: postgres:9.6
+    environment:
+      POSTGRES_DB: etherpad
+      POSTGRES_USER: foo
+      POSTGRES_PASSWORD: pass
+
+  etherpad:
+    build:
+      context: .
+      target: production
+    image: etherpad:production
+    environment:
+      DB_HOST: postgresql
+      DB_NAME: etherpad
+      DB_PASS: pass
+      DB_PORT: 5432
+      DB_TYPE: postgres
+      DB_USER: foo
+      LOGLEVEL: "debug"
+      ROARR_LOG: "true"
+      SKIN_NAME: "education"
+    user: "${DOCKER_USER:-1000}"
+    volumes:
+      - ./private/SESSIONKEY.txt:/app/SESSIONKEY.txt
+      - ./private/APIKEY.txt:/app/APIKEY.txt
+      # Custom plugins/skins development
+      - ./src/static/skins/education:/app/src/static/skins/education
+      - ./src/plugins/ep_lightship:/app/node_modules/ep_lightship
+      # Mount local settings for development
+      - ./settings.json:/app/settings.json
+    depends_on:
+      - postgresql
+      - graylog
+
+  mongo:
+    image: mongo:3
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.5
+    environment:
+      http.host: "0.0.0.0"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+  graylog:
+    image: graylog/graylog:3.2
+    environment:
+      # CHANGE ME (must be at least 16 characters)!
+      GRAYLOG_PASSWORD_SECRET: somepasswordpepper
+      # Password: admin
+      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
+      # Automatically create GELF UDP Input
+      GRAYLOG_CONTENT_PACKS_LOADER_ENABLED: "true"
+      GRAYLOG_CONTENT_PACKS_AUTO_INSTALL: gelf-udp-input.json
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+    volumes:
+      - ./docker/files/usr/share/graylog/data/contentpacks:/usr/share/graylog/data/contentpacks
+    depends_on:
+      - mongo
+      - elasticsearch
+
+  dockerize:
+    image: jwilder/dockerize
+
+  netshoot:
+    image: nicolaka/netshoot
