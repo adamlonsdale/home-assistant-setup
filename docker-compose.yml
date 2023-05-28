@@ -133,8 +133,8 @@ services:
      vlan_bridge:
   
   espresence:
-   image: adamlonsdale/espresence-companion:dev
-   container_name: espresence-companion
+   image: registry.lonsdale.house/espresence-companion:latest
+   container_name: espresence_companion
    user: "${UID}:${GID}"
    restart: always
    depends_on:

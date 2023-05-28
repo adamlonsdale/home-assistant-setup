@@ -53,6 +53,7 @@ services:
     environment:
       PUID: "${UID}"
       PGID: "${GID}"
+      REGISTRY_CATALOG_MAXENTRIES: '100000'
     networks:
       - home_vnet
 
