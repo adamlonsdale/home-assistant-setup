@@ -142,7 +142,7 @@ services:
    expose:
      - "8276"
    volumes:
-     - ${HOME_ROOT}/espresence:/config/espresense
+     - ./espresence:/config/espresense
    networks:
      service_vnet:
 
@@ -154,7 +154,7 @@ services:
     expose:
       - "1880"
     volumes:
-      - ${HOME_ROOT}/nodered:/data
+      - ./nodered:/data
     networks:
      service_vnet:
 
@@ -164,7 +164,7 @@ services:
     command: --model small --language en
     image: rhasspy/wyoming-whisper:latest
     volumes:
-      - ${HOME_ROOT}/whisper:/data
+      - ./whisper:/data
     environment:
       - TZ=Europe/London
     restart: unless-stopped
@@ -179,7 +179,7 @@ services:
     image: rhasspy/wyoming-piper
     command: --voice en-gb-southern_english_female-low
     volumes:
-      - ${HOME_ROOT}/piper:/data
+      - ./piper:/data
     environment:
       - TZ=Europe/London
     restart: unless-stopped
@@ -193,7 +193,7 @@ services:
     user: "${UID}:${GID}"
     image: "registry.lonsdale.house/musicassistantserver"
     volumes:
-      - ${HOME_ROOT}/musicassistant:/data
+      - ./musicassistant:/data
       - ${MUSIC_ROOT}:/media
     restart: unless-stopped
     privileged: true
