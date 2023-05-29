@@ -9,10 +9,7 @@ services:
       POSTGRES_PASSWORD: pass
 
   etherpad:
-    build:
-      context: .
-      target: production
-    image: etherpad:production
+    image: etherpad/etherpad:latest
     environment:
       DB_HOST: postgresql
       DB_NAME: etherpad

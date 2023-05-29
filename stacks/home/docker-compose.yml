@@ -191,7 +191,7 @@ services:
   music-assistant:
     container_name: musicassistant
     user: "${UID}:${GID}"
-    image: "registry.lonsdale.house/musicassistantserver"
+    image: ghcr.io/music-assistant/server:latest
     volumes:
       - ./musicassistant:/data
       - ${MUSIC_ROOT}:/media

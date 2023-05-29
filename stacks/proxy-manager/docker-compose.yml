@@ -19,6 +19,12 @@ services:
       PGID: "${GID}"
     networks:
       - service_vnet
+      - home_vnet
+      - vikunja_vnet
+      - snipeit_vnet
+      - registry_vnet
+      - paperless_vnet
+      - etherpad_vnet
 
   fail2ban:
     image: crazymax/fail2ban:latest
@@ -43,4 +49,23 @@ services:
 networks:
   service_vnet:
     name: proxy_vnet
+    external: true
+
+  home_vnet:
+    name: home_vnet
+    external: true
+  vikunja_vnet:
+    name: vikunja_vnet
+    external: true
+  snipeit_vnet:
+    name: snipeit_vnet
+    external: true
+  registry_vnet:
+    name: registry_vnet
+    external: true
+  paperless_vnet:
+    name: paperless_vnet
+    external: true
+  etherpad_vnet:
+    name: etherpad_vnet
     external: true
