@@ -21,7 +21,9 @@ services:
       ROARR_LOG: "true"
       SKIN_NAME: "education"
       ETHERPAD_PLUGINS: "ep_align ep_comments_page ep_cursortrace ep_markdown ep_headings2 ep_font_size ep_author_hover"
-    user: "${DOCKER_USER:-1000}"
+    user: "${UID}:${GID}"
+    expose:
+      - "9001"
     volumes:
       - ./private/SESSIONKEY.txt:/app/SESSIONKEY.txt
       - ./private/APIKEY.txt:/app/APIKEY.txt
