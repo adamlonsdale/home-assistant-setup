@@ -5,29 +5,28 @@ services:
     image: postgres:9.6
     environment:
       POSTGRES_DB: etherpad
-      POSTGRES_USER: foo
-      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   etherpad:
     image: etherpad/etherpad:latest
     environment:
       DB_HOST: postgresql
       DB_NAME: etherpad
-      DB_PASS: pass
+      DB_PASS: ${DB_PASSWORD}
       DB_PORT: 5432
       DB_TYPE: postgres
-      DB_USER: foo
+      DB_USER: ${DB_USER}
       LOGLEVEL: "debug"
       ROARR_LOG: "true"
       SKIN_NAME: "education"
+      ETHERPAD_PLUGINS: "ep_align ep_comments_page ep_cursortrace ep_markdown ep_headings2 ep_font_size ep_author_hover"
     user: "${DOCKER_USER:-1000}"
     volumes:
       - ./private/SESSIONKEY.txt:/app/SESSIONKEY.txt
       - ./private/APIKEY.txt:/app/APIKEY.txt
-      # Custom plugins/skins development
       - ./src/static/skins/education:/app/src/static/skins/education
       - ./src/plugins/ep_lightship:/app/node_modules/ep_lightship
-      # Mount local settings for development
       - ./settings.json:/app/settings.json
     depends_on:
       - postgresql
@@ -45,17 +44,13 @@ services:
   graylog:
     image: graylog/graylog:3.2
     environment:
-      # CHANGE ME (must be at least 16 characters)!
-      GRAYLOG_PASSWORD_SECRET: somepasswordpepper
-      # Password: admin
-      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_SECRET}
+      GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_PASSWORD}
       GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
-      # Automatically create GELF UDP Input
       GRAYLOG_CONTENT_PACKS_LOADER_ENABLED: "true"
       GRAYLOG_CONTENT_PACKS_AUTO_INSTALL: gelf-udp-input.json
-    ports:
-      # Graylog web interface and REST API
-      - 9000:9000
+    expose:
+      - "9000"
     volumes:
       - ./docker/files/usr/share/graylog/data/contentpacks:/usr/share/graylog/data/contentpacks
     depends_on:
