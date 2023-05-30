@@ -2,11 +2,24 @@ version: "3.4"
 
 services:
   postgresql:
-    image: postgres:9.6
+    image: postgres:latest
+    restart: always
+    user: "${UID}:${GID}"
     environment:
       POSTGRES_DB: etherpad
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "etherpad"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+      - /etc/passwd:/etc/passwd:ro
+    networks:
+      - service_vnet
 
   etherpad:
     image: etherpad/etherpad:latest
@@ -17,50 +30,85 @@ services:
       DB_PORT: 5432
       DB_TYPE: postgres
       DB_USER: ${DB_USER}
-      LOGLEVEL: "debug"
+      LOGLEVEL: "INFO"
       ROARR_LOG: "true"
       SKIN_NAME: "education"
-      ETHERPAD_PLUGINS: "ep_align ep_comments_page ep_cursortrace ep_markdown ep_headings2 ep_font_size ep_author_hover"
+      SESSION_SECRET: ${SESSION_SECRET}
+      ETHERPAD_PLUGINS: "ep_align ep_comments_page ep_cursortrace ep_markdown ep_headings2 ep_font_size ep_author_hover ep_webrtc"
+      PUID: ${UID}
+      PGID: ${GID}
     user: "${UID}:${GID}"
     expose:
       - "9001"
     volumes:
-      - ./private/SESSIONKEY.txt:/app/SESSIONKEY.txt
-      - ./private/APIKEY.txt:/app/APIKEY.txt
-      - ./src/static/skins/education:/app/src/static/skins/education
-      - ./src/plugins/ep_lightship:/app/node_modules/ep_lightship
-      - ./settings.json:/app/settings.json
+      - ./private/SESSIONKEY.txt:/opt/etherpad-lite/SESSIONKEY.txt
+      - ./private/APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
+      - ./static/skins/education:/opt/etherpad-lite/src/static/skins/education
+      - ./plugins/ep_lightship:/opt/etherpad-lite/node_modules/ep_lightship
+      - ./settings.json:/opt/etherpad-lite/settings.json
+      - ./var:/opt/etherpad-lite/var
     depends_on:
-      - postgresql
-      - graylog
+      postgresql:
+        condition: service_healthy
+        restart: true
+    networks:
+      - service_vnet
+  
+  # mongo:
+  #   image: mongo:6
+  #   networks:
+  #     - service_vnet
 
-  mongo:
-    image: mongo:3
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 1g
+  #   environment:
+  #       - http.host=0.0.0.0
+  #       - transport.host=localhost
+  #       - network.host=0.0.0.0
+  #       - "ES_JAVA_OPTS=-Dlog4j2.formatMsgNoLookups=true -Xms512m -Xmx512m"
+  #   networks:
+  #     - service_vnet
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.5
-    environment:
-      http.host: "0.0.0.0"
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+  # graylog:
+  #   image: graylog/graylog:5.0
+  #   environment:
+  #     GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_SECRET}
+  #     GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_PASSWORD}
+  #     GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
+  #     GRAYLOG_CONTENT_PACKS_LOADER_ENABLED: "true"
+  #     GRAYLOG_CONTENT_PACKS_AUTO_INSTALL: gelf-udp-input.json
+  #   entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+  #   expose:
+  #     - "9000"
+  #     - "1514"
+  #     - "1514/udp"
+  #   volumes:
+  #     - ./graylogdata/contentpacks:/usr/share/graylog/data/contentpacks
+  #   depends_on:
+  #     - mongo
+  #     - elasticsearch
+  #   networks:
+  #     - service_vnet
 
-  graylog:
-    image: graylog/graylog:3.2
-    environment:
-      GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_SECRET}
-      GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_PASSWORD}
-      GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
-      GRAYLOG_CONTENT_PACKS_LOADER_ENABLED: "true"
-      GRAYLOG_CONTENT_PACKS_AUTO_INSTALL: gelf-udp-input.json
-    expose:
-      - "9000"
-    volumes:
-      - ./docker/files/usr/share/graylog/data/contentpacks:/usr/share/graylog/data/contentpacks
-    depends_on:
-      - mongo
-      - elasticsearch
-
-  dockerize:
-    image: jwilder/dockerize
+  # dockerize:
+  #   image: jwilder/dockerize
+  #   networks:
+  #     - service_vnet
 
   netshoot:
     image: nicolaka/netshoot
+    networks:
+      - service_vnet
+
+networks:
+  service_vnet:
+    name: etherpad_vnet
+    external: true
