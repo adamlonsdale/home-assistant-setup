@@ -1,0 +1,46 @@
+homeassistant: true
+mqtt:
+  server: mqtt://core-mosquitto:1883
+  user: addons
+  password: '!secret mqtt_password'
+serial:
+  port: /dev/ttyUSB1
+frontend:
+  port: 8080
+advanced:
+  homeassistant_legacy_entity_attributes: false
+  legacy_api: false
+  legacy_availability_payload: false
+  log_level: info
+device_options:
+  legacy: false
+permit_join: false
+devices:
+  '0x00124b00246ca33d':
+    friendly_name: Hallway Plug
+  '0x00124b00246c9dbe':
+    friendly_name: Kitchen Plug
+  '0x00124b00246caf47':
+    friendly_name: Utility Plug
+  '0x00124b00246ca011':
+    friendly_name: Landing Plug
+  '0x00124b00292998ac':
+    friendly_name: Front Door
+  '0x00124b0022d5a09d':
+    friendly_name: En Suite Climate
+  '0x00124b0022d5dc06':
+    friendly_name: Master Bedroom Climate
+  '0x00124b00246cefa3':
+    friendly_name: Living Room TV
+  '0x00124b0029197bbf':
+    friendly_name: Closet Climate
+  '0x7cb94c7788dc0000':
+    friendly_name: Office Plug
+  '0x00124b0029298c5f':
+    friendly_name: Office Door
+  '0x00124b00292927c7':
+    friendly_name: En Suite Door
+  '0x0017880108f6699a':
+    friendly_name: Sonos Dimmer
+  '0x00124b00292931e4':
+    friendly_name: Stairs Motion

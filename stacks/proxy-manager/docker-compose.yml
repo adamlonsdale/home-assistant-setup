@@ -15,56 +15,57 @@ services:
       X_FRAME_OPTIONS: "sameorigin"
       DB_SQLITE_FILE: "/data/database.sqlite"
       TZ: "Europe/London"
+      PUID: "${UID}"
+      PGID: "${GID}"
     networks:
+      - service_vnet
       - home_vnet
+      - vikunja_vnet
+      - snipeit_vnet
+      - registry_vnet
+      - paperless_vnet
+      - etherpad_vnet
 
   fail2ban:
     image: crazymax/fail2ban:latest
     container_name: fail2ban
     network_mode: "host"
+    environment:
+      PUID: "${UID}"
+      PGID: "${GID}"
     cap_add:
       - NET_ADMIN
       - NET_RAW
     privileged: true
     volumes:
-      - "./data_f2b:/data"
-      - "./data_npm/logs/:/var/log/npm/:ro"
+      - ./data_f2b:/data
+      - ./data_npm/logs/:/var/log/npm/:ro
     restart: always
     env_file:
-      - "./fail2ban.env"
+      - ./fail2ban.env
     depends_on:
       - nginx-proxy-manager
-  
-  registry:
-    restart: always
-    image: registry:2
-    expose:
-      - 5000:5000
-    volumes:
-      - ./data_registry:/var/lib/registry
-      - ./certs:/certs
-      - ./auth:/auth
-    networks:
-      - home_vnet
-
-  registry-ui:
-    image: joxit/docker-registry-ui:latest
-    container_name: registryui
-    expose:
-      - "80"
-    environment:
-      - REGISTRY_TITLE=Lonsdale Registry
-      - NGINX_PROXY_PASS_URL=http://proxy-registry-1:5000
-      - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
-      - SINGLE_REGISTRY=true
-    volumes:
-      - ./nginx.env:/etc/nginx/.env
-    depends_on:
-      - registry
-    networks:
-      - home_vnet
 
 networks:
+  service_vnet:
+    name: proxy_vnet
+    external: true
+
   home_vnet:
-    name: home_vlan
+    name: home_vnet
+    external: true
+  vikunja_vnet:
+    name: vikunja_vnet
+    external: true
+  snipeit_vnet:
+    name: snipeit_vnet
+    external: true
+  registry_vnet:
+    name: registry_vnet
+    external: true
+  paperless_vnet:
+    name: paperless_vnet
+    external: true
+  etherpad_vnet:
+    name: etherpad_vnet
     external: true

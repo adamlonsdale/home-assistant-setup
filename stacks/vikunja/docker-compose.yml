@@ -3,39 +3,44 @@ services:
   vikunja_db:
     image: mariadb:10
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    user: "${UID}:${GID}"
     volumes:
-      - ${HOME_ROOT}/vikunja/db:/var/lib/mysql
+      - ./db:/var/lib/mysql
     restart: unless-stopped
     networks:
-     home_vnet:
+     service_vnet:
 
   vikunja_api:
     image: vikunja/api
     environment:
+      PUID: ${UID}
+      PGID: ${GID}
       VIKUNJA_DATABASE_HOST: vikunja_db
       VIKUNJA_DATABASE_TYPE: mysql
       VIKUNJA_SERVICE_FRONTENDURL: https://todo.lonsdale.house/
     expose:
       - "3456"
     volumes:
-      - ${HOME_ROOT}/vikunja/api:/app/vikunja/files
+      - ./api:/app/vikunja/files
     depends_on:
       - vikunja_db
     restart: unless-stopped
     networks:
-     home_vnet:
+     service_vnet:
   
   vikunja_frontend:
     image: vikunja/frontend
     expose:
       - "80"
     environment:
+      PUID: ${UID}
+      PGID: ${GID}
       VIKUNJA_API_URL: https://todo.lonsdale.house/api/v1
     restart: unless-stopped
     networks:
-     home_vnet:
+     service_vnet:
 
 networks:
-  home_vnet:
-    name: home_vlan
+  service_vnet:
+    name: vikunja_vnet
     external: true

@@ -1,0 +1,86 @@
+version: '3'
+networks:
+  macvlan:
+    name: docker_macvlan
+    driver: macvlan
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 192.168.160.0/24
+          ip_range: 192.168.160.128/28
+          gateway: 192.168.160.1
+    driver_opts:
+      parent: br0
+
+  home_vnet:
+    name: home_vnet
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+          ip_range: 172.22.1.0/24
+          gateway: 172.22.0.1
+
+  etherpad_vnet:
+    name: etherpad_vnet
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.23.0.0/16
+          ip_range: 172.23.1.0/24
+          gateway: 172.23.0.1
+  
+  paperless_vnet:
+    name: paperless_vnet
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+          ip_range: 172.24.1.0/24
+          gateway: 172.24.0.1
+
+  vikunja_vnet:
+    name: vikunja_vnet
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+          ip_range: 172.25.1.0/24
+          gateway: 172.25.0.1
+
+  snipeit_vnet:
+    name: snipeit_vnet
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.26.0.0/16
+          ip_range: 172.26.1.0/24
+          gateway: 172.26.0.1
+
+  proxy_vnet:
+    name: proxy_vnet
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.27.0/16
+          ip_range: 172.27.1.0/24
+          gateway: 172.27.0.1
+
+  actualserver_vnet:
+    name: actualserver_vnet
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.28.0/16
+          ip_range: 172.28.1.0/24
+          gateway: 172.28.0.1
+
+  registry_vnet:
+    name: registry_vnet
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 172.29.0/16
+          ip_range: 172.29.1.0/24
+          gateway: 172.29.0.1

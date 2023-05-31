@@ -9,62 +9,58 @@ __pycache__
 
 /ssl/*
 
-/zigbee2mqtt/*
-!/zigbee2mqtt/configuration.yaml
+/stacks/home/zigbee2mqtt/*
+!/stacks/home/zigbee2mqtt/configuration.yaml
 
-/appdaemon/secrets.yaml
+/stacks/home/config/*
+!/stacks/home/config/configuration.yaml
+!/stacks/home/config/customize.yaml
+!/stacks/home/config/automations.yaml
+!/stacks/home/config/blueprints/
+!/stacks/home/config/scenes.yaml
+!/stacks/home/config/scripts.yaml
+!/stacks/home/config/sensor.yaml
+!/stacks/home/config/custom_components/
+!/stacks/home/config/www/
+/stacks/home/config/www/floorplans/
+/stacks/home/config/www/media/
+/stacks/home/config/www/tmp/
+!/stacks/home/config/ui_lovelace_minimalist/
+!/stacks/home/config/themes/
+!/stacks/home/config/dwains-dashboard/
 
-/config/*
-!/config/configuration.yaml
-!/config/customize.yaml
-!/config/automations.yaml
-!/config/blueprints/
-!/config/scenes.yaml
-!/config/scripts.yaml
-!/config/sensor.yaml
-!/config/custom_components/
-!/config/www/
-config/www/floorplans/
-config/www/media/
-config/www/tmp/
-!/config/ui_lovelace_minimalist/
-!/config/themes/
-!/config/dwains-dashboard/
-!/config/zigbee2mqtt
-/config/zigbee2mqtt/*
-!/config/zigbee2mqtt/configuration.yaml
-
-/espresence/.storage/
+/stacks/home/espresence/.storage/
 
 *.glb
 *.old
 
-/adguard/workdir/
+/stacks/home/adguard/workdir/
 
-/grafana/
+/stacks/home/grafana/
 
-/influxdb/
-/influxdb2
+/stacks/home/influxdb
 
-/nodered/*
-!/nodered/settings.js
-!/nodered/flows.json
+/stacks/home/nodered/*
+!/stacks/home/nodered/settings.js
+!/stacks/home/nodered/flows.json
 
-/musicassistant
-/piper
-/vikunja
-/whisper
+/stacks/home/musicassistant
+/stacks/home/piper
+/stacks/home/whisper
 
 /stacks/*
 !/stacks/proxy-manager
 !/stacks/snipeit
 !/stacks/paperless
 !/stacks/vikunja
+!/stacks/networks
+!/stacks/etherpad
+!/stacks/container_registry
+!/stacks/home
 
 /stacks/proxy-manager/*
 !/stacks/proxy-manager/docker-compose.yml
 !/stacks/proxy-manager/fail2ban.env
-!/stacks/proxy-manager/nginx.env
 !/stacks/proxy-manager/data_f2b
 /stacks/proxy-manager/data_f2b/*
 !/stacks/proxy-manager/data_f2b/jail.d
@@ -79,6 +75,13 @@ config/www/tmp/
 
 /stacks/snipeit/*
 !/stacks/snipeit/docker-compose.yml
+
+!/stacks/networks/docker-compose.yml
+
+/stacks/container_registry/*
+!/stacks/container_registry/docker-compose.yml
+
+/stacks/etherpad/private/*
 
 /.idea/
 

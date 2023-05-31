@@ -5,26 +5,30 @@ services:
     container_name: snipeit
     restart: unless-stopped
     env_file: snipeit.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
     expose: 
       - "80"
     depends_on:
       - snipeit_db
     volumes:
-      - ${HOME_ROOT}/snipeit/data:/var/lib/snipeit
+      - ./data:/var/lib/snipeit
     networks:
-     vlan_bridge:
+     service_vnet:
   
   snipeit_db:
     image: mysql:5.6
     container_name: snipeit_db
+    user: "${UID}:${GID}"
     restart: unless-stopped
     env_file: snipeit.env
     volumes:
-      - ${HOME_ROOT}/snipeit/db:/var/lib/mysql
+      - ./db:/var/lib/mysql
     networks:
-     vlan_bridge:
+     service_vnet:
 
 networks:
-  home_vnet:
-    name: home_vlan
+  service_vnet:
+    name: snipeit_vnet
     external: true

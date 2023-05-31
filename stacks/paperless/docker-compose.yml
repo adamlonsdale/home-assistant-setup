@@ -2,19 +2,27 @@ version: '3'
 services:
   broker:
     image: docker.io/library/redis:7
+    user: "${UID}:${GID}"
     restart: unless-stopped
     volumes:
-      - ${HOME_ROOT}/redis/data:/data
+      - ./redisdata:/data
+    environment:
+      PUID: "${UID}"
+      PGID: "${GID}"
     networks:
-     vlan_bridge:
+     service_vnet:
 
   paperless_db:
     image: docker.io/library/mariadb:10
+    user: "${UID}:${GID}"
     restart: unless-stopped
+    environment:
+      PUID: "${UID}"
+      PGID: "${GID}"
     volumes:
-      - ${HOME_ROOT}/paperless/dbdata:/var/lib/mysql
+      - ./dbdata:/var/lib/mysql
     networks:
-     vlan_bridge:
+     service_vnet:
 
   paperless_ui:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -32,30 +40,32 @@ services:
       timeout: 10s
       retries: 5
     volumes:
-      - ${HOME_ROOT}/paperless/data:/usr/src/paperless/data
-      - ${HOME_ROOT}/paperless/media:/usr/src/paperless/media
-      - ${HOME_ROOT}/paperless/export:/usr/src/paperless/export
-      - ${HOME_ROOT}/paperless/consume:/usr/src/paperless/consume
+      - ./data:/usr/src/paperless/data
+      - ./media:/usr/src/paperless/media
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
     networks:
-     vlan_bridge:
+     service_vnet:
 
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.8
+    user: "${UID}:${GID}"
     restart: unless-stopped
     command:
       - "gotenberg"
       - "--chromium-disable-javascript=true"
       - "--chromium-allow-list=file:///tmp/.*"
     networks:
-     vlan_bridge:
+     service_vnet:
 
   tika:
     image: ghcr.io/paperless-ngx/tika:latest
+    user: "${UID}:${GID}"
     restart: unless-stopped
     networks:
-     vlan_bridge:
+     service_vnet:
 
 networks:
-  home_vnet:
-    name: home_vlan
+  service_vnet:
+    name: paperless_vnet
     external: true

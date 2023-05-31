@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  registry:
+    restart: always
+    container_name: registry
+    image: registry:2
+    expose:
+      - "5000"
+    volumes:
+      - ./data_registry:/var/lib/registry
+      - ./certs:/certs
+      - ./auth:/auth
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - REGISTRY_CATALOG_MAXENTRIES=100000
+    networks:
+      - service_vnet
+
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: registryui
+    restart: always
+    expose:
+      - "80"
+    environment:
+      - REGISTRY_TITLE=Lonsdale Containers
+      - NGINX_PROXY_PASS_URL=http://registry:5000
+      - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
+      - SINGLE_REGISTRY=true
+      - PUID=${UID}
+      - PGID=${GID}
+    depends_on:
+      - registry
+    networks:
+      - service_vnet
+
+networks:
+  service_vnet:
+    name: registry_vnet
+    external: true

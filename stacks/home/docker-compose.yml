@@ -1,0 +1,217 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:rc"
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    expose: 
+      - "8123"
+    networks:
+      service_vnet:
+      macvlan:
+        ipv4_address: 192.168.160.102
+        
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: "mqtt"
+    user: "${UID}:${GID}"
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mqtt/data:/mosquitto/data
+      - ./mqtt/config:/mosquitto/config
+      - ./mqtt/log:/mosquitto/log
+    environment:
+      - TZ=Europe/London
+    networks:
+      service_vnet:
+        aliases:
+          - core-mosquitto
+        
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    restart: always
+    privileged: true
+    image: koenkk/zigbee2mqtt:latest
+    volumes:
+      - ./zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    depends_on:
+      mqtt:
+        condition: service_started
+    expose:
+      - "8080"
+    environment:
+      - TZ=Europe/London
+    networks:
+      service_vnet:
+    
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    user: "${UID}:${GID}"
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 784:784/udp
+      - 853:853/tcp
+      - 80:80/tcp
+      - 443:443/tcp
+      - 3000:3000/tcp
+    volumes:
+      - ./adguard/workdir:/opt/adguardhome/work
+      - ./adguard/confdir:/opt/adguardhome/conf
+    networks:
+      macvlan:
+        ipv4_address: 192.168.160.100
+    restart: unless-stopped
+    
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    user: "${UID}:${GID}"
+    restart: always
+    environment:
+      - DOCKER_INFLUXDB_INIT_ORG=Lonsdale
+      - DOCKER_INFLUXDB_INIT_BUCKET=Home
+      - DOCKER_INFLUXDB_INIT_RETENTION=12w
+    expose:
+      - "8086"
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb2
+      - ./influxdb/config:/etc/influxdb2
+    networks:
+      service_vnet:
+        
+  grafana:
+   image: grafana/grafana-oss:latest
+   container_name: grafana
+   user: "${UID}:${GID}"
+   restart: always
+   depends_on:
+     - influxdb
+   environment:
+     - GF_INSTALL_PLUGINS=
+   links:
+     - influxdb
+   expose:
+     - "3000"
+   volumes:
+     - ./grafana:/var/lib/grafana
+   networks:
+     service_vnet:
+    
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:stable
+    container_name: frigate
+    privileged: true
+    restart: unless-stopped
+    shm_size: "256mb"
+    expose:
+      - "5000"
+      - "8554" # RTSP feeds
+      - "8555/tcp" # WebRTC over tcp
+      - "8555/udp" # WebRTC over udp
+    environment:
+      - TZ=Europe/London
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+      - FLASK_ENV=development
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./frigate:/config
+      - ${MEDIA_ROOT}/frigate:/media/frigate
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    networks:
+     service_vnet:
+  
+  espresence:
+   image: registry.lonsdale.house/espresence-companion:latest
+   container_name: espresence_companion
+   user: "${UID}:${GID}"
+   restart: always
+   depends_on:
+     - mqtt
+   expose:
+     - "8276"
+   volumes:
+     - ./espresence:/config/espresense
+   networks:
+     service_vnet:
+
+  node-red:
+    image: nodered/node-red:latest
+    user: "${UID}:${GID}"
+    environment:
+      - TZ=Europe/London
+    expose:
+      - "1880"
+    volumes:
+      - ./nodered:/data
+    networks:
+     service_vnet:
+
+  whisper:
+    container_name: whisper
+    user: "${UID}:${GID}"
+    command: --model small --language en
+    image: rhasspy/wyoming-whisper:latest
+    volumes:
+      - ./whisper:/data
+    environment:
+      - TZ=Europe/London
+    restart: unless-stopped
+    expose:
+      - "10300"
+    networks:
+     service_vnet:
+
+  piper:
+    container_name: piper
+    user: "${UID}:${GID}"
+    image: rhasspy/wyoming-piper
+    command: --voice en-gb-southern_english_female-low
+    volumes:
+      - ./piper:/data
+    environment:
+      - TZ=Europe/London
+    restart: unless-stopped
+    expose:
+      - "10200"
+    networks:
+      service_vnet:
+
+  music-assistant:
+    container_name: musicassistant
+    user: "${UID}:${GID}"
+    image: ghcr.io/music-assistant/server:latest
+    volumes:
+      - ./musicassistant:/data
+      - ${MUSIC_ROOT}:/media
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - 8095:8095
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
+    networks:
+      service_vnet:
+      macvlan:
+        ipv4_address: 192.168.160.101
+
+networks:
+  macvlan:
+    name: docker_macvlan
+    external: true
+
+  service_vnet:
+    name: home_vnet
+    external: true
