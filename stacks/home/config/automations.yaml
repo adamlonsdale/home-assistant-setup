@@ -158,6 +158,7 @@
       illuminance_sensor: sensor.living_room_sensor_illuminance
       sunstate_condition: Below horizon
       no_motion_wait: input_number.living_room_empty_wait_time
+      illuminance_cutoff: input_number.low_light_level
 - id: '1682283901871'
   alias: Hallway - Off
   description: ''
@@ -300,4 +301,265 @@
       - service: media_player.volume_up
         data: {}
         target:
+          entity_id:
+          - media_player.living_room
+      action_button_off_short:
+      - service: media_player.volume_mute
+        data:
+          is_volume_muted: true
+        target:
           entity_id: media_player.living_room
+      action_button_on_short:
+      - service: media_player.volume_mute
+        data:
+          is_volume_muted: false
+        target:
+          entity_id: media_player.living_room
+      action_button_down_short:
+      - service: media_player.volume_down
+        data: {}
+        target:
+          entity_id: media_player.living_room
+      button_up_long_loop: true
+      button_down_long_loop: true
+      action_button_down_long:
+      - service: media_player.volume_down
+        data: {}
+        target:
+          entity_id: media_player.living_room
+      action_button_up_long:
+      - service: media_player.volume_up
+        data: {}
+        target:
+          entity_id: media_player.living_room
+      helper_debounce_delay: 50
+- id: '1685360053965'
+  alias: New Automation
+  description: ''
+  use_blueprint:
+    path: N1c093/media-player-volume-limit.yaml
+    input:
+      media_player:
+      - media_player.living_room
+      volume_limit: 0.4
+- id: '1685360742800'
+  alias: Notification - Frigate - iPhone
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.outside
+      notify_device: 5459415477ca3de54c37573b258cf625
+      base_url: https://home.lonsdale.house
+      title: Frigate Detection
+      message: '{{ label }} detected - {{ camera_name }}'
+      critical: 'false'
+      alert_once: true
+      attachment: snapshot
+      update_thumbnail: true
+      color: teal
+      icon: mdi:{{'account-outline' if label == 'Person' else 'dog' if label == 'Dog'
+        else 'cat' if label == 'Cat' else 'car' if label == 'Car' else 'home-assistant'}}
+      ios_live_view: true
+      zone_filter: false
+      labels:
+      - person
+      - dog
+- id: '1685361017425'
+  alias: Notification - Frigate - TV
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.outside
+      base_url: https://home.lonsdale.house
+      title: Camera Alert!
+      message: '{{ label }} detected - {{ camera_name }}'
+      critical: 'true'
+      alert_once: true
+      attachment: snapshot
+      update_thumbnail: true
+      color: teal
+      icon: mdi:{{'account-outline' if label == 'Person' else 'dog' if label == 'Dog'
+        else 'cat' if label == 'Cat' else 'car' if label == 'Car' else 'home-assistant'}}
+      ios_live_view: true
+      zone_filter: false
+      labels:
+      - person
+      - car
+      - dog
+      notify_group: media_player.android_tv_192_168_160_163
+      tv: true
+      tv_position: top-right
+      tv_duration: 5
+      tv_transparency: 25%
+- id: '1685470047933'
+  alias: Stairs - Descending - Night
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.upstairs_landing_motion_occupancy
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.living_room_sensor_illuminance
+    attribute: light_level
+    below: input_number.low_light_level
+  action:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.hallway_path
+    metadata: {}
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.stairs_motion_occupancy
+      from: 'off'
+      to: 'on'
+    continue_on_timeout: true
+    timeout:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
+  - service: scene.turn_on
+    target:
+      entity_id: scene.going_downstairs
+    metadata: {}
+  - if:
+    - condition: state
+      entity_id: binary_sensor.stairs_motion_occupancy
+      state: 'on'
+    then:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.going_downstairs
+      metadata: {}
+    else:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.living_room_off
+      metadata: {}
+  mode: single
+- id: '1685470759226'
+  alias: Stairs - Ascending - Night
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.stairs_motion_occupancy
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.office_sensor_illuminance
+    attribute: light_level
+    below: input_number.low_light_level
+  action:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.hallway_path
+    metadata: {}
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.upstairs_landing_motion_occupancy
+      from: 'off'
+      to: 'on'
+    timeout:
+      hours: 0
+      minutes: 4
+      seconds: 0
+      milliseconds: 0
+  - if:
+    - condition: state
+      entity_id: binary_sensor.upstairs_landing_motion_occupancy
+      state: 'on'
+    then:
+    - type: turn_on
+      device_id: 76497eb01548d2962b637dce29e2d5c1
+      entity_id: light.lamp
+      domain: light
+    - service: scene.turn_on
+      target:
+        entity_id: scene.going_upstairs
+      metadata: {}
+  - type: turn_off
+    device_id: cde7fca74567f8b9527f6590d1d5849a
+    entity_id: light.hallway
+    domain: light
+  mode: single
+- id: '1685521177369'
+  alias: Stairs - Ascending - Day
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.stairs_motion_occupancy
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.office_sensor_illuminance
+    attribute: light_level
+    above: input_number.low_light_level
+  action:
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.upstairs_landing_motion_occupancy
+      from: 'off'
+      to: 'on'
+    timeout:
+      hours: 0
+      minutes: 4
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: false
+  - type: turn_off
+    device_id: cde7fca74567f8b9527f6590d1d5849a
+    entity_id: light.hallway
+    domain: light
+  - type: turn_off
+    device_id: fa9fca7bea24e9cd3da84140d3ea352a
+    entity_id: light.living_room
+    domain: light
+  mode: single
+- id: '1685521349740'
+  alias: Stairs - Descending - Day
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.upstairs_landing_motion_occupancy
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.living_room_sensor_illuminance
+    attribute: light_level
+    above: input_number.low_light_level
+  action:
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.stairs_motion_occupancy
+      from: 'off'
+      to: 'on'
+    continue_on_timeout: false
+    timeout:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 6c612d272705ea4fdcd149b1462bb079
+    entity_id: light.office
+    domain: light
+  - type: turn_off
+    device_id: 0d99e5aac74c2c30b513aa714dbbaa7b
+    entity_id: light.master_bedroom_2
+    domain: light
+  mode: single

@@ -82,6 +82,7 @@ __pycache__
 !/stacks/container_registry/docker-compose.yml
 
 /stacks/etherpad/private/*
+/stacks/etherpad/var/*
 
 /.idea/
 

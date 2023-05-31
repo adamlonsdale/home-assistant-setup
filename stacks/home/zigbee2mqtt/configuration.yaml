@@ -12,9 +12,21 @@ advanced:
   legacy_api: false
   legacy_availability_payload: false
   log_level: info
+  log_syslog:
+    app_name: Zigbee2MQTT
+    eol: /n
+    host: localhost
+    localhost: localhost
+    path: /dev/log
+    pid: process.pid
+    port: 514
+    protocol: udp4
+    type: '5424'
+  transmit_power: 20
+  last_seen: ISO_8601_local
 device_options:
   legacy: false
-permit_join: false
+permit_join: true
 devices:
   '0x00124b00246ca33d':
     friendly_name: Hallway Plug
@@ -38,9 +50,25 @@ devices:
     friendly_name: Office Plug
   '0x00124b0029298c5f':
     friendly_name: Office Door
-  '0x00124b00292927c7':
-    friendly_name: En Suite Door
   '0x0017880108f6699a':
     friendly_name: Sonos Dimmer
+    legacy: true
+  '0x00124b00246ce913':
+    friendly_name: Master Bedroom Plug
+  '0x00124b0029dedd43':
+    friendly_name: Zigbee USB Router
   '0x00124b00292931e4':
     friendly_name: Stairs Motion
+  '0x00124b00292927c7':
+    friendly_name: En Suite Door
+  '0x00124b0029296de4':
+    friendly_name: Upstairs Landing Motion
+  '0x00124b00292831c5':
+    friendly_name: Master Bedroom Motion
+  '0x8cf681fffeba49ed':
+    friendly_name: Living Room Remote
+availability:
+  active:
+    timeout: 10
+  passive:
+    timeout: 1500

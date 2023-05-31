@@ -1,0 +1,49 @@
+blueprint:
+  name: Media Player - Volume limit
+  description: Reduce the volume of media player to the default level, if limit is
+    exceeded
+  domain: automation
+  input:
+    media_player:
+      name: Media Player
+      description: Specify which media_player should trigger this automation. Multiple
+        Media Player also work
+      selector:
+        entity:
+          domain:
+          - media_player
+          multiple: true
+    volume_limit:
+      name: Volume limit
+      description: Select the volume limit which should trigger this automation. For
+        example "0.7"
+      default: 0.7
+      selector:
+        number:
+          min: 0.1
+          max: 1.0
+          mode: slider
+          step: 0.05
+    default_volume:
+      name: Default volume
+      description: Select the default volume level. For example "0.2"
+      default: 0.2
+      selector:
+        number:
+          min: 0.1
+          max: 1.0
+          mode: slider
+          step: 0.05
+  source_url: https://community.home-assistant.io/t/media-player-volume-limit/261229
+mode: parallel
+max: 10
+trigger:
+  platform: numeric_state
+  entity_id: !input media_player
+  attribute: volume_level
+  above: !input volume_limit
+action:
+- service: media_player.volume_set
+  data:
+    volume_level: !input default_volume
+    entity_id: '{{ trigger.entity_id }}'
