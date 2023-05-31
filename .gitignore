@@ -81,6 +81,8 @@ __pycache__
 /stacks/container_registry/*
 !/stacks/container_registry/docker-compose.yml
 
+/stacks/etherpad/private/*
+
 /.idea/
 
 *.env

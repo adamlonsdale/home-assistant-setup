@@ -39,6 +39,10 @@ go2rtc:
       - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.23:554/stream1#video=copy#audio=copy#audio=opus"
     outside_sd:
       - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.23:554/stream2#video=copy#audio=copy#audio=opus"
+    office_hd:
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.170:554/stream1#video=copy#audio=copy#audio=opus"
+    office_sd:
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.170:554/stream2#video=copy#audio=copy#audio=opus"
   webrtc:
     candidates:
       - frigate.lonsdale.house:8555
@@ -106,3 +110,35 @@ cameras:
       bounding_box: False
       crop: True
       height: 500
+
+  office:
+    ffmpeg:
+      output_args:
+        record: preset-record-generic-audio-copy
+      inputs:
+        - path: rtsp://127.0.0.1:8554/office_sd
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/office_hd
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+    live:
+      stream_name: office_sd
+    snapshots:
+      enabled: True
+      bounding_box: True
+    mqtt:
+      timestamp: False
+      bounding_box: False
+      crop: True
+      height: 500
+
+ui:
+  live_mode: jsmpeg
+  timezone: Europe/London
+  use_experimental: True
+  time_format: browser
+  date_style: short
+  time_style: medium
