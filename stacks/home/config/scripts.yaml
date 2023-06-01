@@ -16,3 +16,57 @@ living_chill_script:
       entity_id: scene.living_room_chill
     metadata: {}
   mode: single
+tts_local_piper:
+  alias: TTS local piper
+  sequence:
+  - service: tts.speak
+    data:
+      cache: true
+      media_player_entity_id: media_player.living_room
+      message: '{{ message_text }}'
+    target:
+      entity_id: tts.piper_2
+  mode: single
+  icon: mdi:microphone
+  fields:
+    message_text:
+      name: Message
+      description: The text to generate
+      required: true
+      selector:
+        template:
+tts_welcome_home:
+  alias: 'TTS: Welcome Home'
+  sequence:
+  - service: script.tts_local_piper
+    data:
+      message_text: 'Welcome home Adam, the time is {{ as_timestamp (now()) | timestamp_custom(''%-I
+        %-M'') }}. It is {{ states("sensor.living_room_sensor_temperature", "Value")
+        }} degrees in the living room and {{ states("sensor.master_bedroom_climate_temperature",
+        "Value") }} upstairs.
+
+        '
+  mode: single
+  icon: phu:rooms-front-door
+'1685576176912':
+  alias: 'TTS: Alarm Triggered'
+  sequence:
+  - service: script.tts_local_piper
+    data:
+      message_text: 'It does appear that you have set the alarm off. Please close
+        the door on your way out.
+
+        '
+  mode: single
+  icon: phu:rooms-front-door
+'1685576222124':
+  alias: 'TTS: Alarm Arming'
+  sequence:
+  - service: script.tts_local_piper
+    data:
+      message_text: 'Have a good day, Adam. I''m arming the Alarm now so please make
+        sure you''re out of the door!
+
+        '
+  mode: single
+  icon: phu:rooms-front-door
