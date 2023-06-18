@@ -7,6 +7,9 @@ services:
       - '80:80'
       - '83:81'
       - '443:443'
+      - '8554' # RTSP feeds
+      - '8555/tcp' # WebRTC over tcp
+      - '8555/udp' # WebRTC over udp
     volumes:
       - ./data_npm:/data
       - ./letsencrypt:/etc/letsencrypt
@@ -25,6 +28,7 @@ services:
       - registry_vnet
       - paperless_vnet
       - etherpad_vnet
+      - netbox_vnet
 
   fail2ban:
     image: crazymax/fail2ban:latest
@@ -50,7 +54,6 @@ networks:
   service_vnet:
     name: proxy_vnet
     external: true
-
   home_vnet:
     name: home_vnet
     external: true
@@ -68,4 +71,7 @@ networks:
     external: true
   etherpad_vnet:
     name: etherpad_vnet
+    external: true
+  netbox_vnet:
+    name: netbox_vnet
     external: true

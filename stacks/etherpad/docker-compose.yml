@@ -22,7 +22,7 @@ services:
       - service_vnet
 
   etherpad:
-    image: etherpad/etherpad:latest
+    image: etherpad/etherpad:develop
     environment:
       DB_HOST: postgresql
       DB_NAME: etherpad

@@ -16,6 +16,7 @@ http:
   use_x_forwarded_for: true
   trusted_proxies:
     - 172.22.0.0/16
+    - 172.27.0.0/16
 
 automation: !include automations.yaml
 script: !include scripts.yaml
@@ -122,23 +123,6 @@ template:
 homeassistant:
     customize: !include customize.yaml
 
-alarm_control_panel:
-  - platform: manual_mqtt
-    state_topic: home/alarm
-    command_topic: home/alarm/set
-    code: !secret alarm_code
-    code_arm_required: true
-    pending_time: 30
-    delay_time: 30
-    trigger_time: 4
-    disarmed:
-      trigger_time: 0
-    armed_home:
-      pending_time: 0
-      delay_time: 0
-    triggered:
-      pending_time: 0
-
 influxdb:
     api_version: 2
     host: influxdb
@@ -153,3 +137,106 @@ influxdb:
         source: hass
 
 o365: !include o365.yaml
+
+homekit:
+  - name: Home Assistant
+    port: 21063
+    filter:
+      include_domains:
+        - alarm_control_panel
+        - light
+        - climate
+        - person
+      include_entity_globs:
+        - binary_sensor.*_occupancy
+      include_entities:
+        - binary_sensor.living_room_sensor_motion
+
+        - sensor.living_room_sensor_temperature
+
+        - sensor.closet_climate_temperature
+        - sensor.closet_climate_humidity
+
+        - sensor.en_suite_climate_temperature
+        - sensor.en_suite_climate_humidity
+
+        - sensor.hue_outdoor_motion_sensor_1_temperature
+
+        - sensor.kitchen_temperature
+        - sensor.kitchen_humidity
+
+        - sensor.master_bedroom_climate_temperature
+        - sensor.master_bedroom_climate_humidity
+
+        - sensor.office_climate_temperature
+
+      exclude_entity_globs:
+        - "*espresen?e*"
+      exclude_entities:
+        - light.office_lightstrip
+        - light.kitchen_lamp
+
+    entity_config:
+      alarm_control_panel.alarmo:
+        code: !secret alarm_code
+
+      binary_sensor.living_room_sensor_motion:
+        linked_battery_sensor: sensor.living_room_sensor_battery
+        low_battery_threshold: 31
+
+      media_player.sky_q:
+        name: Sky Q
+        feature_list:
+          - feature: on_off
+          - feature: play_pause
+          - feature: play_stop
+          - feature: toggle_mute
+  - name: Driveway Camera
+    port: 21064
+    mode: accessory
+    filter:
+      include_entities:
+       - camera.outside
+  - name: Garden Camera
+    port: 21065
+    mode: accessory
+    filter:
+      include_entities:
+       - camera.office
+  - name: Downstairs Garden Camera
+    port: 21066
+    mode: accessory
+    filter:
+      include_entities:
+       - camera.kitchen
+
+config_editor:
+
+waste_collection_schedule:
+  sources:
+    - name: eastriding_gov_uk
+      args:
+        postcode: !secret property_postcode
+        uprn: !secret property_uprn
+
+mqtt:
+  siren:
+    - unique_id: alarm_siren
+      name: "Intrusion Siren"
+      command_topic: "zigbee2mqtt/Alarm Siren/set"
+      command_template: "{\"warning\": {\"duration\": 10, \"mode\": \"{{ tone }}\" }}"
+      command_off_template: "{\"warning\": {\"mode\": \"stop\" }}"
+      available_tones:
+        - emergency
+      availability:
+        - topic: "zigbee2mqtt/Alarm Siren/availability"
+          payload_available: "{\"state\":\"online\"}"
+      optimistic: false
+      qos: 0
+      retain: true
+
+logger:
+  default: warning
+  logs:
+    homeassistant.core: warning
+    homeassistant.components.waste_collection_schedule: info
