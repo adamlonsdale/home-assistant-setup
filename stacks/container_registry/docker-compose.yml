@@ -3,6 +3,7 @@ services:
   registry:
     restart: always
     container_name: registry
+    user: "${UID}:${GID}"
     image: registry:2
     expose:
       - "5000"

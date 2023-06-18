@@ -10,6 +10,7 @@ services:
       - PGID=${GID}
     expose: 
       - "80"
+      - "443"
     depends_on:
       - snipeit_db
     volumes:

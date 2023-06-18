@@ -43,7 +43,7 @@ services:
       - ./data:/usr/src/paperless/data
       - ./media:/usr/src/paperless/media
       - ./export:/usr/src/paperless/export
-      - ./consume:/usr/src/paperless/consume
+      - ${CONSUME_PATH}:/usr/src/paperless/consume
     networks:
      service_vnet:
 
