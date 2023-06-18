@@ -67,6 +67,20 @@ devices:
     friendly_name: Master Bedroom Motion
   '0x8cf681fffeba49ed':
     friendly_name: Living Room Remote
+  '0x30eb5affff54faed':
+    friendly_name: '0x30eb5affff54faed'
+  '0x8cf681fffed7dbaa':
+    friendly_name: Alarm Siren
+  '0x00124b0029278706':
+    friendly_name: Patio Doors
+  '0x00124b0029190e17':
+    friendly_name: Utility Door
+  '0x00124b002927bbf9':
+    friendly_name: Downstairs Toilet Motion
+  '0x001788010bf1db7e':
+    friendly_name: '0x001788010bf1db7e'
+  '0x001788010bf1db7d':
+    friendly_name: '0x001788010bf1db7d'
 availability:
   active:
     timeout: 10
