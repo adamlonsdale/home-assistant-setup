@@ -10,6 +10,7 @@
       - None
       - candle
       - fire
+      - unknown
       supported_color_modes:
       - color_temp
       - xy
@@ -27,9 +28,14 @@
       - None
       - candle
       - fire
+      - unknown
       supported_color_modes:
       - color_temp
       - xy
+      mode: normal
+      dynamics: none
+      friendly_name: Lamp
+      supported_features: 44
       color_mode: color_temp
       brightness: 252
       color_temp_kelvin: 2409
@@ -45,10 +51,6 @@
       - 0.557
       - 0.389
       effect: None
-      mode: normal
-      dynamics: none
-      friendly_name: Lamp
-      supported_features: 44
       state: 'on'
     light.near_window:
       min_color_temp_kelvin: 2000
@@ -59,6 +61,7 @@
       - None
       - candle
       - fire
+      - unknown
       supported_color_modes:
       - color_temp
       - xy
@@ -76,12 +79,17 @@
       - None
       - candle
       - fire
+      - unknown
       - sunrise
       supported_color_modes:
       - color_temp
       - xy
+      mode: normal
+      dynamics: none
+      friendly_name: Signe Sofas
+      supported_features: 44
       color_mode: color_temp
-      brightness: 153
+      brightness: 82
       color_temp_kelvin: 2832
       color_temp: 353
       hs_color:
@@ -95,10 +103,6 @@
       - 0.513
       - 0.386
       effect: None
-      mode: normal
-      dynamics: none
-      friendly_name: Signe Sofas
-      supported_features: 44
       state: 'on'
   icon: mdi:lamp-outline
   metadata:
@@ -122,6 +126,7 @@
       - None
       - candle
       - fire
+      - unknown
       supported_color_modes:
       - color_temp
       - xy
@@ -139,6 +144,7 @@
       - None
       - candle
       - fire
+      - unknown
       supported_color_modes:
       - color_temp
       - xy
@@ -148,6 +154,8 @@
       supported_features: 44
       color_mode: color_temp
       brightness: 255
+      color_temp_kelvin: 2710
+      color_temp: 369
       hs_color:
       - 28.373
       - 65.405
@@ -159,8 +167,6 @@
       - 0.524
       - 0.388
       effect: None
-      color_temp_kelvin: 2710
-      color_temp: 369
       state: 'on'
     light.near_window:
       min_color_temp_kelvin: 2000
@@ -171,6 +177,7 @@
       - None
       - candle
       - fire
+      - unknown
       supported_color_modes:
       - color_temp
       - xy
@@ -188,6 +195,7 @@
       - None
       - candle
       - fire
+      - unknown
       - sunrise
       supported_color_modes:
       - color_temp
@@ -197,7 +205,9 @@
       friendly_name: Signe Sofas
       supported_features: 44
       color_mode: color_temp
-      brightness: 217
+      brightness: 79
+      color_temp_kelvin: 2710
+      color_temp: 369
       hs_color:
       - 28.373
       - 65.405
@@ -209,8 +219,6 @@
       - 0.524
       - 0.388
       effect: None
-      color_temp_kelvin: 2710
-      color_temp: 369
       state: 'on'
     light.signe_gradient_bedroom:
       min_color_temp_kelvin: 2000
@@ -221,6 +229,7 @@
       - None
       - candle
       - fire
+      - unknown
       - sunrise
       supported_color_modes:
       - color_temp

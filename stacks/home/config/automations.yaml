@@ -147,6 +147,7 @@
       sunstate_condition: Above horizon
       no_motion_wait: input_number.living_room_empty_wait_time
       illuminance_cutoff: input_number.low_light_level
+      blocker_entity: input_boolean.lights_override
 - id: '1682234975513'
   alias: Living Room - Evening
   description: ''
@@ -405,7 +406,6 @@
   condition:
   - condition: numeric_state
     entity_id: sensor.living_room_sensor_illuminance
-    attribute: light_level
     below: input_number.low_light_level
   action:
   - service: scene.turn_on
@@ -455,7 +455,6 @@
   condition:
   - condition: numeric_state
     entity_id: sensor.office_sensor_illuminance
-    attribute: light_level
     below: input_number.low_light_level
   action:
   - service: scene.turn_on
@@ -563,3 +562,18 @@
     entity_id: light.master_bedroom_2
     domain: light
   mode: single
+- id: '1686166847713'
+  alias: Downstairs Toilet - Motion
+  description: ''
+  use_blueprint:
+    path: Blackshome/sensor-light.yaml
+    input:
+      motion_trigger:
+      - binary_sensor.downstairs_toilet_motion_occupancy
+      light_switch:
+        entity_id: light.downstairs_toilet
+      time_delay: 1.5
+      include_time: time_disabled
+      include_ambient: ambient_disabled
+      include_sun: sun_disabled
+      include_bypass: bypass_disabled

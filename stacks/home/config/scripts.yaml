@@ -1,9 +1,3 @@
-text_to_speech_on_sonos:
-  alias: Text-to-Speech on Sonos
-  use_blueprint:
-    path: Talvish/sonos_say.yaml
-  icon: mdi:account-voice
-  mode: single
 living_chill_script:
   alias: Living Chill Script
   sequence:
@@ -19,13 +13,21 @@ living_chill_script:
 tts_local_piper:
   alias: TTS local piper
   sequence:
-  - service: tts.speak
-    data:
-      cache: true
-      media_player_entity_id: media_player.living_room
-      message: '{{ message_text }}'
-    target:
-      entity_id: tts.piper_2
+  - parallel:
+    - service: tts.speak
+      data:
+        cache: true
+        media_player_entity_id: media_player.office
+        message: '{{ message_text }}'
+      target:
+        entity_id: tts.piper_2
+    - service: tts.speak
+      data:
+        cache: true
+        media_player_entity_id: media_player.living_room
+        message: '{{ message_text }}'
+      target:
+        entity_id: tts.piper_2
   mode: single
   icon: mdi:microphone
   fields:
@@ -40,7 +42,13 @@ tts_welcome_home:
   sequence:
   - service: script.tts_local_piper
     data:
-      message_text: '{{ "Good Morning" if now().hour < 12 else "Good Afternoon" }} Adam, the time is {{ as_timestamp (now()) | timestamp_custom("%-I %M") }} It is {{ states("sensor.living_room_sensor_temperature", "Value") }} degrees in the living room and {{ states("sensor.master_bedroom_climate_temperature", "Value") }} upstairs. {{ "It sounds a bit hot upstairs. The master bedroom window is currently closed." if float(states("sensor.master_bedroom_climate_temperature", "Value")) > 10 }}'
+      message_text: '{{ "Good Morning" if now().hour < 12 else "Good Afternoon" }}
+        Adam, the time is {{ as_timestamp (now()) | timestamp_custom("%-I %M") }}
+        It is {{ states("sensor.living_room_sensor_temperature", "Value") }} degrees
+        in the living room and {{ states("sensor.master_bedroom_climate_temperature",
+        "Value") }} upstairs. {{ "It sounds a bit hot upstairs. The master bedroom
+        window is currently closed." if float(states("sensor.master_bedroom_climate_temperature",
+        "Value")) > 10 }}'
   mode: single
   icon: phu:rooms-front-door
 '1685576176912':
@@ -65,3 +73,23 @@ tts_welcome_home:
         '
   mode: single
   icon: phu:rooms-front-door
+tts_sonos:
+  alias: TTS Sonos
+  sequence:
+  - service: sonos.snapshot
+    data:
+      with_group: true
+      entity_id: media_player.living_room
+  - service: tts.speak
+    data:
+      cache: false
+      media_player_entity_id: media_player.living_room
+      message: this is a test
+    target:
+      entity_id: tts.piper_2
+  - service: sonos.restore
+    data:
+      with_group: true
+      entity_id: media_player.living_room
+  mode: single
+  icon: phu:sonos-one
