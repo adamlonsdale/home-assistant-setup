@@ -136,7 +136,7 @@ cameras:
       height: 500
 
 ui:
-  live_mode: jsmpeg
+  live_mode: mse
   timezone: Europe/London
   use_experimental: True
   time_format: browser
