@@ -1,0 +1,395 @@
+blueprint:
+  name: Z2M - RGBGenie ZB-5008/5028 or ZB-5004 4 Zone Remote 1.1
+  description: Control lights with a RGBGenie ZB 5008/5028 RGBW or ZB-5004 Dimmer
+    4 Zone Remote v1.0
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: Choose the Remote Control Sensor.action to use
+      selector:
+        entity:
+          integration: mqtt
+          domain:
+          - sensor
+          multiple: false
+    zb_5004:
+      name: Remote Type = ZB-5004 / ZB-5001 or similar?
+      description: Turn On if this is a ZB-5004 (you want to use the "action_group"
+        attribute to choose zones rather than receiving zone info from the "action"
+        attribute). Default is ZB-5008/5028
+      default: false
+      selector:
+        boolean: {}
+    helper_stop_button:
+      name: Helper - Brightness or Hue Stop
+      description: Input Boolean used to monitor receipt of a brightness_stop or hue_stop
+        button. Needs to be created before creating automation Configuration>Helpers>Toggle
+      default: {}
+      selector:
+        entity:
+          domain:
+          - input_boolean
+          multiple: false
+    remote_zone_1_action_group:
+      name: (Change if ZB-5004 / ZB-5001 - otherwise it is ignored) ZB-5004 Zone 1
+        Action Group ID
+      description: Enter the 5 digit "action_group" for Zone 1 - look at Z2M log when
+        you press Master On/Off or 1st Zone Button On/Off
+      default: 48897
+      selector:
+        number:
+          min: 1.0
+          max: 99999.0
+          mode: box
+          step: 1.0
+    remote_zone_2_action_group:
+      name: (Change if ZB-5004 / ZB-5001 - otherwise it is ignored) ZB-5004 Zone 2
+        Action Group ID
+      description: Enter the 5 digit "action_group" for Zone 2 - look at Z2M log when
+        you press Master On/Off or 1st Zone Button On/Off
+      default: 48898
+      selector:
+        number:
+          min: 1.0
+          max: 99999.0
+          mode: box
+          step: 1.0
+    remote_zone_3_action_group:
+      name: (Change if ZB-5004 / ZB-5001 - otherwise it is ignored) ZB-5004 Zone 3
+        Action Group ID
+      description: Enter the 5 digit "action_group" for Zone 3 - look at Z2M log when
+        you press Master On/Off or 1st Zone Button On/Off
+      default: 48899
+      selector:
+        number:
+          min: 1.0
+          max: 99999.0
+          mode: box
+          step: 1.0
+    remote_zone_4_action_group:
+      name: (Change if ZB-5004 / ZB-5001 - otherwise it is ignored) ZB-5004 Zone 4
+        Action Group ID
+      description: Enter the 5 digit "action_group" for Zone 4 - look at Z2M log when
+        you press Master On/Off or 1st Zone Button On/Off
+      default: 48900
+      selector:
+        number:
+          min: 1.0
+          max: 99999.0
+          mode: box
+          step: 1.0
+    remote_zone_5_action_group:
+      name: (Change if ZB-5001 - otherwise it is ignored) ZB-5001 or other 5 zone
+        remote - Zone 5 Action Group ID
+      description: Enter the 5 digit "action_group" for Zone 5 - look at Z2M log when
+        you press Master On/Off or 1st Zone Button On/Off
+      default: 48901
+      selector:
+        number:
+          min: 1.0
+          max: 99999.0
+          mode: box
+          step: 1.0
+    light_group_1:
+      name: Optional - light group 1
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - light
+    light_group_2:
+      name: Optional - light group 2
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - light
+    light_group_3:
+      name: Optional - light group 3
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - light
+    light_group_4:
+      name: Optional - light group 4
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - light
+    light_group_5:
+      name: Optional - light group 5 (if 5 zone remote e.g.)
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - light
+    scene_1_1:
+      name: scene 1 zone 1
+      description: Optional - Enter Scene 1 for ZB-5004 or Scene 1 Zone 1 for ZB-5028
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_2_1:
+      name: scene 2 zone 1
+      description: Optional - Enter Scene 2 for ZB-5004 or Scene 2 Zone 1 for ZB-5028
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_3_1:
+      name: scene 3 zone 1
+      description: Optional - ZB-5028 only
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_1_2:
+      name: scene 1 zone 2
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_2_2:
+      name: scene 2 zone 2
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_3_2:
+      name: scene 3 zone 2
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_1_3:
+      name: scene 1 zone 3
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_2_3:
+      name: scene 2 zone 3
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_3_3:
+      name: scene 3 zone 3
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_1_4:
+      name: scene 1 zone 4
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_2_4:
+      name: scene 2 zone 4
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+    scene_3_4:
+      name: scene 3 zone 4
+      default: {}
+      selector:
+        target:
+          entity:
+          - domain:
+            - scene
+  source_url: https://github.com/bayview252/home-assistant/blob/c6977524748691edb29a45535fc9ccfff40392dd/blueprints/rgbgenie-zb-5004-and-zb-5028-combined.yaml
+variables:
+  remote_type_zb_5004: !input zb_5004
+  stop_button_received: !input helper_stop_button
+  stopper: !input helper_stop_button
+  remote_action_group:
+  - !input remote_zone_1_action_group
+  - !input remote_zone_2_action_group
+  - !input remote_zone_3_action_group
+  - !input remote_zone_4_action_group
+  - !input remote_zone_5_action_group
+  light_entities:
+  - !input light_group_1
+  - !input light_group_2
+  - !input light_group_3
+  - !input light_group_4
+  - !input light_group_5
+  scene_entities:
+  - !input scene_1_1
+  - !input scene_2_1
+  - !input scene_3_1
+  - !input scene_1_2
+  - !input scene_2_2
+  - !input scene_3_2
+  - !input scene_1_3
+  - !input scene_2_3
+  - !input scene_3_3
+  - !input scene_1_4
+  - !input scene_2_4
+  - !input scene_3_4
+mode: parallel
+max: 5
+max_exceeded: silent
+trigger:
+- platform: state
+  entity_id: !input remote
+condition:
+- condition: and
+  conditions:
+  - condition: template
+    value_template: '{{ trigger.from_state.state != trigger.to_state.state }}'
+  - condition: template
+    value_template: '{% if remote_type_zb_5004 %} {{ trigger.to_state.attributes.action
+      in (''off'', ''on'', ''brightness_move_down'', ''brightness_move_up'', ''brightness_stop'',
+      ''recall_1'', ''recall_2'' ) }} {% else %} {{ trigger.to_state.attributes.action.find(''_'')
+      != -1 }} {% endif %}'
+action:
+- variables:
+    button_group_press: '{% if not remote_type_zb_5004 %} {{ trigger.to_state.attributes.action.rsplit("_",
+      1) }} {% endif %}'
+    button: '{% if remote_type_zb_5004 %} {{ trigger.to_state.attributes.action |
+      string }} {% else %} {{ button_group_press[0] | string }} {% endif %}'
+    group_id: '{% if remote_type_zb_5004 %}{{ remote_action_group.index(trigger.to_state.attributes.action_group)
+      | int }} {% else %} {{ button_group_press[1] | int }} {% endif %}'
+    light_target: '{% if remote_type_zb_5004 %}{{ light_entities[group_id] }} {% else
+      %} {{ light_entities[group_id - 1] }} {% endif %}'
+    recall_found: '{{ ( "recall" ) in button }}'
+    recall_press: '{% if recall_found %} {{ button.rsplit("_", 1) }} {% endif %}'
+    recall_scene: '{% if recall_found %} {{ recall_press[1] | int }} {% endif %}'
+    recall_scene_index: '{% if recall_found %} {{ (recall_scene - 1 | int) if remote_type_zb_5004
+      else (((group_id - 1) * 3) + recall_scene - 1 | int) }} {% endif %}'
+    scene_target: '{% if recall_found %} {{ scene_entities[recall_scene_index] }}
+      {% endif %}'
+    scene_target_valid: '{% if (scene_target | length) > 0 %} {{ true }} {% else %}
+      {{ false }} {% endif %}'
+- service: system_log.write
+  data:
+    level: info
+    message: 'ZB-5028/5004 Button pressed: {{ trigger.to_state.state }} {{ trigger.to_state.attributes
+      }} Length {{ trigger.to_state.attributes.action | length }} Button {{ button
+      }} Zone {{ group_id }}'
+- choose:
+  - conditions:
+    - condition: template
+      value_template: '{{ button in ( "on", "off" ) }}'
+    sequence:
+    - service: light.turn_{{ button }}
+      data: {}
+      target: '{{ light_target }}'
+  - conditions:
+    - condition: template
+      value_template: '{{ button in ( "color_move" ) }}'
+    sequence:
+    - service: light.turn_on
+      data_template:
+        xy_color:
+        - '{{ trigger.to_state.attributes.action_color.x | float }}'
+        - '{{ trigger.to_state.attributes.action_color.y | float }}'
+      target: '{{ light_target }}'
+  - conditions:
+    - condition: template
+      value_template: '{{ button in ( "brightness_stop " ) }}'
+    sequence:
+    - service: system_log.write
+      data:
+        level: info
+        message: 'stop button received: {{ trigger.to_state.state }} {{ trigger.to_state.attributes
+          }} Button {{ button }} Zone {{ group_id }}'
+    - service: input_boolean.turn_on
+      entity_id: !input helper_stop_button
+  - conditions:
+    - condition: template
+      value_template: '{{ button in ( "brightness_move_up", "brightness_move_down"
+        ) }}'
+    sequence:
+    - service: input_boolean.turn_off
+      entity_id: !input helper_stop_button
+    - repeat:
+        while: '{{ repeat.index < 50 and states(stopper) == "off" }}'
+        sequence:
+        - delay: 0.3
+        - choose:
+          - conditions: '{{ button in ( "brightness_move_up" , "brightness_move_down"
+              ) }}'
+            sequence:
+            - variables:
+                factor: '{% if button in ( "brightness_move_down" ) %} -{{ trigger.to_state.attributes.action_rate
+                  / 2| int }} {% else %} {{ trigger.to_state.attributes.action_rate
+                  / 2 | int }} {% endif %}'
+            - service: system_log.write
+              data:
+                level: info
+                message: 'In the LOOP:                       Iteration {{ repeat.index
+                  }} Button {{ button }} Group {{ group_id }}'
+            - service: light.turn_on
+              data_template:
+                brightness_step: '{{ factor | int }}'
+              target: '{{ light_target }}'
+  - conditions:
+    - condition: template
+      value_template: '{{ recall_found and scene_target_valid }}'
+    sequence:
+    - service: scene.turn_on
+      data:
+        transition: 2
+      target: '{{ scene_target }}'
+  - conditions:
+    - condition: template
+      value_template: '{{ button in ( "color_temperature_move" ) }}'
+    sequence:
+    - service: light.turn_on
+      data_template:
+        color_temp: '{{ trigger.to_state.attributes.action_color_temperature | int
+          }}'
+      target: '{{ light_target }}'
+  - conditions:
+    - condition: template
+      value_template: '{{ button in ( "brightness_step_up", "brightness_step_down"
+        ) }}'
+    sequence:
+    - variables:
+        factor: '{% if button in ( "brightness_step_down" ) %} -{{ trigger.to_state.attributes.action_step_size
+          /2 | int }} {% else %} {{ trigger.to_state.attributes.action_step_size /2
+          | int }} {% endif %}'
+    - service: light.turn_on
+      data_template:
+        brightness_step: '{{ factor | int }}'
+      target: '{{ light_target }}'
+  - conditions:
+    - condition: template
+      value_template: '{{ button in ( "hue_move" ) }}'
+    sequence: []
+  default: []
