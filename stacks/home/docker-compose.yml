@@ -111,12 +111,14 @@ services:
     container_name: frigate
     privileged: true
     restart: unless-stopped
+    cpus: 1.5
     shm_size: "256mb"
     expose:
       - "5000"
       - "8554" # RTSP feeds
       - "8555/tcp" # WebRTC over tcp
       - "8555/udp" # WebRTC over udp
+      - "1935/tcp" # RTMP feed
     environment:
       - TZ=Europe/London
       - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
@@ -134,7 +136,7 @@ services:
   
   espresence:
    image: registry.lonsdale.house/espresence-companion:latest
-   container_name: espresence_companion
+   container_name: "espresence_companion"
    user: "${UID}:${GID}"
    restart: always
    depends_on:
@@ -242,14 +244,17 @@ services:
 
   rhasspy3:
     container_name: rhasspy3
-    user: "${UID}:${GID}"
     image: registry.lonsdale.house/rhasspy3:latest
     volumes:
-      - ./rhasspy:/root/rhasspy3/config
+      - ./rhasspy/config:/root/rhasspy3/config
     restart: unless-stopped
     privileged: true
     ports:
       - 13331:13331
+    environment:
+      - TZ=Europe/London
+      - PUID=${UID}
+      - PGID=${GID}
     networks:
       service_vnet:
       macvlan:

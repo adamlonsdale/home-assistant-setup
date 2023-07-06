@@ -366,34 +366,6 @@
       labels:
       - person
       - dog
-- id: '1685361017425'
-  alias: Notification - Frigate - TV
-  description: ''
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera: camera.outside
-      base_url: https://home.lonsdale.house
-      title: Camera Alert!
-      message: '{{ label }} detected - {{ camera_name }}'
-      critical: 'true'
-      alert_once: true
-      attachment: snapshot
-      update_thumbnail: true
-      color: teal
-      icon: mdi:{{'account-outline' if label == 'Person' else 'dog' if label == 'Dog'
-        else 'cat' if label == 'Cat' else 'car' if label == 'Car' else 'home-assistant'}}
-      ios_live_view: true
-      zone_filter: false
-      labels:
-      - person
-      - car
-      - dog
-      notify_group: media_player.android_tv_192_168_160_163
-      tv: true
-      tv_position: top-right
-      tv_duration: 5
-      tv_transparency: 25%
 - id: '1685470047933'
   alias: Stairs - Descending - Night
   description: ''
