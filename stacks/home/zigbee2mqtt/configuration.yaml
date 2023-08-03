@@ -81,6 +81,14 @@ devices:
     friendly_name: '0x001788010bf1db7e'
   '0x001788010bf1db7d':
     friendly_name: '0x001788010bf1db7d'
+  '0x001e5e090292a066':
+    friendly_name: '0x001e5e090292a066'
+  '0x001e5e09028e9d34':
+    friendly_name: '0x001e5e09028e9d34'
+  '0x001e5e0902933935':
+    friendly_name: '0x001e5e0902933935'
+  '0x0017880108390523':
+    friendly_name: '0x0017880108390523'
 availability:
   active:
     timeout: 10
