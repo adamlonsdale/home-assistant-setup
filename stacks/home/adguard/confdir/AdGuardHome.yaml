@@ -1,5 +1,6 @@
-bind_host: 0.0.0.0
-bind_port: 80
+http:
+  address: 0.0.0.0:80
+  session_ttl: 720h
 users: []
 auth_attempts: 5
 block_auth_min: 15
@@ -7,7 +8,6 @@ http_proxy: ""
 language: ""
 theme: auto
 debug_pprof: false
-web_session_ttl: 720
 dns:
   bind_hosts:
     - 192.168.160.100
@@ -24,7 +24,7 @@ dns:
   safebrowsing_block_host: standard-block.dns.adguard.com
   ratelimit: 20
   ratelimit_whitelist: []
-  refuse_any: true
+  refuse_any: false
   upstream_dns:
     - https://dns10.quad9.net/dns-query
   upstream_dns_file: ""
@@ -41,6 +41,8 @@ dns:
     - hostname.bind
   trusted_proxies:
     - 127.0.0.0/8
+    - 192.168.160.0/24
+    - 172.0.0.0/8
   cache_size: 4194304
   cache_ttl_min: 0
   cache_ttl_max: 0
@@ -76,7 +78,10 @@ dns:
   rewrites:
     - domain: '*.lonsdale.house'
       answer: 192.168.160.151
-  blocked_services: []
+  blocked_services:
+    schedule:
+      time_zone: UTC
+    ids: []
   upstream_timeout: 10s
   private_networks: []
   use_private_ptr_resolvers: true
@@ -159,14 +164,17 @@ clients:
         pixabay: false
         yandex: false
         youtube: false
+      blocked_services:
+        schedule:
+          time_zone: UTC
+        ids: []
       name: Macbook Pro
+      ids:
+        - 192.168.160.2
       tags:
         - device_laptop
         - os_macos
         - user_admin
-      ids:
-        - 192.168.160.2
-      blocked_services: []
       upstreams: []
       use_global_settings: true
       filtering_enabled: false
@@ -183,11 +191,14 @@ clients:
         pixabay: false
         yandex: false
         youtube: false
+      blocked_services:
+        schedule:
+          time_zone: UTC
+        ids: []
       name: Router
-      tags: []
       ids:
         - 192.168.160.1
-      blocked_services: []
+      tags: []
       upstreams: []
       use_global_settings: true
       filtering_enabled: false
@@ -196,15 +207,16 @@ clients:
       use_global_blocked_services: true
       ignore_querylog: false
       ignore_statistics: false
-log_file: ""
-log_max_backups: 0
-log_max_size: 100
-log_max_age: 3
-log_compress: false
-log_localtime: false
-verbose: false
+log:
+  file: ""
+  max_backups: 0
+  max_size: 100
+  max_age: 3
+  compress: false
+  local_time: false
+  verbose: false
 os:
   group: ""
   user: ""
   rlimit_nofile: 0
-schema_version: 20
+schema_version: 24
