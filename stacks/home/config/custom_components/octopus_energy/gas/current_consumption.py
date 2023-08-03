@@ -67,11 +67,10 @@ class OctopusEnergyCurrentGasConsumption(CoordinatorEntity, OctopusEnergyGasSens
   def last_reset(self):
     """Return the time when the sensor was last reset, if any."""
     return self._latest_date
-
+  
   @property
   def state(self):
-    """Retrieve the latest gas consumption"""
-    
+    """The current consumption for the meter."""
     _LOGGER.debug('Updating OctopusEnergyCurrentGasConsumption')
     consumption_result = self.coordinator.data
 
