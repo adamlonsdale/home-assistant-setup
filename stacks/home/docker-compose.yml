@@ -11,9 +11,48 @@ services:
       - "8123"
     networks:
       service_vnet:
-      macvlan:
+      iot_macvlan:
         ipv4_address: 192.168.160.102
-        
+    
+  emhass:
+    container_name: emhass
+    image: davidusb/emhass-docker-standalone:latest
+    user: "${UID}:${GID}"
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      - LOCAL_COSTFUN=profit
+    volumes:
+      - ./emhass/config_emhass.yaml:/app/config_emhass.yaml
+      - ./emhass/secrets_emhass.yaml:/app/secrets_emhass.yaml
+
+  mdns-repeater:
+    image: monstrenyatko/mdns-repeater
+    container_name: mdns-repeater
+    restart: unless-stopped
+    command: mdns-repeater-app -f br0 br-c6f7fe3f6058
+    network_mode: "host"
+
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome
+    user: "${UID}:${GID}"
+    volumes:
+      - ./esphome/config:/config
+      - ./esphome/cache:/cache
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - 6052
+    restart: always
+    privileged: true
+    environment:
+      PLATFORMIO_CORE_DIR: .plattformio
+      PLATFORMIO_GLOBALLIB_DIR: .plattformioLibs
+      ESPHOME_DASHBOARD_USE_PING: true
+    networks:
+      service_vnet:
+
   mqtt:
     image: eclipse-mosquitto:latest
     container_name: "mqtt"
@@ -67,7 +106,7 @@ services:
       - ./adguard/workdir:/opt/adguardhome/work
       - ./adguard/confdir:/opt/adguardhome/conf
     networks:
-      macvlan:
+      iot_macvlan:
         ipv4_address: 192.168.160.100
     restart: unless-stopped
     
@@ -111,7 +150,11 @@ services:
     container_name: frigate
     privileged: true
     restart: unless-stopped
-    cpus: 1.5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
     shm_size: "256mb"
     expose:
       - "5000"
@@ -135,14 +178,14 @@ services:
      service_vnet:
   
   espresence:
-   image: registry.lonsdale.house/espresence-companion:latest
+   image: espresense/espresense-companion:latest
    container_name: "espresence_companion"
    user: "${UID}:${GID}"
    restart: always
    depends_on:
      - mqtt
    expose:
-     - "8276"
+     - "8267"
    volumes:
      - ./espresence:/config/espresense
    networks:
@@ -239,7 +282,7 @@ services:
       - DAC_READ_SEARCH
     networks:
       service_vnet:
-      macvlan:
+      iot_macvlan:
         ipv4_address: 192.168.160.101
 
   rhasspy3:
@@ -257,12 +300,12 @@ services:
       - PGID=${GID}
     networks:
       service_vnet:
-      macvlan:
+      iot_macvlan:
         ipv4_address: 192.168.160.60
 
 networks:
-  macvlan:
-    name: docker_macvlan
+  iot_macvlan:
+    name: iot_macvlan
     external: true
 
   service_vnet:

@@ -1,16 +1,35 @@
 version: '3'
+services:
+  dummy:
+    container_name: dummy
+    image: hello-world
+    networks:
+     - iot_macvlan
+     - home_vnet
+     - etherpad_vnet
+     - paperless_vnet
+     - vikunja_vnet
+     - snipeit_vnet
+     - proxy_vnet
+     - actualserver_vnet
+     - registry_vnet
+     - netbox_vnet
+
 networks:
-  macvlan:
-    name: docker_macvlan
+  iot_macvlan:
+    name: iot_macvlan
     driver: macvlan
     enable_ipv6: false
-    ipam:
-      config:
-        - subnet: 192.168.160.0/24
-          ip_range: 192.168.160.128/28
-          gateway: 192.168.160.1
     driver_opts:
       parent: br0
+    ipam:
+      config:
+      - subnet: 192.168.160.0/24
+        gateway: 192.168.160.1
+        ip_range: 192.168.160.128/28
+      - subnet: 192.168.150.0/24
+        gateway: 192.168.150.1
+        ip_range: 192.168.150.1/24
 
   home_vnet:
     name: home_vnet

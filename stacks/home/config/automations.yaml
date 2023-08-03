@@ -16,6 +16,18 @@
         type: notify
         message: Batteries need changing!
         title: 'The following sensors need batteries changing: {{sensors}}'
+- alias: EMHASS day-ahead optimization
+  trigger:
+    platform: time
+    at: '05:30:00'
+  action:
+  - service: shell_command.dayahead_optim
+- alias: EMHASS publish data
+  trigger:
+  - minutes: /5
+    platform: time_pattern
+  action:
+  - service: shell_command.publish_data
 - id: '1673389901443'
   alias: Go to bed
   description: ''
