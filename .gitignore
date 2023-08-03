@@ -58,6 +58,7 @@ __pycache__
 !/stacks/vikunja
 !/stacks/networks
 !/stacks/etherpad
+/stacks/etherpad/dbdata/*
 !/stacks/container_registry
 !/stacks/home
 
