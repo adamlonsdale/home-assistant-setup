@@ -29,6 +29,8 @@ __pycache__
 !/stacks/home/config/themes/
 !/stacks/home/config/dwains-dashboard/
 
+/stacks/home/esphome/*.yaml
+
 /stacks/home/espresence/.storage/
 
 *.glb
@@ -56,6 +58,7 @@ __pycache__
 !/stacks/vikunja
 !/stacks/networks
 !/stacks/etherpad
+/stacks/etherpad/dbdata/*
 !/stacks/container_registry
 !/stacks/home
 
@@ -94,6 +97,8 @@ __pycache__
 *.lock
 *.pid
 supervisord.conf
+
+**/*secrets*.*
 
 *.mmdb
 

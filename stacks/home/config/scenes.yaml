@@ -32,10 +32,6 @@
       supported_color_modes:
       - color_temp
       - xy
-      mode: normal
-      dynamics: none
-      friendly_name: Lamp
-      supported_features: 44
       color_mode: color_temp
       brightness: 252
       color_temp_kelvin: 2409
@@ -51,6 +47,10 @@
       - 0.557
       - 0.389
       effect: None
+      mode: normal
+      dynamics: none
+      friendly_name: Lamp
+      supported_features: 44
       state: 'on'
     light.near_window:
       min_color_temp_kelvin: 2000
@@ -84,12 +84,8 @@
       supported_color_modes:
       - color_temp
       - xy
-      mode: normal
-      dynamics: none
-      friendly_name: Signe Sofas
-      supported_features: 44
       color_mode: color_temp
-      brightness: 82
+      brightness: 99
       color_temp_kelvin: 2832
       color_temp: 353
       hs_color:
@@ -103,6 +99,44 @@
       - 0.513
       - 0.386
       effect: None
+      mode: normal
+      dynamics: none
+      friendly_name: Signe Sofas
+      supported_features: 44
+      state: 'on'
+    light.signe_gradient_bedroom:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - None
+      - candle
+      - fire
+      - unknown
+      - sunrise
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 166
+      color_temp_kelvin: 2710
+      color_temp: 369
+      hs_color:
+      - 28.373
+      - 65.405
+      rgb_color:
+      - 255
+      - 167
+      - 88
+      xy_color:
+      - 0.524
+      - 0.388
+      effect: None
+      mode: normal
+      dynamics: none
+      friendly_name: Signe Window
+      supported_features: 44
       state: 'on'
   icon: mdi:lamp-outline
   metadata:
@@ -113,6 +147,8 @@
     light.near_window:
       entity_only: true
     light.signe_gradient_living_room:
+      entity_only: true
+    light.signe_gradient_bedroom:
       entity_only: true
 - id: '1673386578096'
   name: Living Room Daytime Chill
@@ -1063,3 +1099,172 @@
       state: 'off'
   icon: mdi:outdoor-lamp
   metadata: {}
+- id: '1687901784441'
+  name: Master Bedroom - On
+  entities:
+    light.go_bedside_lamp_1:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - None
+      - candle
+      - fire
+      - unknown
+      supported_color_modes:
+      - color_temp
+      - xy
+      mode: normal
+      dynamics: none
+      friendly_name: Bedside Lamp
+      supported_features: 44
+      color_mode: color_temp
+      brightness: 171
+      color_temp_kelvin: 3164
+      color_temp: 316
+      hs_color:
+      - 27.575
+      - 52.614
+      rgb_color:
+      - 255
+      - 182
+      - 120
+      xy_color:
+      - 0.482
+      - 0.38
+      effect: None
+      state: 'on'
+    light.lamp:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      mode: normal
+      dynamics: none
+      friendly_name: Lamp
+      supported_features: 40
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2732
+      color_temp: 366
+      hs_color:
+      - 28.327
+      - 64.71
+      rgb_color:
+      - 255
+      - 167
+      - 89
+      xy_color:
+      - 0.524
+      - 0.387
+      state: 'on'
+    light.master_bedroom:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      mode: normal
+      dynamics: none
+      friendly_name: Main
+      supported_features: 40
+      state: 'off'
+  metadata: {}
+- id: '1687901807640'
+  name: Master Bedroom - Off
+  entities:
+    light.master_bedroom_2:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      - xy
+      is_hue_group: true
+      hue_scenes:
+      - Painted sky
+      - Soho
+      hue_type: room
+      lights:
+      - Main
+      - Table Lamp
+      - Lamp
+      dynamics: false
+      icon: mdi:lightbulb-group
+      friendly_name: Master Bedroom
+      supported_features: 40
+      state: 'off'
+  metadata: {}
+- id: '1689457358726'
+  name: Bedtime Chill
+  entities:
+    light.go_bedside_lamp_1:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - None
+      - candle
+      - fire
+      - unknown
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 135
+      color_temp_kelvin: 3134
+      color_temp: 319
+      hs_color:
+      - 27.618
+      - 53.372
+      rgb_color:
+      - 255
+      - 181
+      - 118
+      xy_color:
+      - 0.485
+      - 0.381
+      effect: None
+      mode: normal
+      dynamics: none
+      friendly_name: Bedside Lamp
+      supported_features: 44
+      state: 'on'
+    light.lamp:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 135
+      color_temp_kelvin: 3144
+      color_temp: 318
+      hs_color:
+      - 27.604
+      - 53.118
+      rgb_color:
+      - 255
+      - 181
+      - 119
+      xy_color:
+      - 0.484
+      - 0.38
+      mode: normal
+      dynamics: none
+      friendly_name: Lamp
+      supported_features: 40
+      state: 'on'
+  icon: mdi:bed
+  metadata:
+    light.go_bedside_lamp_1:
+      entity_only: true
+    light.lamp:
+      entity_only: true

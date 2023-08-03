@@ -15,6 +15,14 @@
         "info": ""
     },
     {
+        "id": "b2ada2d2d5523081",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "24c7cb2a32da7cd7",
         "type": "junction",
         "z": "5947024a55c4b639",
@@ -6670,5 +6678,305 @@
         "x": 170,
         "y": 2840,
         "wires": []
+    },
+    {
+        "id": "697099cd2e1d73c6",
+        "type": "mqtt in",
+        "z": "b2ada2d2d5523081",
+        "name": "action",
+        "topic": "zigbee2mqtt/Living Room Remote/action",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "557fa6094b0a8d44",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 160,
+        "wires": [
+            [
+                "22c0d37a03a6e388",
+                "03f75bbe7c3b8e89"
+            ]
+        ]
+    },
+    {
+        "id": "22c0d37a03a6e388",
+        "type": "api-call-service",
+        "z": "b2ada2d2d5523081",
+        "name": "",
+        "server": "ece13e6eb6ac97c7",
+        "version": 5,
+        "debugenabled": true,
+        "domain": "input_text",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_text.debug"
+        ],
+        "data": "{\"value\": msg.payload}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 680,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "03f75bbe7c3b8e89",
+        "type": "switch",
+        "z": "b2ada2d2d5523081",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "on_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "on_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "on_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "on_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "recall_1_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "recall_2_1",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 10,
+        "x": 430,
+        "y": 320,
+        "wires": [
+            [
+                "7b368cf50e76c8f3"
+            ],
+            [
+                "c2fea3a57068afec"
+            ],
+            [
+                "7d4aa149be01fb9c"
+            ],
+            [
+                "efea64045348924a"
+            ],
+            [],
+            [],
+            [
+                "812eb1ee9107520e"
+            ],
+            [
+                "6bc6c736f2aed8b7"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "7d4aa149be01fb9c",
+        "type": "api-call-service",
+        "z": "b2ada2d2d5523081",
+        "name": "2/ON Living Room On ",
+        "server": "ece13e6eb6ac97c7",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "scene",
+        "service": "turn_on",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "scene.living_room_daytime_chill"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 680,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "efea64045348924a",
+        "type": "api-call-service",
+        "z": "b2ada2d2d5523081",
+        "name": "2/OFF Living Room Off",
+        "server": "ece13e6eb6ac97c7",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "scene",
+        "service": "turn_on",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "scene.living_room_off"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 950,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6bc6c736f2aed8b7",
+        "type": "api-call-service",
+        "z": "b2ada2d2d5523081",
+        "name": "4/OFF Master Bedroom Off",
+        "server": "ece13e6eb6ac97c7",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "scene",
+        "service": "turn_on",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "scene.master_bedroom_off"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 960,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "812eb1ee9107520e",
+        "type": "api-call-service",
+        "z": "b2ada2d2d5523081",
+        "name": "4/ON Master Bedroom On",
+        "server": "ece13e6eb6ac97c7",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "scene",
+        "service": "turn_on",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "scene.master_bedroom_on"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 700,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7b368cf50e76c8f3",
+        "type": "api-call-service",
+        "z": "b2ada2d2d5523081",
+        "name": "1/UP Living Room Sonos",
+        "server": "ece13e6eb6ac97c7",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "media_player",
+        "service": "volume_up",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "media_player.living_room"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 690,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c2fea3a57068afec",
+        "type": "api-call-service",
+        "z": "b2ada2d2d5523081",
+        "name": "1/DOWN Living Room Sonos",
+        "server": "ece13e6eb6ac97c7",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "media_player",
+        "service": "volume_down",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "media_player.living_room"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 960,
+        "y": 240,
+        "wires": [
+            []
+        ]
     }
 ]

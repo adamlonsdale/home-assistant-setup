@@ -15,8 +15,11 @@ from .const_homekit import (
     KEY_SELECT,
 )
 
+DEFAULT_ENTITY_NAME = "Sky Q"
+DEFAULT_MINI = "Mini"
 DOMAIN = "skyq"
 DOMAINBROWSER = "skyq_browser"
+MR_DEVICE = "MR-Device"
 SKYQREMOTE = "skyqremote"
 UNDO_UPDATE_LISTENER = "undo_update_listener"
 SCAN_INTERVAL = timedelta(seconds=10)
@@ -75,11 +78,11 @@ FEATURE_BASE = (
     | MediaPlayerEntityFeature.TURN_ON
     | MediaPlayerEntityFeature.PAUSE
     | MediaPlayerEntityFeature.PLAY
-    | MediaPlayerEntityFeature.STOP
+    # | MediaPlayerEntityFeature.STOP
     | MediaPlayerEntityFeature.NEXT_TRACK
     | MediaPlayerEntityFeature.PREVIOUS_TRACK
     | MediaPlayerEntityFeature.SELECT_SOURCE
-    | MediaPlayerEntityFeature.SEEK
+    # | MediaPlayerEntityFeature.SEEK
     | MediaPlayerEntityFeature.PLAY_MEDIA
 )
 

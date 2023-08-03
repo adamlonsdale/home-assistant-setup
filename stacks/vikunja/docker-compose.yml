@@ -30,12 +30,13 @@ services:
   
   vikunja_frontend:
     image: vikunja/frontend
+    container_name: vikunja_frontend
     expose:
       - "80"
     environment:
       PUID: ${UID}
       PGID: ${GID}
-      VIKUNJA_API_URL: https://todo.lonsdale.house/api/v1
+      VIKUNJA_API_URL: https://todo_api.lonsdale.house/api/v1
     restart: unless-stopped
     networks:
      service_vnet:

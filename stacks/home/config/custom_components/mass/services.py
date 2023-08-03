@@ -73,9 +73,7 @@ def register_services(hass: HomeAssistant):
         for player_id in player_ids:
             # translate entity_id --> player_id
             if entity := hass.states.get(player_id):
-                player_id = entity.attributes.get(  # noqa: PLW2901
-                    "mass_player_id", player_id
-                )
+                player_id = entity.attributes.get("mass_player_id", player_id)  # noqa: PLW2901
             player = mass.players.get_player(player_id)
             if not player:
                 raise RuntimeError(f"Invalid player id: {player_id}")
@@ -128,18 +126,16 @@ def register_services(hass: HomeAssistant):
     )
 
 
-async def get_item_by_name(
-    mass: MusicAssistantClient, name: str
-) -> MediaItemType | None:
+async def get_item_by_name(mass: MusicAssistantClient, name: str) -> MediaItemType | None:
     """Try to find a media item (such as a playlist) by name."""
     # iterate media controllers one by one,
     # start with playlists and radio as those are the most common one
     for func in (
-        mass.music.get_playlists,
-        mass.music.get_radios,
-        mass.music.get_albums,
-        mass.music.get_tracks,
-        mass.music.get_artists,
+        mass.music.get_library_playlists,
+        mass.music.get_library_radios,
+        mass.music.get_library_albums,
+        mass.music.get_library_tracks,
+        mass.music.get_library_artists,
     ):
         result = await func(search=name)
         for item in result.items:
