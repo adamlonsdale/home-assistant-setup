@@ -40,9 +40,9 @@ go2rtc:
     outside_sd:
       - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.23:554/stream2#video=copy#audio=copy#audio=opus"
     office_hd:
-      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.170:554/stream1#video=copy#audio=copy#audio=opus"
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.24:554/stream1#video=copy#audio=copy#audio=opus"
     office_sd:
-      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.170:554/stream2#video=copy#audio=copy#audio=opus"
+      - "ffmpeg:rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.160.24:554/stream2#video=copy#audio=copy#audio=opus"
   webrtc:
     candidates:
       - frigate.lonsdale.house:8555
